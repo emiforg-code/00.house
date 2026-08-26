@@ -4,418 +4,437 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>00.house — Are you looking for a house?</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <!-- Leaflet CSS for Interactive Map -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
 <style>
-/* ══ PRESERVED ORIGINAL CSS ════════════════════════════ */
+/* ══ BASE CSS ═════════════════════════════════════════ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --black:#0a0a0a;
+  --black:#000000;
   --white:#ffffff;
-  --off:#f8f6f2;
-  --warm:#e8e2d8;
-  --gold:#c8a855;
-  --green:#1d4d2e;
+  --off:#f4f4f4;
+  --rose:#c57b83; /* Matching the tenant card pink */
   --muted:#6b6b6b;
-  --border:rgba(0,0,0,0.1);
-  --panel-w:520px;
+  --border:rgba(0,0,0,0.15);
+  --panel-w:560px;
 }
 html{scroll-behavior:smooth}
 body{font-family:'Inter',sans-serif;background:var(--white);color:var(--black);overflow-x:hidden}
 
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--warm);border-radius:2px}
+::-webkit-scrollbar-thumb{background:var(--black);border-radius:2px}
 
+/* ══ NAVIGATION ═══════════════════════════════════════ */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 40px;height:60px;
-  background:rgba(255,255,255,0.94);
-  backdrop-filter:blur(12px);
-  border-bottom:0.5px solid var(--border);
+  padding:0 40px;height:70px;
+  background:rgba(255,255,255,0.95);
+  backdrop-filter:blur(10px);
+  border-bottom:1.5px solid var(--black);
   transition:all 0.3s;
 }
 .nav-logo{
-  display:flex;align-items:center;gap:10px;
-  font-family:'Inter',sans-serif;font-weight:400;font-size:17px;
-  letter-spacing:-0.01em;color:var(--black);text-decoration:none;
-  cursor:pointer;
+  display:flex;align-items:center;gap:12px;
+  font-size:20px;font-weight:400;letter-spacing:-0.02em;
+  color:var(--black);text-decoration:none;
 }
-.nav-logo svg{width:20px;height:20px;stroke:var(--black);fill:none;stroke-width:1.4}
-.nav-pills{display:flex;align-items:center;gap:6px}
+.nav-logo svg{width:24px;height:24px;stroke:var(--black);fill:none;stroke-width:1.5}
+.nav-pills{display:flex;align-items:center;gap:10px}
 .pill{
-  font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;
-  padding:8px 18px;border:1px solid var(--black);border-radius:100px;
+  font-size:12px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;
+  padding:10px 20px;border:1.5px solid var(--black);border-radius:100px;
   background:transparent;color:var(--black);cursor:pointer;
-  transition:all 0.2s;white-space:nowrap;font-family:'Inter',sans-serif;
+  transition:all 0.2s;font-family:'Inter',sans-serif;
 }
 .pill:hover,.pill.active{background:var(--black);color:var(--white)}
-.pill.lang{display:flex;align-items:center;gap:6px;padding:8px 14px}
-.pill.lang img{width:18px;height:13px;border-radius:1px;object-fit:cover}
-.pill.account{background:var(--black);color:var(--white)}
-.pill.account:hover{background:#333}
 
-/* ══ NEW HERO IMAGE ═══════════════════════════════════ */
+/* ══ HERO SECTION ════════════════════════════════════ */
 .hero{
   position:relative;width:100%;height:100vh;overflow:hidden;
-  cursor:pointer;
+  border-bottom: 2px solid var(--black);
 }
 .hero-photo{
   width:100%;height:100%;object-fit:cover;object-position:center;
-  display:block;transition:transform 8s ease;
-}
-.hero:hover .hero-photo{transform:scale(1.02)}
-.hero::after{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:140px;
-  background:linear-gradient(to top,rgba(255,255,255,0.8),transparent);
-  pointer-events:none;
+  display:block;
 }
 
-/* ══ TAGLINE & SEARCH ════════════════════════════════ */
+/* ══ SEARCH & TAGLINE ════════════════════════════════ */
 .tagline-section{
   display:flex;flex-direction:column;align-items:center;
-  padding:64px 24px 56px;background:var(--white);text-align:center;
+  padding:60px 24px 40px;text-align:center;
 }
 .tagline{
-  font-family:'Cormorant Garamond',serif;
-  font-size:clamp(32px,4vw,52px);font-weight:300;
-  letter-spacing:-0.02em;line-height:1.15;margin-bottom:32px;
-  color:var(--black);
+  font-family:'Inter',sans-serif;
+  font-size:clamp(24px, 3vw, 36px);font-weight:400;
+  letter-spacing:-0.01em;margin-bottom:24px;
 }
-.tagline em{font-style:italic;font-weight:300}
-
-/* Mockup-style stylised search bar */
 .search-container {
-  width: 100%; max-width: 460px;
-  display: flex; flex-direction: column; gap: 8px;
+  width: 100%; max-width: 480px;
+  display: flex; flex-direction: column; gap: 0;
+  border: 1.5px solid var(--black); border-radius: 16px;
+  overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
-.search-bar-top {
+.search-bar-top, .search-bar-bottom {
   display:flex;align-items:center; justify-content:space-between;
-  border:1.5px solid var(--black);border-radius:12px;
-  padding:0 22px;height:52px;background:var(--white);cursor:text;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  padding:0 24px;height:56px;background:var(--white);cursor:text;
 }
-.search-bar-top span{
-  font-size:12px;font-weight:600;color:var(--black);
-  letter-spacing:0.08em;text-transform:uppercase;
-}
-.search-bar-top svg{width:18px;height:18px;stroke:var(--black);fill:none;stroke-width:2;}
-.search-bar-bottom {
-  display:flex;align-items:center; justify-content:space-between;
-  border:1.5px solid var(--black);border-radius:12px;
-  padding:0 22px;height:52px;background:var(--white);cursor:pointer;
-}
-.search-bar-bottom span { font-size: 15px; color: var(--black); }
+.search-bar-top { border-bottom: 1.5px solid var(--black); }
+.search-bar-top span{ font-size:13px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase; }
+.search-bar-top svg{ width:20px;height:20px;stroke:var(--black);fill:none;stroke-width:2; }
+.search-bar-bottom span { font-size: 16px; color: var(--black); }
+.search-bar-bottom svg { width:20px;height:20px;stroke:var(--black);fill:none;stroke-width:2; }
 
-/* ══ FLORAL MAP FRAME ════════════════════════════════ */
+/* ══ FLORAL MAP SECTION ══════════════════════════════ */
 .floral-map-wrapper {
-  margin:0 32px 40px;
-  position: relative;
-  border-radius:24px;
-  padding: 16px;
-  background-image: url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1200&auto=format&fit=crop'); /* Wisteria/Floral proxy */
-  background-size: cover;
-  background-position: center;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  margin:0 auto 40px; max-width: 800px;
+  position: relative; border-radius:24px; padding: 20px;
+  /* Wisteria background placeholder */
+  background-image: url('https://images.unsplash.com/photo-1543227448-971c26123490?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'); 
+  background-size: cover; background-position: center;
 }
 .floral-map-wrapper::before {
   content: ''; position: absolute; inset: 0;
-  background: rgba(255,255,255,0.3); backdrop-filter: blur(2px);
+  background: rgba(255,255,255,0.6); backdrop-filter: blur(3px);
   border-radius: 24px; pointer-events: none;
 }
 .map-badge-mockup {
-  position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
-  background: var(--white); border: 1.5px solid var(--border);
+  position: absolute; top: -18px; left: 50%; transform: translateX(-50%);
+  background: var(--white); border: 1.5px solid var(--black);
   padding: 8px 24px; border-radius: 100px;
-  font-size: 14px; font-weight: 500; z-index: 10;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  font-size: 15px; font-weight: 500; z-index: 10;
 }
 .map-section{
   border-radius:16px;overflow:hidden;
-  border:2.5px solid rgba(255,255,255,0.9);
-  position:relative; height:320px; z-index: 2;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  border:1.5px solid var(--black);
+  position:relative; height:400px; z-index: 2;
 }
-#map { width: 100%; height: 100%; background: #e8ede4; z-index: 1; }
+#map { width: 100%; height: 100%; background: #e8ede4; }
 
-/* ══ SPECIFIC SERVICES LAYOUT (From Mockup 3) ════════ */
-.services-section{padding:0 24px 44px; max-width: 600px; margin: 0 auto;}
-.section-eyebrow{
-  font-size:24px;font-weight:400; text-align:center;
-  color:var(--black); margin-bottom:16px; font-family:'Inter',sans-serif;
+/* ══ SERVICES GRID ═══════════════════════════════════ */
+.services-section{
+  max-width: 480px; margin: 0 auto 50px; padding: 0 24px;
 }
-.services-mockup-grid {
-  display: flex; flex-direction: column; gap: 12px;
+.section-title {
+  font-size: 28px; font-weight: 400; text-align: center; margin-bottom: 20px;
 }
-.svc-card-full {
-  border:1.5px solid var(--black); border-radius:12px;
-  padding:12px 16px; display:flex; align-items:center; gap:16px;
-  background:var(--white); cursor:pointer; transition: transform 0.2s;
+.svc-grid { display: flex; flex-direction: column; gap: 12px; }
+.svc-full, .svc-half {
+  border: 1.5px solid var(--black); border-radius: 12px;
+  background: var(--white); cursor: pointer; transition: transform 0.2s;
+  display: flex; align-items: center;
 }
-.svc-card-full:hover { transform: translateY(-2px); }
-.svc-card-half-container {
-  display: flex; gap: 12px;
-}
-.svc-card-half {
-  flex: 1; border:1.5px solid var(--black); border-radius:12px;
-  padding:16px; display:flex; align-items:center; justify-content:center; gap:12px;
-  background:var(--white); cursor:pointer; transition: transform 0.2s;
-}
-.svc-card-half:hover { transform: translateY(-2px); }
-.mockup-icon { width: 40px; height: 40px; flex-shrink: 0; }
-.mockup-icon svg { width: 100%; height: 100%; stroke: var(--black); fill: none; stroke-width: 1.2; }
-.svc-full-text { flex: 1; }
-.svc-full-title { font-size: 16px; font-weight: 500; margin-bottom: 2px; }
-.svc-full-desc { font-size: 12px; color: var(--muted); line-height: 1.3; }
-.svc-badge { border: 1px solid var(--black); border-radius: 4px; padding: 2px 6px; font-size: 11px; font-weight: 600; }
-.svc-half-text { font-size: 15px; font-weight: 500; text-align: center; line-height:1.2;}
+.svc-full:hover, .svc-half:hover { transform: translateY(-3px); }
+.svc-full { padding: 16px 20px; gap: 16px; }
+.svc-half-row { display: flex; gap: 12px; }
+.svc-half { flex: 1; padding: 16px; gap: 12px; justify-content: center; }
 
-/* ══ PINK TENANT CARD (From Mockup 3) ════════════════ */
-.tenant-card-pink {
-  margin:0 24px 40px; border-radius:20px;
-  background-color: #d88c94; /* Dusty rose */
-  background-image: radial-gradient(circle at 80% 90%, rgba(255,255,255,0.15) 0%, transparent 40%),
-                    radial-gradient(circle at 20% 10%, rgba(255,255,255,0.1) 0%, transparent 30%);
-  padding:28px 24px; color:var(--white); position:relative; overflow:hidden;
-  box-shadow: 0 10px 30px rgba(216, 140, 148, 0.3);
-}
-/* Abstract Rose line art placeholder using CSS curves */
-.tenant-card-pink::before {
-  content: ''; position: absolute; right: -40px; bottom: -40px;
-  width: 180px; height: 180px; border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-  border: 1px solid rgba(255,255,255,0.3); pointer-events: none;
-}
-.tenant-card-pink::after {
-  content: ''; position: absolute; right: 0px; bottom: 0px;
-  width: 120px; height: 120px; border-radius: 50% 50% 30% 70% / 50% 50% 70% 50%;
-  border: 1px solid rgba(255,255,255,0.2); pointer-events: none;
-}
-.tc-title {
-  font-family:'Inter',sans-serif; font-size:22px; font-weight:500; margin-bottom:6px;
-}
-.tc-desc {
-  font-size:13px; color:rgba(255,255,255,0.95); line-height:1.4; margin-bottom:20px; max-width:280px;
-}
-.tc-desc a { color: var(--white); text-decoration: underline; font-weight: 500; }
-.tc-bottom-row {
-  display: flex; align-items: center; gap: 16px;
-}
-.tc-checklist-icon {
-  width: 48px; height: 48px; flex-shrink: 0;
-}
-.tc-progress-container { flex: 1; }
-.tc-bar-bg { background: rgba(255,255,255,0.25); border-radius: 100px; height: 6px; margin-bottom: 6px; }
-.tc-bar-fill { background: var(--white); height: 6px; border-radius: 100px; width: 45%; transition: width 1.5s ease; }
-.tc-label { font-size: 11px; font-weight: 500; letter-spacing: 0.04em; }
+.svc-icon { width: 44px; height: 44px; flex-shrink: 0; }
+.svc-icon svg { width: 100%; height: 100%; stroke: var(--black); fill: none; stroke-width: 1.2; }
+.svc-text-full { flex: 1; }
+.svc-text-full h3 { font-size: 17px; font-weight: 500; margin-bottom: 4px; }
+.svc-text-full p { font-size: 13px; color: var(--black); line-height: 1.3; }
+.svc-text-half { font-size: 16px; font-weight: 500; text-align: center; line-height: 1.2; }
+.svc-count { border: 1.5px solid var(--black); border-radius: 6px; padding: 2px 8px; font-size: 12px; font-weight: 600; }
 
-/* ══ FOOTER (Preserved from original but simplified to match mockup 3 bottom) ════════ */
-.footer-mockup {
-  display: grid; grid-template-columns: 1fr 1fr; padding: 0 32px 40px; gap: 24px;
+/* ══ ROSE TENANT PASS (Popping Out) ══════════════════ */
+.tenant-pass-container {
+  max-width: 480px; margin: 0 auto 60px; padding: 0 24px;
 }
-.footer-col h4 { font-size: 14px; font-weight: 600; text-transform: uppercase; margin-bottom: 12px; }
-.footer-col a { display: block; font-size: 15px; color: var(--black); text-decoration: none; margin-bottom: 6px; }
+.tenant-card-rose {
+  background-color: var(--rose);
+  border-radius: 16px; padding: 32px 24px;
+  color: var(--white); cursor: pointer;
+  position: relative; overflow: hidden;
+  box-shadow: 0 12px 30px rgba(197, 123, 131, 0.4);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.tenant-card-rose:hover { transform: scale(1.03) translateY(-5px); }
 
-/* ══ SLIDE PANEL (Preserved Original CSS) ════════════ */
+/* SVG Rose Background Patterns */
+.tenant-card-rose::before, .tenant-card-rose::after {
+  content: ''; position: absolute;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50,10 C30,10 10,30 10,50 C10,70 30,90 50,90 C70,90 90,70 90,50 C90,30 70,10 50,10 Z M50,20 C65,20 80,35 80,50 C80,65 65,80 50,80 C35,80 20,65 20,50 C20,35 35,20 50,20 Z M50,30 C60,30 70,40 70,50 C70,60 60,70 50,70 C40,70 30,60 30,50 C30,40 40,30 50,30 Z M50,40 C55,40 60,45 60,50 C60,55 55,60 50,60 C45,60 40,55 40,50 C40,45 45,40 50,40 Z' fill='none' stroke='rgba(255,255,255,0.2)' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-size: cover; pointer-events: none;
+}
+.tenant-card-rose::before { width: 250px; height: 250px; bottom: -80px; right: -60px; transform: rotate(15deg); }
+.tenant-card-rose::after { width: 150px; height: 150px; top: -40px; left: -40px; transform: rotate(-20deg); }
+
+.tc-content { position: relative; z-index: 2; }
+.tc-title { font-size: 26px; font-weight: 400; margin-bottom: 8px; }
+.tc-desc { font-size: 14px; line-height: 1.5; margin-bottom: 24px; color: rgba(255,255,255,0.9); }
+.tc-desc a { color: var(--white); text-decoration: underline; font-weight: 600; }
+
+.tc-interactive { display: flex; align-items: center; gap: 16px; }
+.tc-checkbox { width: 40px; height: 40px; }
+.tc-progress { flex: 1; }
+.tc-bar-bg { height: 6px; border-radius: 10px; background: rgba(255,255,255,0.3); margin-bottom: 8px; }
+.tc-bar-fill { height: 100%; border-radius: 10px; background: var(--white); width: 45%; }
+.tc-label { font-size: 12px; font-weight: 500; }
+
+/* ══ FOOTER ══════════════════════════════════════════ */
+footer{
+  border-top: 2px solid var(--black);
+  padding: 40px 24px; max-width: 800px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+}
+.footer-col h4 { font-size: 16px; font-weight: 700; text-transform: uppercase; margin-bottom: 16px; letter-spacing: 0.05em; }
+.footer-col a { display: block; font-size: 16px; color: var(--black); text-decoration: none; margin-bottom: 8px; font-weight: 400; }
+.footer-col a:hover { text-decoration: underline; }
+
+/* ══ BLACK & WHITE SIDE PANEL (Right Side) ═══════════ */
 .panel-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,0);
-  z-index:200;pointer-events:none; transition:background 0.4s;
+  position:fixed;inset:0;background:rgba(255,255,255,0);
+  backdrop-filter: blur(0px);
+  z-index:200;pointer-events:none; transition:all 0.4s ease;
 }
-.panel-overlay.open{background:rgba(0,0,0,0.4);pointer-events:all}
+.panel-overlay.open{background:rgba(255,255,255,0.7); backdrop-filter: blur(5px); pointer-events:all;}
 .side-panel{
   position:fixed;top:0;right:-100%; width:var(--panel-w);max-width:100vw;
   height:100vh;background:var(--white); z-index:201;overflow-y:auto;
-  transition:right 0.45s cubic-bezier(0.22,1,0.36,1); border-left:0.5px solid var(--border);
+  transition:right 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  border-left: 4px solid var(--black); /* Heavy B&W frame */
+  box-shadow: -10px 0 30px rgba(0,0,0,0.1);
 }
 .side-panel.open{right:0}
-.panel-head{
-  position:sticky;top:0;background:rgba(255,255,255,0.96); backdrop-filter:blur(10px);
-  border-bottom:0.5px solid var(--border); padding:20px 28px;
-  display:flex;align-items:center;justify-content:space-between; z-index:2;
+
+/* Panel Internal Styling (Matching cards_2.jpeg exactly) */
+.panel-head {
+  padding: 30px 40px; display: flex; align-items: center; justify-content: space-between;
 }
-.panel-head-title{ font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400; }
-.panel-close{
-  width:36px;height:36px;border-radius:50%; border:0.5px solid var(--border);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;font-size:18px;color:var(--muted); transition:all 0.15s;
+.panel-menu-icon { width: 30px; height: 30px; cursor: pointer; }
+.panel-menu-icon svg { width: 100%; height: 100%; stroke: var(--black); stroke-width: 2; }
+.panel-user-icon { width: 34px; height: 34px; border: 2px solid var(--black); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+.panel-body { padding: 0 40px 40px; }
+.panel-main-title {
+  font-size: 42px; font-weight: 800; text-transform: uppercase;
+  line-height: 1; letter-spacing: -0.02em; margin-bottom: 30px;
 }
-.panel-close:hover{background:var(--black);color:var(--white);border-color:var(--black)}
-.panel-body{padding:28px}
+
+/* BW Card Styling */
+.bw-card {
+  border: 2px solid var(--black); border-radius: 12px;
+  overflow: hidden; margin-bottom: 30px;
+}
+.bw-card-header {
+  background: var(--black); color: var(--white);
+  padding: 8px 16px; font-size: 13px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+}
+.bw-card-img {
+  width: 100%; height: 280px; object-fit: cover; border-bottom: 2px solid var(--black);
+}
+
+.panel-sub-title {
+  font-size: 16px; font-weight: 700; text-transform: uppercase;
+  display: flex; justify-content: space-between; margin-bottom: 16px;
+}
+.highlights-scroll {
+  display: flex; gap: 12px; overflow-x: auto; padding-bottom: 12px;
+}
+.highlights-scroll::-webkit-scrollbar { display: none; }
+.highlight-img {
+  width: 140px; height: 100px; border: 2px solid var(--black);
+  border-radius: 8px; object-fit: cover; flex-shrink: 0;
+}
+
+/* Panel Buttons */
+.panel-actions {
+  display: flex; gap: 12px; margin-top: 20px;
+}
+.bw-btn {
+  flex: 1; padding: 12px; text-align: center;
+  border: 2px solid var(--black); border-radius: 100px;
+  font-size: 13px; font-weight: 700; text-transform: uppercase;
+  cursor: pointer; background: var(--white); transition: all 0.2s;
+}
+.bw-btn:hover { background: var(--black); color: var(--white); }
+
 </style>
 </head>
 <body>
 
-<!-- ══ NAV ══════════════════════════════════════════ -->
-<nav id="main-nav">
+<!-- NAV -->
+<nav>
   <a class="nav-logo" href="#">
     <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
     00.house
   </a>
   <div class="nav-pills">
-    <button class="pill" onclick="openPanel('explore')">Explore</button>
-    <button class="pill" onclick="openPanel('find')">Find your home</button>
-    <button class="pill lang" onclick="openPanel('lang')">
-      <span>🇺🇸</span> EN ▾
-    </button>
-    <button class="pill account" onclick="openPanel('account')">Account</button>
+    <button class="pill" onclick="openPanel()">Explore</button>
+    <button class="pill" onclick="openPanel()">Find your home</button>
+    <button class="pill" onclick="openPanel()">🇺🇸 EN ▾</button>
+    <button class="pill active" onclick="openPanel()">Account</button>
   </div>
 </nav>
 
-<!-- ══ HERO WITH REAL HD PHOTO ═════════════════════ -->
-<section class="hero" onclick="openPanel('explore')">
-  <img src="watermarked_img_6083006709610084108.jpg" class="hero-photo" alt="Luxury Interior with View">
+<!-- HEADER IMAGE -->
+<section class="hero" onclick="openPanel()">
+  <img src="home-house-rent.jpeg" class="hero-photo" alt="Luxury Home Render">
 </section>
 
-<!-- ══ SEARCH SECTION ════════════════════════════════ -->
+<!-- TAGLINE & SEARCH -->
 <section class="tagline-section">
-  <h1 class="tagline">00.house — <em>Are you looking for a house?</em></h1>
-  <div class="search-container">
-    <div class="search-bar-top" onclick="openPanel('find')">
+  <h1 class="tagline">00.house — Are you looking for a house?</h1>
+  <div class="search-container" onclick="openPanel()">
+    <div class="search-bar-top">
       <span>[Search by city or country]</span>
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
     </div>
-    <div class="search-bar-bottom" onclick="openPanel('find')">
+    <div class="search-bar-bottom">
       <span>Choose a city...</span>
-      <svg viewBox="0 0 24 24" style="width:20px;height:20px;stroke:var(--black);fill:none;stroke-width:1.5"><path d="M6 9l6 6 6-6"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
     </div>
   </div>
 </section>
 
-<!-- ══ MOVABLE MAP WITH FLORAL FRAME ═════════════════ -->
+<!-- FLORAL MAP -->
 <div class="floral-map-wrapper">
   <div class="map-badge-mockup">73 properties</div>
   <div class="map-section" id="map"></div>
 </div>
 
-<!-- ══ ADDITIONAL SERVICES (Mockup Layout) ═══════════ -->
+<!-- ADDITIONAL SERVICES (1 Top, 2 Bottom Grid) -->
 <div class="services-section">
-  <div class="section-eyebrow">Additional Services</div>
-  <div class="services-mockup-grid">
-    
-    <!-- Top Full Row -->
-    <div class="svc-card-full" onclick="openPanel('interior')">
-      <div class="mockup-icon">
+  <h2 class="section-title">Additional Services</h2>
+  <div class="svc-grid">
+    <!-- Top Full -->
+    <div class="svc-full" onclick="openPanel()">
+      <div class="svc-icon">
         <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/><circle cx="12" cy="12" r="3"/></svg>
       </div>
-      <div class="svc-full-text">
-        <div class="svc-full-title">Interior Design</div>
-        <div class="svc-full-desc">Allow property management your<br>property Management.</div>
+      <div class="svc-text-full">
+        <h3>Interior Design</h3>
+        <p>Allow property management your<br>property Management.</p>
       </div>
-      <div class="svc-badge">[1]</div>
+      <div class="svc-count">[1]</div>
     </div>
-
-    <!-- Bottom Half Rows -->
-    <div class="svc-card-half-container">
-      <div class="svc-card-half" onclick="openPanel('tenant-pass')">
-        <div class="mockup-icon" style="width:32px;height:32px;">
+    <!-- Bottom Half -->
+    <div class="svc-half-row">
+      <div class="svc-half" onclick="openPanel()">
+        <div class="svc-icon" style="width:36px;height:36px;">
           <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/><circle cx="9" cy="14" r="2"/></svg>
         </div>
-        <div class="svc-half-text">Tenant<br>Screening</div>
+        <div class="svc-text-half">Tenant<br>Screening</div>
       </div>
-      
-      <div class="svc-card-half" onclick="openPanel('insurance')">
-        <div class="mockup-icon" style="width:32px;height:32px;">
+      <div class="svc-half" onclick="openPanel()">
+        <div class="svc-icon" style="width:36px;height:36px;">
           <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><rect x="9" y="9" width="6" height="8" rx="1"/></svg>
         </div>
-        <div class="svc-half-text">Landlord<br>Insurance</div>
+        <div class="svc-text-half">Landlord<br>Insurance</div>
       </div>
     </div>
-    
   </div>
 </div>
 
-<!-- ══ PINK TENANT CARD ══════════════════════════════ -->
-<div class="tenant-card-pink">
-  <div class="tc-title">Tenant Application Card</div>
-  <div class="tc-desc">Required to apply. Secure your properties with our tenant card. <a href="#" onclick="openPanel('tenant-pass')">[Learn More]</a></div>
-  
-  <div class="tc-bottom-row">
-    <div class="tc-checklist-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
-        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-        <path d="M9 12l2 2 4-4"></path>
-        <line x1="8" y1="6" x2="16" y2="6"></line>
-        <line x1="8" y1="18" x2="16" y2="18"></line>
-      </svg>
-    </div>
-    <div class="tc-progress-container">
-      <div class="tc-bar-bg"><div class="tc-bar-fill" id="tBarMockup"></div></div>
-      <div class="tc-label">Application progress</div>
+<!-- ROSE TENANT PASS -->
+<div class="tenant-pass-container">
+  <div class="tenant-card-rose" onclick="openPanel()">
+    <div class="tc-content">
+      <h2 class="tc-title">Tenant Application Card</h2>
+      <p class="tc-desc">Required to apply. Secure your properties with our tenant card. <a>[Learn More]</a></p>
+      
+      <div class="tc-interactive">
+        <div class="tc-checkbox">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <path d="M9 12l2 2 4-4"></path>
+            <line x1="8" y1="6" x2="16" y2="6"></line>
+            <line x1="8" y1="18" x2="16" y2="18"></line>
+          </svg>
+        </div>
+        <div class="tc-progress">
+          <div class="tc-bar-bg"><div class="tc-bar-fill"></div></div>
+          <div class="tc-label">Application progress</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ══ FOOTER (Matching Mockup 3) ════════════════════ -->
-<div class="footer-mockup">
+<!-- FOOTER -->
+<footer>
   <div class="footer-col">
-    <h4>COMPANY</h4>
+    <h4>Company</h4>
     <a href="#">About Us</a>
     <a href="#">Careers</a>
     <a href="#">Contact</a>
     <a href="#">Help Center</a>
   </div>
   <div class="footer-col">
-    <h4>LEGAL</h4>
+    <h4>Legal</h4>
     <a href="#">Terms of Service</a>
     <a href="#">Privacy Policy</a>
     <a href="#">Disclosures</a>
     <a href="#">Licenses</a>
   </div>
-</div>
+</footer>
 
-<!-- ══ OVERLAY + PANEL (Preserved Original) ══════════ -->
+<!-- B&W RIGHT SIDE PANEL (Pop out as new page to register) -->
 <div class="panel-overlay" id="overlay" onclick="closePanel()"></div>
 <div class="side-panel" id="sidePanel">
   <div class="panel-head">
-    <div class="panel-head-title" id="panelTitle">Explore</div>
-    <div class="panel-close" onclick="closePanel()">×</div>
+    <div class="panel-menu-icon" onclick="closePanel()">
+      <svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </div>
+    <div class="panel-user-icon">
+      <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--black);fill:none;stroke-width:2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </div>
   </div>
-  <div class="panel-body" id="panelBody"></div>
+  
+  <div class="panel-body">
+    <h1 class="panel-main-title">Explore Properties</h1>
+    
+    <div class="bw-card">
+      <div class="bw-card-header">Live Feed</div>
+      <img src="watermarked_img_6083006709610084108.jpg" class="bw-card-img" alt="Property Render">
+    </div>
+
+    <div class="panel-sub-title">
+      <span>Interior Highlights</span>
+      <span>< &nbsp; ></span>
+    </div>
+    
+    <div class="highlights-scroll">
+      <img src="watermarked_img_6083006709610084108.jpg" class="highlight-img">
+      <img src="128974e6-988f-40b2-8028-49acb2e9b308.jpg" class="highlight-img">
+      <img src="home-house-rent.jpeg" class="highlight-img" onerror="this.src='watermarked_img_6083006709610084108.jpg'">
+    </div>
+
+    <div class="panel-actions">
+      <button class="bw-btn">[Explore All]</button>
+      <button class="bw-btn">[Find Your Home]</button>
+      <button class="bw-btn">[Register Pass]</button>
+    </div>
+  </div>
 </div>
 
-<!-- Leaflet JS and Logic -->
+<!-- LEAFLET MAP SCRIPT -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-  // Initialize Movable Leaflet Map
+  // Init Map
   var map = L.map('map', { zoomControl: false, scrollWheelZoom: false }).setView([34.0522, -118.2437], 11);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
+    attribution: '&copy; OpenStreetMap'
   }).addTo(map);
 
-  // Custom Map Pin
+  // Custom B&W Pin
   var pinHtml = `
-    <div style="background: white; border: 1.5px solid black; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 6px rgba(0,0,0,0.2);">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path></svg>
+    <div style="background: var(--white); border: 2px solid var(--black); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--black)" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path></svg>
     </div>`;
-  var customIcon = L.divIcon({ className: 'custom-pin', html: pinHtml, iconSize: [28, 28], iconAnchor: [14, 14] });
+  var customIcon = L.divIcon({ className: 'custom-pin', html: pinHtml, iconSize: [32, 32], iconAnchor: [16, 16] });
 
-  // Dummy Pins matching image
+  // Add sample pins
   L.marker([34.05, -118.25], {icon: customIcon}).addTo(map);
   L.marker([34.10, -118.10], {icon: customIcon}).addTo(map);
   L.marker([33.95, -118.35], {icon: customIcon}).addTo(map);
 
-  // Animate Pink Tenant Progress Bar on scroll
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) document.getElementById('tBarMockup').style.width = '65%';
-    });
-  }, {threshold: 0.5});
-  const tCard = document.querySelector('.tenant-card-pink');
-  if (tCard) observer.observe(tCard);
-
-  // Original Panel Logic
-  const panels = {
-    explore: { title: 'Explore Properties', html: '<p>Explore properties content...</p>' },
-    find: { title: 'Find Your Home', html: '<p>Search settings...</p>' },
-    lang: { title: 'Language', html: '<p>Language options...</p>' },
-    account: { title: 'Your Account', html: '<p>Account login...</p>' }
-  };
-  function openPanel(key) {
-    if (!panels[key]) return;
-    document.getElementById('panelTitle').textContent = panels[key].title;
-    document.getElementById('panelBody').innerHTML = panels[key].html;
+  // Panel Logic
+  function openPanel() {
     document.getElementById('sidePanel').classList.add('open');
     document.getElementById('overlay').classList.add('open');
     document.body.style.overflow = 'hidden';
@@ -425,7 +444,6 @@ nav{
     document.getElementById('overlay').classList.remove('open');
     document.body.style.overflow = '';
   }
-  document.addEventListener('keydown', e => { if(e.key === 'Escape') closePanel(); });
 </script>
 </body>
 </html>
