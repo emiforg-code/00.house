@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>00.house — Are you looking for a house?</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#0a0a0a;
+  --white:#ffffff;
+  --off:#f8f6f2;
+  --warm:#e8e2d8;
+  --gold:#c8a855;
+  --green:#1d4d2e;
+  --muted:#6b6b6b;
+  --border:rgba(0,0,0,0.1);
+  --panel-w:520px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--white);color:var(--black);overflow-x:hidden}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--warm);border-radius:2px}
+
+/* ══ NAV ══════════════════════════════════════════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;height:60px;
+  background:rgba(255,255,255,0.94);
+  backdrop-filter:blur(12px);
+  border-bottom:0.5px solid var(--border);
+  transition:all 0.3s;
+}
+.nav-logo{
+  display:flex;align-items:center;gap:10px;
+  font-family:'Inter',sans-serif;font-weight:400;font-size:17px;
+  letter-spacing:-0.01em;color:var(--black);text-decoration:none;
+  cursor:pointer;
+}
+.nav-logo svg{width:20px;height:20px;stroke:var(--black);fill:none;stroke-width:1.4}
+.nav-pills{display:flex;align-items:center;gap:6px}
+.pill{
+  font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;
+  padding:8px 18px;border:1px solid var(--black);border-radius:100px;
+  background:transparent;color:var(--black);cursor:pointer;
+  transition:all 0.2s;white-space:nowrap;font-family:'Inter',sans-serif;
+}
+.pill:hover,.pill.active{background:var(--black);color:var(--white)}
+.pill.lang{display:flex;align-items:center;gap:6px;padding:8px 14px}
+.pill.lang img{width:18px;height:13px;border-radius:1px;object-fit:cover}
+.pill.account{background:var(--black);color:var(--white)}
+.pill.account:hover{background:#333}
+
+/* ══ HERO ════════════════════════════════════════════ */
+.hero{
+  position:relative;width:100%;height:100vh;overflow:hidden;
+  cursor:pointer;
+}
+.hero-img{
+  width:100%;height:100%;object-fit:cover;object-position:center 35%;
+  display:block;transition:transform 8s ease;
+}
+.hero:hover .hero-img{transform:scale(1.02)}
+.hero-svg{width:100%;height:100%;display:block;position:absolute;top:0;left:0}
+
+/* subtle vignette at very bottom only */
+.hero::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:140px;
+  background:linear-gradient(to top,rgba(255,255,255,0.5),transparent);
+  pointer-events:none;
+}
+
+/* ══ TAGLINE SECTION ═════════════════════════════════ */
+.tagline-section{
+  display:flex;flex-direction:column;align-items:center;
+  padding:64px 24px 56px;background:var(--white);text-align:center;
+}
+.tagline{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(32px,4vw,52px);font-weight:300;
+  letter-spacing:-0.02em;line-height:1.15;margin-bottom:32px;
+  color:var(--black);
+}
+.tagline em{font-style:italic;font-weight:300}
+.search-bar{
+  display:flex;align-items:center;gap:0;
+  border:1.5px solid var(--black);border-radius:100px;
+  padding:0 22px 0 28px;height:52px;width:100%;max-width:460px;
+  background:var(--white);cursor:text;
+  transition:box-shadow 0.2s;
+}
+.search-bar:hover{box-shadow:0 0 0 3px rgba(0,0,0,0.06)}
+.search-bar span{
+  flex:1;font-size:12px;font-weight:400;color:#aaa;
+  letter-spacing:0.08em;text-transform:uppercase;
+}
+.search-bar svg{width:18px;height:18px;stroke:var(--black);fill:none;stroke-width:1.5;flex-shrink:0}
+.search-sub{
+  margin-top:16px;
+  display:flex;gap:8px;flex-wrap:wrap;justify-content:center;
+}
+.search-tag{
+  font-size:11px;color:var(--muted);
+  border:0.5px solid var(--warm);border-radius:100px;
+  padding:5px 14px;cursor:pointer;transition:all 0.15s;
+}
+.search-tag:hover{border-color:var(--black);color:var(--black)}
+
+/* ══ SECTION HEADER ══════════════════════════════════ */
+.section-eyebrow{
+  font-size:10px;font-weight:500;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--muted);
+  margin-bottom:12px;
+}
+
+/* ══ MAP SECTION ════════════════════════════════════ */
+.map-section{
+  margin:0 32px 40px;border-radius:20px;overflow:hidden;
+  border:0.5px solid var(--border);position:relative;
+  height:320px;
+}
+.map-controls{
+  position:absolute;top:16px;left:16px;right:16px;
+  display:flex;justify-content:space-between;align-items:center;z-index:2;
+}
+.map-badge{
+  background:rgba(255,255,255,0.95);backdrop-filter:blur(6px);
+  border:0.5px solid rgba(0,0,0,0.08);border-radius:100px;
+  font-size:12px;font-weight:500;padding:7px 16px;
+  display:flex;align-items:center;gap:7px;
+}
+.map-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(1.3)}}
+.map-count{
+  background:var(--black);color:var(--white);border-radius:100px;
+  font-size:12px;font-weight:500;padding:7px 16px;
+}
+.map-filter-row{
+  position:absolute;bottom:16px;left:16px;right:16px;
+  display:flex;gap:8px;z-index:2;overflow-x:auto;
+}
+.map-filter-row::-webkit-scrollbar{display:none}
+.map-filter{
+  background:rgba(255,255,255,0.95);backdrop-filter:blur(4px);
+  border:0.5px solid rgba(0,0,0,0.1);border-radius:100px;
+  font-size:11px;font-weight:500;padding:6px 14px;
+  white-space:nowrap;cursor:pointer;transition:all 0.15s;
+}
+.map-filter:hover,.map-filter.on{background:var(--black);color:var(--white);border-color:var(--black)}
+
+/* ══ SERVICES ════════════════════════════════════════ */
+.services-section{padding:0 24px 44px}
+.services-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.service-card{
+  border:0.5px solid rgba(0,0,0,0.12);border-radius:14px;
+  padding:18px 16px;display:flex;align-items:flex-start;gap:13px;
+  cursor:pointer;transition:all 0.2s;background:var(--white);
+  position:relative;overflow:hidden;
+}
+.service-card::before{
+  content:'';position:absolute;inset:0;
+  background:var(--black);opacity:0;transition:opacity 0.2s;
+  border-radius:14px;
+}
+.service-card:hover::before{opacity:0.03}
+.service-card:hover{border-color:var(--black);transform:translateY(-1px)}
+.service-card:hover .service-arrow{opacity:1;transform:translateX(0)}
+.svc-icon{
+  width:36px;height:36px;border-radius:9px;
+  border:0.5px solid rgba(0,0,0,0.1);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;background:var(--off);
+}
+.svc-icon svg{width:18px;height:18px;stroke:var(--black);fill:none;stroke-width:1.4}
+.svc-text{flex:1}
+.svc-name{font-size:13px;font-weight:500;color:var(--black);margin-bottom:3px}
+.svc-desc{font-size:11px;color:var(--muted);line-height:1.45}
+.service-arrow{
+  font-size:14px;color:var(--muted);
+  opacity:0;transform:translateX(-4px);
+  transition:all 0.2s;align-self:center;flex-shrink:0;
+}
+
+/* ══ LEGAL HUB ═══════════════════════════════════════ */
+.legal-section{
+  margin:0 24px 40px;
+  border:0.5px solid var(--border);border-radius:20px;
+  overflow:hidden;
+}
+.legal-header{
+  padding:20px 22px 16px;
+  border-bottom:0.5px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.legal-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-weight:400;
+}
+.legal-tag{
+  font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
+  background:var(--off);border-radius:100px;padding:5px 12px;color:var(--muted);
+}
+.legal-list{}
+.legal-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 22px;border-bottom:0.5px solid var(--border);
+  cursor:pointer;transition:background 0.15s;
+}
+.legal-row:last-child{border-bottom:none}
+.legal-row:hover{background:var(--off)}
+.legal-row-left{display:flex;align-items:center;gap:12px}
+.legal-flag{font-size:20px;line-height:1}
+.legal-info{}
+.legal-country{font-size:13px;font-weight:500}
+.legal-law{font-size:11px;color:var(--muted);margin-top:2px}
+.legal-row-right{display:flex;align-items:center;gap:8px}
+.legal-status{
+  font-size:10px;font-weight:500;letter-spacing:0.05em;
+  border-radius:100px;padding:4px 10px;
+}
+.legal-status.new{background:#e8f5e9;color:#2e7d32}
+.legal-status.updated{background:#fff8e1;color:#f57f17}
+.legal-status.active{background:#e3f2fd;color:#1565c0}
+.legal-chevron{font-size:12px;color:var(--muted)}
+
+/* ══ TENANT CARD ═════════════════════════════════════ */
+.tenant-card{
+  margin:0 24px 40px;border-radius:20px;
+  background:var(--black);
+  padding:28px 24px 24px;color:var(--white);
+  position:relative;overflow:hidden;
+}
+.tenant-card::before{
+  content:'';position:absolute;
+  top:-60px;right:-60px;
+  width:200px;height:200px;
+  border-radius:50%;border:30px solid rgba(255,255,255,0.04);
+}
+.tenant-card::after{
+  content:'';position:absolute;
+  bottom:-40px;left:40px;
+  width:140px;height:140px;
+  border-radius:50%;border:20px solid rgba(255,255,255,0.03);
+}
+.tenant-eyebrow{
+  font-size:10px;font-weight:500;letter-spacing:0.12em;
+  text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:8px;
+}
+.tenant-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:26px;font-weight:300;margin-bottom:8px;line-height:1.2;
+}
+.tenant-desc{
+  font-size:12px;color:rgba(255,255,255,0.55);
+  line-height:1.6;margin-bottom:20px;max-width:240px;
+}
+.tenant-bar-wrap{margin-bottom:8px}
+.tenant-bar-bg{
+  background:rgba(255,255,255,0.12);border-radius:100px;height:3px;margin-bottom:6px;
+}
+.tenant-bar-fill{
+  height:3px;border-radius:100px;background:var(--gold);width:35%;
+  transition:width 1s ease;
+}
+.tenant-bar-label{
+  display:flex;justify-content:space-between;
+  font-size:10px;color:rgba(255,255,255,0.35);
+}
+.tenant-cta{
+  margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;
+}
+.tenant-btn{
+  font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;
+  padding:10px 20px;border-radius:100px;cursor:pointer;
+  transition:all 0.2s;font-family:'Inter',sans-serif;border:1px solid;
+}
+.tenant-btn.primary{
+  background:var(--white);color:var(--black);border-color:var(--white);
+}
+.tenant-btn.primary:hover{background:var(--off)}
+.tenant-btn.outline{
+  background:transparent;color:var(--white);border-color:rgba(255,255,255,0.25);
+}
+.tenant-btn.outline:hover{border-color:var(--white)}
+
+/* ══ ACCOUNTS SECTION ════════════════════════════════ */
+.accounts-section{padding:0 24px 44px}
+.accounts-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:16px}
+.account-card{
+  border:0.5px solid var(--border);border-radius:14px;
+  padding:20px 16px;cursor:pointer;
+  transition:all 0.2s;text-align:center;background:var(--white);
+}
+.account-card:hover{border-color:var(--black);background:var(--off)}
+.account-card:hover .acc-icon{background:var(--black)}
+.account-card:hover .acc-icon svg{stroke:var(--white)}
+.acc-icon{
+  width:44px;height:44px;border-radius:12px;
+  background:var(--off);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 12px;transition:all 0.2s;
+}
+.acc-icon svg{width:20px;height:20px;stroke:var(--black);fill:none;stroke-width:1.4;transition:stroke 0.2s}
+.acc-name{font-size:12px;font-weight:500;margin-bottom:4px}
+.acc-desc{font-size:10px;color:var(--muted);line-height:1.4}
+
+/* ══ PR / ABOUT STRIP ═══════════════════════════════ */
+.pr-section{
+  margin:0 24px 40px;border-radius:20px;
+  background:var(--off);padding:28px 24px;
+}
+.pr-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+.pr-card{
+  background:var(--white);border-radius:14px;
+  padding:18px 16px;cursor:pointer;
+  border:0.5px solid var(--border);transition:all 0.2s;
+}
+.pr-card:hover{border-color:var(--black)}
+.pr-tag{
+  font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:8px;
+}
+.pr-headline{font-size:13px;font-weight:500;line-height:1.4;margin-bottom:6px}
+.pr-date{font-size:11px;color:var(--muted)}
+
+/* ══ FAQ ═════════════════════════════════════════════ */
+.faq-section{padding:0 24px 48px}
+.faq-list{margin-top:16px}
+.faq-item{
+  border-bottom:0.5px solid var(--border);
+}
+.faq-q{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 0;cursor:pointer;
+  font-size:14px;font-weight:400;
+  transition:color 0.15s;
+}
+.faq-q:hover{color:var(--muted)}
+.faq-icon{
+  width:24px;height:24px;border-radius:50%;
+  border:0.5px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-size:14px;color:var(--muted);
+  transition:all 0.2s;
+}
+.faq-item.open .faq-icon{background:var(--black);color:var(--white);border-color:var(--black)}
+.faq-a{
+  font-size:13px;color:var(--muted);line-height:1.65;
+  padding-bottom:18px;display:none;
+}
+.faq-item.open .faq-a{display:block}
+
+/* ══ FOOTER ══════════════════════════════════════════ */
+footer{
+  background:var(--black);color:var(--white);
+  padding:56px 32px 40px;
+}
+.footer-top{
+  display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px;
+  margin-bottom:48px;
+}
+.footer-brand{
+  font-family:'Cormorant Garamond',serif;
+  font-size:28px;font-weight:300;margin-bottom:12px;
+}
+.footer-brand-desc{
+  font-size:12px;color:rgba(255,255,255,0.4);
+  line-height:1.65;max-width:220px;margin-bottom:20px;
+}
+.footer-lang-row{display:flex;gap:8px;flex-wrap:wrap}
+.footer-lang{
+  font-size:11px;color:rgba(255,255,255,0.5);
+  border:0.5px solid rgba(255,255,255,0.15);border-radius:100px;
+  padding:5px 12px;cursor:pointer;display:flex;align-items:center;gap:5px;
+  transition:all 0.15s;
+}
+.footer-lang:hover{border-color:rgba(255,255,255,0.5);color:var(--white)}
+.footer-col-title{
+  font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;
+  color:rgba(255,255,255,0.35);margin-bottom:16px;
+}
+.footer-link{
+  display:block;font-size:13px;color:rgba(255,255,255,0.6);
+  text-decoration:none;margin-bottom:10px;cursor:pointer;
+  transition:color 0.15s;
+}
+.footer-link:hover{color:var(--white)}
+.footer-link.gov{
+  color:var(--gold);
+}
+.footer-link.gov:hover{color:lightyellow}
+.footer-bottom{
+  border-top:0.5px solid rgba(255,255,255,0.1);
+  padding-top:24px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:12px;
+}
+.footer-copy{font-size:11px;color:rgba(255,255,255,0.25)}
+.footer-badges{display:flex;gap:8px}
+.footer-badge{
+  font-size:10px;color:rgba(255,255,255,0.3);
+  border:0.5px solid rgba(255,255,255,0.1);border-radius:100px;
+  padding:4px 12px;
+}
+
+/* ══ SLIDE PANEL ════════════════════════════════════ */
+.panel-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0);
+  z-index:200;pointer-events:none;
+  transition:background 0.4s;
+}
+.panel-overlay.open{background:rgba(0,0,0,0.4);pointer-events:all}
+.side-panel{
+  position:fixed;top:0;right:-100%;
+  width:var(--panel-w);max-width:100vw;
+  height:100vh;background:var(--white);
+  z-index:201;overflow-y:auto;
+  transition:right 0.45s cubic-bezier(0.22,1,0.36,1);
+  border-left:0.5px solid var(--border);
+}
+.side-panel.open{right:0}
+.panel-head{
+  position:sticky;top:0;background:rgba(255,255,255,0.96);
+  backdrop-filter:blur(10px);
+  border-bottom:0.5px solid var(--border);
+  padding:20px 28px;
+  display:flex;align-items:center;justify-content:space-between;
+  z-index:2;
+}
+.panel-head-title{
+  font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;
+}
+.panel-close{
+  width:36px;height:36px;border-radius:50%;
+  border:0.5px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:18px;color:var(--muted);
+  transition:all 0.15s;
+}
+.panel-close:hover{background:var(--black);color:var(--white);border-color:var(--black)}
+.panel-body{padding:28px}
+.panel-section{margin-bottom:32px}
+.panel-section-title{
+  font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:14px;
+}
+.panel-card{
+  border:0.5px solid var(--border);border-radius:14px;
+  padding:18px;margin-bottom:10px;cursor:pointer;
+  transition:all 0.15s;
+}
+.panel-card:hover{border-color:var(--black);background:var(--off)}
+.panel-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.panel-card-name{font-size:14px;font-weight:500}
+.panel-card-tag{
+  font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;
+  border-radius:100px;padding:3px 10px;
+}
+.tag-live{background:#e8f5e9;color:#2e7d32}
+.tag-new{background:#fff8e1;color:#f57f17}
+.tag-req{background:#fce4ec;color:#c62828}
+.panel-card-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.panel-form-group{margin-bottom:18px}
+.panel-label{font-size:11px;font-weight:500;letter-spacing:0.04em;color:var(--muted);margin-bottom:7px;display:block;text-transform:uppercase}
+.panel-input{
+  width:100%;height:44px;border:0.5px solid var(--warm);border-radius:10px;
+  padding:0 14px;font-size:13px;font-family:'Inter',sans-serif;
+  background:var(--white);color:var(--black);outline:none;
+  transition:border-color 0.15s;
+}
+.panel-input:focus{border-color:var(--black)}
+.panel-input::placeholder{color:#ccc}
+.panel-select{
+  width:100%;height:44px;border:0.5px solid var(--warm);border-radius:10px;
+  padding:0 14px;font-size:13px;font-family:'Inter',sans-serif;
+  background:var(--white);color:var(--black);outline:none;
+  appearance:none;cursor:pointer;
+}
+.panel-btn{
+  width:100%;height:48px;border-radius:100px;
+  font-size:12px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;
+  cursor:pointer;font-family:'Inter',sans-serif;
+  transition:all 0.2s;border:1px solid;
+}
+.panel-btn.primary{background:var(--black);color:var(--white);border-color:var(--black)}
+.panel-btn.primary:hover{background:#222}
+.panel-btn.outline{background:transparent;color:var(--black);border-color:var(--warm)}
+.panel-btn.outline:hover{border-color:var(--black)}
+.panel-divider{border:none;border-top:0.5px solid var(--border);margin:24px 0}
+.panel-link-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 0;border-bottom:0.5px solid var(--border);cursor:pointer;
+}
+.panel-link-row:hover .panel-link-name{color:var(--muted)}
+.panel-link-name{font-size:13px;font-weight:400;transition:color 0.15s}
+.panel-link-arrow{font-size:12px;color:var(--muted)}
+.panel-gov-link{
+  display:flex;align-items:center;gap:10px;
+  padding:13px 16px;border:0.5px solid var(--border);border-radius:12px;
+  margin-bottom:8px;cursor:pointer;transition:all 0.15s;
+}
+.panel-gov-link:hover{border-color:var(--gold);background:rgba(200,168,85,0.04)}
+.panel-gov-flag{font-size:22px}
+.panel-gov-info{}
+.panel-gov-country{font-size:13px;font-weight:500}
+.panel-gov-url{font-size:11px;color:var(--gold)}
+.panel-gov-ext{font-size:11px;color:var(--muted);margin-left:auto}
+
+/* ══ HERO PHOTO (SVG stand-in) ═══════════════════════ */
+.hero-photo{width:100%;height:100%;display:block}
+
+/* ══ RESPONSIVE ══════════════════════════════════════ */
+@media(max-width:760px){
+  nav{padding:0 20px}
+  .pill:not(.account):not(.lang){display:none}
+  .tagline{font-size:28px}
+  .footer-top{grid-template-columns:1fr 1fr;gap:24px}
+  .accounts-grid{grid-template-columns:1fr 1fr}
+  :root{--panel-w:100vw}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══════════════════════════════════════════ -->
+<nav id="main-nav">
+  <a class="nav-logo" href="#">
+    <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+    00.house
+  </a>
+  <div class="nav-pills">
+    <button class="pill" onclick="openPanel('explore')">Explore</button>
+    <button class="pill" onclick="openPanel('find')">Find your home</button>
+    <button class="pill lang" onclick="openPanel('lang')">
+      <span>🇬🇧</span> EN ▾
+    </button>
+    <button class="pill account" onclick="openPanel('account')">Account</button>
+  </div>
+</nav>
+
+<!-- ══ HERO — FULL BLEED, ZERO TEXT ════════════════ -->
+<section class="hero" onclick="openPanel('explore')">
+  <svg class="hero-photo" viewBox="0 0 1440 900" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <linearGradient id="hSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#cfe8b8"/><stop offset="100%" stop-color="#f0e9d6"/></linearGradient>
+      <linearGradient id="hFloor" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3a5fd9"/><stop offset="100%" stop-color="#2240a8"/></linearGradient>
+      <linearGradient id="hMarble" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#f8f4ef"/><stop offset="50%" stop-color="#ede7dd"/><stop offset="100%" stop-color="#f5f0ea"/></linearGradient>
+      <linearGradient id="hSofa" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2d7050"/><stop offset="100%" stop-color="#1b4d38"/></linearGradient>
+      <linearGradient id="hGarden" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#b8d490"/><stop offset="100%" stop-color="#7aaa55"/></linearGradient>
+      <linearGradient id="hCeil" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#faf6f0"/><stop offset="100%" stop-color="#ede5d5"/></linearGradient>
+      <linearGradient id="hGlow" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fef3c7" stop-opacity="0.8"/><stop offset="100%" stop-color="#fde68a" stop-opacity="0.2"/></linearGradient>
+      <linearGradient id="hDoor" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c0d895"/><stop offset="100%" stop-color="#85b555"/></linearGradient>
+      <filter id="hBlur"><feGaussianBlur stdDeviation="4"/></filter>
+      <filter id="hBlur2"><feGaussianBlur stdDeviation="8"/></filter>
+    </defs>
+    <!-- Sky / exterior background -->
+    <rect width="1440" height="900" fill="url(#hSky)"/>
+    <!-- Rolling hills far -->
+    <ellipse cx="400" cy="350" rx="420" ry="200" fill="#aec888" opacity="0.55"/>
+    <ellipse cx="900" cy="320" rx="380" ry="180" fill="#9dbc74" opacity="0.5"/>
+    <ellipse cx="1200" cy="340" rx="300" ry="160" fill="#b4cc80" opacity="0.45"/>
+    <ellipse cx="150" cy="370" rx="260" ry="150" fill="#b8d090" opacity="0.5"/>
+    <!-- Distant Mediterranean houses -->
+    <g opacity="0.85">
+      <rect x="180" y="260" width="120" height="90" rx="3" fill="#d8c8a8"/>
+      <polygon points="170,260 310,260 240,210" fill="#c8a882"/>
+      <rect x="215" y="295" width="28" height="55" rx="2" fill="#8a7050" opacity="0.75"/>
+      <rect x="256" y="270" width="38" height="28" rx="2" fill="#b5d0e5" opacity="0.8"/>
+      <rect x="340" y="275" width="90" height="70" rx="3" fill="#d4c4a0"/>
+      <polygon points="330,275 440,275 385,235" fill="#c0a878"/>
+      <rect x="368" y="305" width="22" height="40" rx="2" fill="#7a6040" opacity="0.75"/>
+      <rect x="600" y="255" width="130" height="88" rx="3" fill="#ddd0b0"/>
+      <polygon points="590,255 740,255 665,208" fill="#cdb888"/>
+      <rect x="638" y="292" width="30" height="51" rx="2" fill="#856a42" opacity="0.75"/>
+      <rect x="677" y="265" width="42" height="32" rx="2" fill="#aec8de" opacity="0.8"/>
+      <rect x="800" y="265" width="110" height="82" rx="3" fill="#d8c8a8"/>
+      <polygon points="792,265 918,265 855,222" fill="#c4a882"/>
+      <rect x="838" y="302" width="26" height="45" rx="2" fill="#7a6040" opacity="0.75"/>
+      <rect x="1020" y="258" width="125" height="85" rx="3" fill="#ddd2b2"/>
+      <polygon points="1012,258 1152,258 1082,212" fill="#ccb890"/>
+      <rect x="1055" y="296" width="28" height="47" rx="2" fill="#806545" opacity="0.75"/>
+      <rect x="1090" y="268" width="40" height="30" rx="2" fill="#b0cce0" opacity="0.8"/>
+    </g>
+    <!-- Lavender fields -->
+    <rect x="0" y="430" width="1440" height="470" fill="url(#hGarden)"/>
+    <!-- Garden ground details -->
+    <ellipse cx="720" cy="600" rx="90" ry="280" fill="#d8cc98" opacity="0.45"/>
+    <circle cx="250" cy="490" r="70" fill="#4a9040" opacity="0.85"/>
+    <circle cx="200" cy="475" r="50" fill="#3a8030"/>
+    <circle cx="310" cy="470" r="42" fill="#5aa840" opacity="0.9"/>
+    <circle cx="1200" cy="485" r="65" fill="#4a9040" opacity="0.85"/>
+    <circle cx="1250" cy="475" r="48" fill="#3a8030"/>
+    <!-- Lavender clusters -->
+    <g opacity="0.9">
+      <ellipse cx="430" cy="460" rx="12" ry="22" fill="#8b65b5"/>
+      <ellipse cx="460" cy="456" rx="10" ry="18" fill="#9b72c5"/>
+      <ellipse cx="490" cy="462" rx="11" ry="20" fill="#8560b0"/>
+      <ellipse cx="950" cy="458" rx="12" ry="22" fill="#8b65b5"/>
+      <ellipse cx="980" cy="454" rx="10" ry="18" fill="#9b72c5"/>
+      <ellipse cx="1010" cy="460" rx="11" ry="20" fill="#8560b0"/>
+    </g>
+    <!-- People in garden -->
+    <g opacity="0.5" filter="url(#hBlur)">
+      <circle cx="700" cy="498" r="12" fill="#4a3a2a"/>
+      <rect x="695" y="510" width="10" height="28" rx="4" fill="#4a3a2a"/>
+      <circle cx="740" cy="502" r="11" fill="#4a3a2a"/>
+      <rect x="735" y="514" width="10" height="26" rx="4" fill="#4a3a2a"/>
+      <circle cx="765" cy="506" r="8" fill="#4a3a2a"/>
+      <rect x="761" y="515" width="8" height="18" rx="3" fill="#4a3a2a"/>
+    </g>
+
+    <!-- Interior room overlaid — ceiling and walls -->
+    <rect x="0" y="0" width="1440" height="900" fill="url(#hCeil)" opacity="0.92"/>
+
+    <!-- Large multi-pane window — left 2/3 -->
+    <!-- Outer frame -->
+    <rect x="30" y="20" width="820" height="640" rx="4" fill="#f0ebe0" opacity="0.2"/>
+    <!-- Window panes — 4 columns, 2 rows -->
+    <rect x="42" y="28" width="193" height="305" rx="2" fill="#b8d898" opacity="0.82"/>
+    <rect x="244" y="28" width="193" height="305" rx="2" fill="#c0dea0" opacity="0.82"/>
+    <rect x="446" y="28" width="193" height="305" rx="2" fill="#b5d895" opacity="0.80"/>
+    <rect x="648" y="28" width="193" height="305" rx="2" fill="#bcd898" opacity="0.80"/>
+    <rect x="42" y="343" width="193" height="307" rx="2" fill="#a8cc88" opacity="0.78"/>
+    <rect x="244" y="343" width="193" height="307" rx="2" fill="#b0d490" opacity="0.78"/>
+    <rect x="446" y="343" width="193" height="307" rx="2" fill="#a8cc85" opacity="0.76"/>
+    <rect x="648" y="343" width="193" height="307" rx="2" fill="#b0d090" opacity="0.76"/>
+    <!-- Mullion frames (white bars) -->
+    <rect x="38" y="20" width="10" height="640" fill="#f5f0e8"/>
+    <rect x="238" y="20" width="10" height="640" fill="#f5f0e8"/>
+    <rect x="440" y="20" width="10" height="640" fill="#f5f0e8"/>
+    <rect x="642" y="20" width="10" height="640" fill="#f5f0e8"/>
+    <rect x="838" y="20" width="10" height="640" fill="#f5f0e8"/>
+    <rect x="38" y="20" width="810" height="10" fill="#f5f0e8"/>
+    <rect x="38" y="335" width="810" height="12" fill="#f5f0e8"/>
+    <rect x="38" y="658" width="810" height="10" fill="#f5f0e8"/>
+    <!-- Horizontal glazing bars -->
+    <rect x="42" y="166" width="193" height="5" fill="#e8e2d8" opacity="0.7"/>
+    <rect x="244" y="166" width="193" height="5" fill="#e8e2d8" opacity="0.7"/>
+    <rect x="446" y="166" width="193" height="5" fill="#e8e2d8" opacity="0.7"/>
+    <rect x="648" y="166" width="193" height="5" fill="#e8e2d8" opacity="0.7"/>
+    <rect x="42" y="496" width="193" height="5" fill="#e8e2d8" opacity="0.7"/>
+    <rect x="244" y="496" width="193" height="5" fill="#e8e2d8" opacity="0.7"/>
+    <rect x="446" y="496" width="193" height="5" fill="#e8e2d8" opacity="0.7"/>
+    <rect x="648" y="496" width="193" height="5" fill="#e8e2d8" opacity="0.7"/>
+
+    <!-- OPEN DOOR — right panel -->
+    <rect x="856" y="80" width="230" height="590" rx="4" fill="#e4dccb"/>
+    <polygon points="856,80 1076,80 1076,670 856,670" fill="#ddd4c0"/>
+    <polygon points="1076,80 1096,95 1096,655 1076,670" fill="#c8c0b0"/>
+    <!-- Garden view through door -->
+    <rect x="860" y="84" width="214" height="582" fill="url(#hDoor)" opacity="0.85"/>
+    <ellipse cx="920" cy="280" rx="70" ry="120" fill="#5aaa3a" opacity="0.6"/>
+    <ellipse cx="990" cy="300" rx="55" ry="90" fill="#4a9a2a" opacity="0.55"/>
+    <ellipse cx="950" cy="500" rx="80" ry="50" fill="#5ab040" opacity="0.4"/>
+    <!-- Door knob -->
+    <circle cx="1060" cy="385" r="12" fill="#c8a855"/>
+    <circle cx="1060" cy="385" r="7" fill="#d4b860"/>
+    <!-- Light spill from door -->
+    <polygon points="1096,95 1440,0 1440,900 1096,655" fill="#f0e8d0" opacity="0.12"/>
+
+    <!-- Blue floor -->
+    <polygon points="0,740 1440,710 1440,900 0,900" fill="url(#hFloor)"/>
+    <rect x="0" y="740" width="1440" height="6" fill="#4a68e0" opacity="0.4"/>
+
+    <!-- Kitchen island (marble counter) -->
+    <polygon points="0,690 700,665 700,740 0,740" fill="url(#hMarble)"/>
+    <!-- Marble veining -->
+    <path d="M50,702 Q200,695 400,708 Q550,715 690,700" stroke="#ddd8ce" stroke-width="2" fill="none" opacity="0.7"/>
+    <path d="M0,718 Q180,712 320,722 Q480,730 650,718" stroke="#e4dfd4" stroke-width="1.5" fill="none" opacity="0.5"/>
+    <!-- Sink basin -->
+    <rect x="180" y="670" width="140" height="38" rx="5" fill="#e8e2d8" opacity="0.9"/>
+    <rect x="200" y="676" width="100" height="26" rx="3" fill="#d4cec8" opacity="0.85"/>
+    <!-- Gold faucet -->
+    <rect x="238" y="652" width="12" height="24" rx="3" fill="#c8a855"/>
+    <rect x="228" y="652" width="32" height="7" rx="3" fill="#c8a855"/>
+    <!-- Stools -->
+    <rect x="30" y="735" width="48" height="12" rx="6" fill="#d8cdb8" opacity="0.8"/>
+    <rect x="100" y="735" width="48" height="12" rx="6" fill="#d8cdb8" opacity="0.8"/>
+    <rect x="170" y="735" width="48" height="12" rx="6" fill="#d8cdb8" opacity="0.75"/>
+
+    <!-- Green velvet sofa -->
+    <rect x="-20" y="620" width="440" height="110" rx="18" fill="url(#hSofa)"/>
+    <rect x="-20" y="620" width="440" height="30" rx="12" fill="#358055"/>
+    <rect x="-20" y="588" width="440" height="42" rx="14" fill="#2d6848"/>
+    <!-- Cushions -->
+    <rect x="40" y="625" width="100" height="75" rx="8" fill="#3a7858" opacity="0.8"/>
+    <rect x="155" y="625" width="100" height="75" rx="8" fill="#3a7858" opacity="0.8"/>
+    <rect x="270" y="625" width="100" height="75" rx="8" fill="#3a7858" opacity="0.8"/>
+    <!-- Deco cushions -->
+    <rect x="50" y="600" width="70" height="52" rx="6" fill="#c8d0a0"/>
+    <rect x="165" y="598" width="65" height="50" rx="6" fill="#d4b8a0"/>
+    <!-- Lamp -->
+    <rect x="-20" y="540" width="18" height="90" fill="#c8b890" opacity="0.9"/>
+    <ellipse cx="-11" cy="540" rx="55" ry="35" fill="#e8dcc8" opacity="0.95"/>
+    <ellipse cx="-11" cy="507" rx="35" ry="15" fill="#d8ccb8" opacity="0.9"/>
+
+    <!-- Hanging pendant lights — 3 -->
+    <line x1="500" y1="0" x2="500" y2="130" stroke="#9a8878" stroke-width="3.5"/>
+    <line x1="580" y1="0" x2="580" y2="148" stroke="#9a8878" stroke-width="3.5"/>
+    <line x1="660" y1="0" x2="660" y2="138" stroke="#9a8878" stroke-width="3.5"/>
+    <!-- Pendant 1 -->
+    <ellipse cx="500" cy="138" rx="36" ry="14" fill="#c8a035"/>
+    <polygon points="464,135 536,135 546,218 454,218" fill="#d4a840"/>
+    <ellipse cx="500" cy="220" rx="46" ry="12" fill="#b89028" opacity="0.9"/>
+    <ellipse cx="500" cy="232" rx="90" ry="35" fill="url(#hGlow)" filter="url(#hBlur)"/>
+    <!-- Pendant 2 -->
+    <ellipse cx="580" cy="157" rx="34" ry="13" fill="#c8a035"/>
+    <polygon points="546,154 614,154 624,234 536,234" fill="#d4a840"/>
+    <ellipse cx="580" cy="236" rx="44" ry="11" fill="#b89028" opacity="0.9"/>
+    <!-- Pendant 3 -->
+    <ellipse cx="660" cy="147" rx="34" ry="13" fill="#c8a035"/>
+    <polygon points="626,144 694,144 704,224 616,224" fill="#d4a840"/>
+    <ellipse cx="660" cy="226" rx="44" ry="11" fill="#b89028" opacity="0.9"/>
+
+    <!-- Plants near door -->
+    <rect x="760" y="610" width="50" height="68" rx="6" fill="#8a7050"/>
+    <ellipse cx="785" cy="608" rx="44" ry="18" fill="#5a7820"/>
+    <circle cx="770" cy="580" rx="38" fill="#3a6815"/>
+    <circle cx="800" cy="570" rx="32" fill="#4a7820"/>
+    <circle cx="782" cy="558" rx="26" fill="#5a8830"/>
+
+    <!-- Right outdoor patio seating (through open door area) -->
+    <rect x="1120" y="510" width="240" height="65" rx="8" fill="#8b2040" opacity="0.9"/>
+    <rect x="1110" y="455" width="255" height="62" rx="8" fill="#9b2848" opacity="0.95"/>
+    <rect x="1118" y="572" width="20" height="40" rx="4" fill="#6a3020"/>
+    <rect x="1340" y="572" width="20" height="40" rx="4" fill="#6a3020"/>
+    <!-- Fire pit -->
+    <rect x="1160" y="745" width="120" height="30" rx="5" fill="#6a5030"/>
+    <ellipse cx="1220" cy="742" rx="58" ry="28" fill="#c05018" opacity="0.8"/>
+    <ellipse cx="1220" cy="735" rx="38" ry="20" fill="#e07018" opacity="0.7"/>
+    <!-- Olive tree suggestion -->
+    <circle cx="1380" cy="350" rx="90" fill="#6a8030" opacity="0.6"/>
+    <circle cx="1360" cy="320" rx="70" fill="#588030" opacity="0.65"/>
+    <rect x="1368" y="430" width="24" height="120" fill="#7a6030" opacity="0.8"/>
+
+    <!-- Warm light wash from window onto floor -->
+    <polygon points="42,668 848,640 848,680 0,710" fill="#f8f0d8" opacity="0.1"/>
+    <!-- Subtle shadow at left edge -->
+    <rect x="0" y="0" width="42" height="900" fill="#0a0808" opacity="0.1"/>
+    <!-- Subtle vignette top -->
+    <rect x="0" y="0" width="1440" height="20" fill="#0a0808" opacity="0.07"/>
+  </svg>
+</section>
+
+<!-- ══ TAGLINE + SEARCH ══════════════════════════════ -->
+<section class="tagline-section">
+  <h1 class="tagline">00.house — <em>Are you looking for a house?</em></h1>
+  <div class="search-bar">
+    <span>Search by city or country</span>
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+  </div>
+  <div class="search-sub">
+    <span class="search-tag" onclick="openPanel('find')">🇬🇧 London</span>
+    <span class="search-tag" onclick="openPanel('find')">🇦🇪 Dubai</span>
+    <span class="search-tag" onclick="openPanel('find')">🇫🇷 Paris</span>
+    <span class="search-tag" onclick="openPanel('find')">🇸🇦 Riyadh</span>
+    <span class="search-tag" onclick="openPanel('find')">🇸🇬 Singapore</span>
+    <span class="search-tag" onclick="openPanel('find')">🇺🇸 New York</span>
+    <span class="search-tag" onclick="openPanel('find')">🇯🇵 Tokyo</span>
+  </div>
+</section>
+
+<!-- ══ MAP ════════════════════════════════════════════ -->
+<div class="map-section" onclick="openPanel('explore')">
+  <svg width="100%" height="320" viewBox="0 0 700 320" xmlns="http://www.w3.org/2000/svg">
+    <rect width="700" height="320" fill="#e8ede4"/>
+    <!-- Roads -->
+    <path d="M0,160 Q180,145 350,160 Q520,175 700,152" stroke="#d4cfc0" stroke-width="8" fill="none"/>
+    <path d="M0,95 Q130,92 270,112 Q420,132 540,108 Q620,95 700,104" stroke="#d4cfc0" stroke-width="6" fill="none"/>
+    <path d="M350,0 Q347,80 350,160 Q353,235 350,320" stroke="#d4cfc0" stroke-width="6" fill="none"/>
+    <path d="M150,0 Q152,90 150,160 Q148,240 152,320" stroke="#d4cfc0" stroke-width="5" fill="none"/>
+    <path d="M550,0 Q548,80 550,160 Q552,240 548,320" stroke="#d4cfc0" stroke-width="5" fill="none"/>
+    <path d="M0,245 Q220,238 350,245 Q480,252 700,240" stroke="#d4cfc0" stroke-width="5" fill="none"/>
+    <!-- Parks -->
+    <rect x="165" y="48" width="130" height="55" rx="3" fill="#c8d8a8" opacity="0.7"/>
+    <rect x="365" y="62" width="110" height="50" rx="3" fill="#c0d0a0" opacity="0.65"/>
+    <rect x="35" y="188" width="95" height="45" rx="3" fill="#c8d8a8" opacity="0.65"/>
+    <rect x="565" y="120" width="110" height="55" rx="3" fill="#c8d8a8" opacity="0.65"/>
+    <rect x="410" y="200" width="80" height="40" rx="3" fill="#c0d8a8" opacity="0.6"/>
+    <!-- Water -->
+    <path d="M0,280 Q180,272 350,280 Q520,288 700,275 L700,320 L0,320 Z" fill="#a8c4d8" opacity="0.5"/>
+    <!-- Main pins -->
+    <g transform="translate(320,128)"><circle r="22" fill="#1a1a1a" opacity="0.1"/><circle r="14" fill="#1a1a1a"/><circle r="6" fill="#fff"/></g>
+    <g transform="translate(440,95)"><circle r="18" fill="#1a1a1a" opacity="0.1"/><circle r="11" fill="#1a1a1a" opacity="0.75"/><circle r="4.5" fill="#fff"/></g>
+    <g transform="translate(185,162)"><circle r="16" fill="#1a1a1a" opacity="0.08"/><circle r="10" fill="#1a1a1a" opacity="0.65"/><circle r="4" fill="#fff"/></g>
+    <g transform="translate(560,178)"><circle r="14" fill="#1a1a1a" opacity="0.08"/><circle r="9" fill="#1a1a1a" opacity="0.6"/><circle r="3.5" fill="#fff"/></g>
+    <g transform="translate(80,108)"><circle r="14" fill="#1a1a1a" opacity="0.08"/><circle r="9" fill="#1a1a1a" opacity="0.6"/><circle r="3.5" fill="#fff"/></g>
+    <g transform="translate(630,88)"><circle r="13" fill="#1a1a1a" opacity="0.08"/><circle r="8" fill="#1a1a1a" opacity="0.55"/><circle r="3" fill="#fff"/></g>
+    <!-- Small pins -->
+    <circle cx="250" cy="90" r="5" fill="#1a1a1a" opacity="0.4"/>
+    <circle cx="500" cy="195" r="5" fill="#1a1a1a" opacity="0.4"/>
+    <circle cx="140" cy="220" r="4" fill="#1a1a1a" opacity="0.35"/>
+    <circle cx="600" cy="240" r="4" fill="#1a1a1a" opacity="0.35"/>
+    <circle cx="380" cy="255" r="4" fill="#1a1a1a" opacity="0.3"/>
+    <circle cx="50" cy="260" r="4" fill="#1a1a1a" opacity="0.3"/>
+    <circle cx="670" cy="148" r="4" fill="#1a1a1a" opacity="0.3"/>
+  </svg>
+  <div class="map-controls">
+    <div class="map-badge"><div class="map-dot"></div> Live global listings</div>
+    <div class="map-count">73 properties</div>
+  </div>
+  <div class="map-filter-row">
+    <div class="map-filter on">All</div>
+    <div class="map-filter">Apartments</div>
+    <div class="map-filter">Houses</div>
+    <div class="map-filter">Villas</div>
+    <div class="map-filter">Commercial</div>
+    <div class="map-filter">Short-term</div>
+  </div>
+</div>
+
+<!-- ══ SERVICES ══════════════════════════════════════ -->
+<div class="services-section">
+  <div class="section-eyebrow">Additional services</div>
+  <div class="services-grid">
+    <div class="service-card" onclick="openPanel('keyholder')">
+      <div class="svc-icon"><svg viewBox="0 0 24 24"><circle cx="7" cy="17" r="3"/><path d="M7 14V6a5 5 0 0110 0v1M10 14h4"/><rect x="12" y="10" width="8" height="6" rx="1"/></svg></div>
+      <div class="svc-text"><div class="svc-name">Keyholder Viewings</div><div class="svc-desc">On-demand property access worldwide</div></div>
+      <span class="service-arrow">›</span>
+    </div>
+    <div class="service-card" onclick="openPanel('tenant-pass')">
+      <div class="svc-icon"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20"/><circle cx="7" cy="15" r="1.5"/></svg></div>
+      <div class="svc-text"><div class="svc-name">Tenant Pass</div><div class="svc-desc">Verified global tenant identity card</div></div>
+      <span class="service-arrow">›</span>
+    </div>
+    <div class="service-card" onclick="openPanel('guarantor')">
+      <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+      <div class="svc-text"><div class="svc-name">Rent Guarantor</div><div class="svc-desc">Foreign tenant bonds & guarantee</div></div>
+      <span class="service-arrow">›</span>
+    </div>
+    <div class="service-card" onclick="openPanel('insurance')">
+      <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div class="svc-text"><div class="svc-name">Landlord Insurance</div><div class="svc-desc">Full rent & property protection</div></div>
+      <span class="service-arrow">›</span>
+    </div>
+    <div class="service-card" onclick="openPanel('legal')">
+      <div class="svc-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg></div>
+      <div class="svc-text"><div class="svc-name">Legal Hub</div><div class="svc-desc">Government links & local law guides</div></div>
+      <span class="service-arrow">›</span>
+    </div>
+    <div class="service-card" onclick="openPanel('interior')">
+      <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+      <div class="svc-text"><div class="svc-name">Interior Design</div><div class="svc-desc">Staging & property management</div></div>
+      <span class="service-arrow">›</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ LEGAL HUB ══════════════════════════════════════ -->
+<div class="legal-section">
+  <div class="legal-header">
+    <div class="legal-title">Government & Legal</div>
+    <div class="legal-tag">Official sources</div>
+  </div>
+  <div class="legal-list">
+    <div class="legal-row" onclick="openPanel('legal')"><div class="legal-row-left"><div class="legal-flag">🇬🇧</div><div class="legal-info"><div class="legal-country">United Kingdom</div><div class="legal-law">Renters' Rights Act 2025 · Right to Rent</div></div></div><div class="legal-row-right"><span class="legal-status new">New</span><span class="legal-chevron">›</span></div></div>
+    <div class="legal-row" onclick="openPanel('legal')"><div class="legal-row-left"><div class="legal-flag">🇦🇪</div><div class="legal-info"><div class="legal-country">UAE / Dubai</div><div class="legal-law">RERA Tenancy Law · Foreign Ownership</div></div></div><div class="legal-row-right"><span class="legal-status active">Active</span><span class="legal-chevron">›</span></div></div>
+    <div class="legal-row" onclick="openPanel('legal')"><div class="legal-row-left"><div class="legal-flag">🇸🇦</div><div class="legal-info"><div class="legal-country">Saudi Arabia</div><div class="legal-law">Ejar System · Foreign Real Estate Rules</div></div></div><div class="legal-row-right"><span class="legal-status updated">Updated</span><span class="legal-chevron">›</span></div></div>
+    <div class="legal-row" onclick="openPanel('legal')"><div class="legal-row-left"><div class="legal-flag">🇫🇷</div><div class="legal-info"><div class="legal-country">France</div><div class="legal-law">Loi Alur · GLI Garantie Loyers Impayés</div></div></div><div class="legal-row-right"><span class="legal-status active">Active</span><span class="legal-chevron">›</span></div></div>
+    <div class="legal-row" onclick="openPanel('legal')"><div class="legal-row-left"><div class="legal-flag">🇸🇬</div><div class="legal-info"><div class="legal-country">Singapore</div><div class="legal-law">Residential Tenancy Act · EP Visa Housing</div></div></div><div class="legal-row-right"><span class="legal-status active">Active</span><span class="legal-chevron">›</span></div></div>
+    <div class="legal-row" onclick="openPanel('legal')"><div class="legal-row-left"><div class="legal-flag">🇺🇸</div><div class="legal-info"><div class="legal-country">United States</div><div class="legal-law">Fair Housing Act · State Tenant Protections</div></div></div><div class="legal-row-right"><span class="legal-status active">Active</span><span class="legal-chevron">›</span></div></div>
+  </div>
+</div>
+
+<!-- ══ TENANT CARD ════════════════════════════════════ -->
+<div class="tenant-card">
+  <div class="tenant-eyebrow">Required to apply</div>
+  <div class="tenant-title">Tenant Application Card</div>
+  <div class="tenant-desc">Apply once, rent anywhere. Your verified global identity card — accepted by agents worldwide.</div>
+  <div class="tenant-bar-wrap">
+    <div class="tenant-bar-bg"><div class="tenant-bar-fill" id="tBar"></div></div>
+    <div class="tenant-bar-label"><span>Application progress</span><span>35%</span></div>
+  </div>
+  <div class="tenant-cta">
+    <button class="tenant-btn primary" onclick="openPanel('tenant-pass')">Get your pass</button>
+    <button class="tenant-btn outline" onclick="openPanel('tenant-pass')">Learn more</button>
+  </div>
+</div>
+
+<!-- ══ ACCOUNT TYPES ══════════════════════════════════ -->
+<div class="accounts-section">
+  <div class="section-eyebrow">Join 00.house</div>
+  <div class="accounts-grid">
+    <div class="account-card" onclick="openPanel('agent-reg')">
+      <div class="acc-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+      <div class="acc-name">Agent</div>
+      <div class="acc-desc">List & co-broker globally</div>
+    </div>
+    <div class="account-card" onclick="openPanel('keyholder')">
+      <div class="acc-icon"><svg viewBox="0 0 24 24"><circle cx="7" cy="17" r="3"/><path d="M7 14V6a5 5 0 0110 0v2"/></svg></div>
+      <div class="acc-name">Keyholder</div>
+      <div class="acc-desc">Host property viewings</div>
+    </div>
+    <div class="account-card" onclick="openPanel('tenant-pass')">
+      <div class="acc-icon"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20"/><circle cx="7" cy="15" r="1.5"/></svg></div>
+      <div class="acc-name">Tenant</div>
+      <div class="acc-desc">Apply with your pass</div>
+    </div>
+    <div class="account-card" onclick="openPanel('account')">
+      <div class="acc-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>
+      <div class="acc-name">Landlord</div>
+      <div class="acc-desc">Manage your portfolio</div>
+    </div>
+    <div class="account-card" onclick="openPanel('explore')">
+      <div class="acc-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+      <div class="acc-name">Investor</div>
+      <div class="acc-desc">Cross-border portfolio</div>
+    </div>
+    <div class="account-card" onclick="openPanel('agent-reg')">
+      <div class="acc-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg></div>
+      <div class="acc-name">Developer</div>
+      <div class="acc-desc">New builds & projects</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PR / NEWS ══════════════════════════════════════ -->
+<div class="pr-section">
+  <div class="section-eyebrow">Press & media</div>
+  <div class="pr-grid">
+    <div class="pr-card" onclick="openPanel('pr')">
+      <div class="pr-tag">Press release</div>
+      <div class="pr-headline">00.house launches global co-broking network for GCC & European agents</div>
+      <div class="pr-date">August 2026</div>
+    </div>
+    <div class="pr-card" onclick="openPanel('pr')">
+      <div class="pr-tag">Feature</div>
+      <div class="pr-headline">How the Tenant Pass is reshaping cross-border rental applications</div>
+      <div class="pr-date">July 2026</div>
+    </div>
+    <div class="pr-card" onclick="openPanel('pr')">
+      <div class="pr-tag">Partnership</div>
+      <div class="pr-headline">00.house integrates with leading keyholder networks across 12 markets</div>
+      <div class="pr-date">June 2026</div>
+    </div>
+    <div class="pr-card" onclick="openPanel('pr')">
+      <div class="pr-tag">Industry</div>
+      <div class="pr-headline">PropTech platforms with scraping-based MLS see 3x agent adoption</div>
+      <div class="pr-date">May 2026</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FAQ ════════════════════════════════════════════ -->
+<div class="faq-section">
+  <div class="section-eyebrow">Frequently asked</div>
+  <div class="faq-list">
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">What is the 00.house Tenant Pass? <div class="faq-icon">+</div></div>
+      <div class="faq-a">The Tenant Pass is a verified digital identity card for renters. Apply once with your documents, credit history and references — then use it with any agent or landlord on the 00.house network worldwide. No need to repeat referencing for each property.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">How does the keyholder viewing system work? <div class="faq-icon">+</div></div>
+      <div class="faq-a">Property owners or agents register keyholders — trusted local individuals who can facilitate viewings on demand. Prospective tenants or buyers book a viewing slot through the platform. Keyholders are paid per completed viewing.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Can foreign tenants use the guarantor service? <div class="faq-icon">+</div></div>
+      <div class="faq-a">Yes. Our guarantor partners cover international tenants who may not have a local credit history. We work with specialist insurers in the UK, UAE, France, Germany and Singapore who provide rent default protection accepted by landlords.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">How do agents list properties on 00.house? <div class="faq-icon">+</div></div>
+      <div class="faq-a">Agents register a free account and their listings are pulled automatically via our scraping engine from their existing portals. No manual data entry required. Premium placements and co-broking splits are managed inside the agent dashboard.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Which government portals does the legal hub link to? <div class="faq-icon">+</div></div>
+      <div class="faq-a">We link directly to official government sources: UK GOV (Renters' Rights Act, Right to Rent checks), UAE RERA, Saudi Arabia Ministry of Housing / Ejar, French ANIL, Singapore HDB & URA, and US HUD. All links are verified and updated monthly.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Is 00.house available in my country? <div class="faq-icon">+</div></div>
+      <div class="faq-a">We currently cover the UK, UAE, Saudi Arabia, France, Germany, Singapore, Japan and the United States with dedicated legal frameworks. Our scraping network aggregates listings from 40+ countries. New markets are added monthly — search your city to check availability.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FOOTER ═════════════════════════════════════════ -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand">00.house</div>
+      <div class="footer-brand-desc">The global property platform connecting agents, tenants, keyholders and investors across every market.</div>
+      <div class="footer-lang-row">
+        <div class="footer-lang">🇬🇧 English</div>
+        <div class="footer-lang">🇦🇪 العربية</div>
+        <div class="footer-lang">🇫🇷 Français</div>
+        <div class="footer-lang">🇩🇪 Deutsch</div>
+        <div class="footer-lang">🇯🇵 日本語</div>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Platform</div>
+      <a class="footer-link" onclick="openPanel('explore')">Explore properties</a>
+      <a class="footer-link" onclick="openPanel('find')">Find your home</a>
+      <a class="footer-link" onclick="openPanel('agent-reg')">Agent registration</a>
+      <a class="footer-link" onclick="openPanel('keyholder')">Keyholder account</a>
+      <a class="footer-link" onclick="openPanel('tenant-pass')">Tenant Pass</a>
+      <a class="footer-link" onclick="openPanel('guarantor')">Rent guarantor</a>
+      <a class="footer-link" onclick="openPanel('insurance')">Landlord insurance</a>
+    </div>
+    <div>
+      <div class="footer-col-title">Government links</div>
+      <a class="footer-link gov" href="https://www.gov.uk/government/collections/renters-reform-bill" target="_blank">🇬🇧 UK Renters' Rights Act</a>
+      <a class="footer-link gov" href="https://www.gov.uk/landlord-immigration-check" target="_blank">🇬🇧 Right to Rent</a>
+      <a class="footer-link gov" href="https://www.rera.gov.ae" target="_blank">🇦🇪 UAE RERA</a>
+      <a class="footer-link gov" href="https://www.mom.gov.sa" target="_blank">🇸🇦 Saudi Ejar</a>
+      <a class="footer-link gov" href="https://www.anil.org" target="_blank">🇫🇷 ANIL France</a>
+      <a class="footer-link gov" href="https://www.ura.gov.sg" target="_blank">🇸🇬 Singapore URA</a>
+      <a class="footer-link gov" href="https://www.hud.gov" target="_blank">🇺🇸 US HUD</a>
+    </div>
+    <div>
+      <div class="footer-col-title">Company</div>
+      <a class="footer-link" onclick="openPanel('pr')">About us</a>
+      <a class="footer-link" onclick="openPanel('pr')">Press & media</a>
+      <a class="footer-link" onclick="openPanel('pr')">Careers</a>
+      <a class="footer-link" onclick="openPanel('faq')">FAQ</a>
+      <a class="footer-link">Contact</a>
+      <a class="footer-link">Terms of service</a>
+      <a class="footer-link">Privacy policy</a>
+      <a class="footer-link">Disclosures & licences</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 00.house · All rights reserved · Registered in England & Wales</div>
+    <div class="footer-badges">
+      <div class="footer-badge">GDPR Compliant</div>
+      <div class="footer-badge">ICO Registered</div>
+      <div class="footer-badge">RICS Aligned</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ══ OVERLAY + PANEL ════════════════════════════════ -->
+<div class="panel-overlay" id="overlay" onclick="closePanel()"></div>
+<div class="side-panel" id="sidePanel">
+  <div class="panel-head">
+    <div class="panel-head-title" id="panelTitle">Explore</div>
+    <div class="panel-close" onclick="closePanel()">×</div>
+  </div>
+  <div class="panel-body" id="panelBody"></div>
+</div>
+
+<script>
+const panels = {
+  explore: {
+    title: 'Explore Properties',
+    html: `
+      <div class="panel-section">
+        <div class="panel-section-title">Live feed</div>
+        <div class="panel-card"><div class="panel-card-head"><span class="panel-card-name">Mayfair Penthouse</span><span class="panel-card-tag tag-live">Live</span></div><div class="panel-card-desc">🇬🇧 London · 3 bed · £8,500/mo · Keyholder available</div></div>
+        <div class="panel-card"><div class="panel-card-head"><span class="panel-card-name">Palm Jumeirah Villa</span><span class="panel-card-tag tag-new">New</span></div><div class="panel-card-desc">🇦🇪 Dubai · 5 bed · AED 45,000/mo · Pool & sea view</div></div>
+        <div class="panel-card"><div class="panel-card-head"><span class="panel-card-name">Marais Apartment</span><span class="panel-card-tag tag-live">Live</span></div><div class="panel-card-desc">🇫🇷 Paris 3e · 2 bed · €4,200/mo · Furnished</div></div>
+        <div class="panel-card"><div class="panel-card-head"><span class="panel-card-name">Orchard Rd Condo</span><span class="panel-card-tag tag-new">New</span></div><div class="panel-card-desc">🇸🇬 Singapore · 2 bed · SGD 6,800/mo · EP welcome</div></div>
+        <div class="panel-card"><div class="panel-card-head"><span class="panel-card-name">Riyadh Compound Villa</span><span class="panel-card-tag tag-live">Live</span></div><div class="panel-card-desc">🇸🇦 Riyadh · 4 bed · SAR 180,000/yr · Gated</div></div>
+      </div>
+      <div class="panel-section">
+        <div class="panel-section-title">Interior highlights</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+          <div style="height:80px;background:var(--off);border-radius:10px;border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer">🛋</div>
+          <div style="height:80px;background:var(--off);border-radius:10px;border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer">🪟</div>
+          <div style="height:80px;background:var(--off);border-radius:10px;border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer">🌿</div>
+        </div>
+      </div>
+      <button class="panel-btn primary" style="margin-top:8px">View all listings</button>
+    `
+  },
+  find: {
+    title: 'Find Your Home',
+    html: `
+      <div class="panel-section">
+        <div class="panel-section-title">Search</div>
+        <div class="panel-form-group"><label class="panel-label">City or country</label><input class="panel-input" placeholder="London, Dubai, Paris…"></div>
+        <div class="panel-form-group"><label class="panel-label">Property type</label><select class="panel-select"><option>Any type</option><option>Apartment</option><option>House</option><option>Villa</option><option>Studio</option><option>Commercial</option></select></div>
+        <div class="panel-form-group"><label class="panel-label">Budget (monthly)</label><input class="panel-input" placeholder="e.g. £3,000 – £8,000"></div>
+        <div class="panel-form-group"><label class="panel-label">Move-in date</label><input class="panel-input" placeholder="e.g. October 2026"></div>
+        <button class="panel-btn primary">Search properties</button>
+      </div>
+      <hr class="panel-divider">
+      <div class="panel-section">
+        <div class="panel-section-title">Popular right now</div>
+        <div class="panel-link-row"><span class="panel-link-name">🇬🇧 London — 18 listings</span><span class="panel-link-arrow">›</span></div>
+        <div class="panel-link-row"><span class="panel-link-name">🇦🇪 Dubai — 24 listings</span><span class="panel-link-arrow">›</span></div>
+        <div class="panel-link-row"><span class="panel-link-name">🇫🇷 Paris — 9 listings</span><span class="panel-link-arrow">›</span></div>
+        <div class="panel-link-row"><span class="panel-link-name">🇸🇦 Riyadh — 11 listings</span><span class="panel-link-arrow">›</span></div>
+        <div class="panel-link-row"><span class="panel-link-name">🇸🇬 Singapore — 7 listings</span><span class="panel-link-arrow">›</span></div>
+      </div>
+    `
+  },
+  lang: {
+    title: 'Language',
+    html: `
+      <div class="panel-section">
+        <div class="panel-section-title">Select your language</div>
+        ${[['🇬🇧','English','en'],['🇦🇪','العربية','ar'],['🇫🇷','Français','fr'],['🇩🇪','Deutsch','de'],['🇸🇬','中文','zh'],['🇯🇵','日本語','ja'],['🇪🇸','Español','es'],['🇮🇹','Italiano','it'],['🇰🇷','한국어','ko'],['🇧🇷','Português','pt']].map(([flag,name,code])=>`
+          <div class="panel-link-row"><span class="panel-link-name" style="font-size:16px">${flag} &nbsp; ${name}</span><span class="panel-link-arrow" style="font-size:10px;color:#bbb">${code.toUpperCase()}</span></div>
+        `).join('')}
+      </div>
+    `
+  },
+  account: {
+    title: 'Your Account',
+    html: `
+      <div class="panel-section">
+        <div class="panel-section-title">Sign in or create account</div>
+        <div class="panel-form-group"><label class="panel-label">Email address</label><input class="panel-input" placeholder="you@example.com"></div>
+        <div class="panel-form-group"><label class="panel-label">Password</label><input class="panel-input" type="password" placeholder="••••••••"></div>
+        <button class="panel-btn primary" style="margin-bottom:10px">Sign in</button>
+        <button class="panel-btn outline">Create account</button>
+      </div>
+      <hr class="panel-divider">
+      <div class="panel-section">
+        <div class="panel-section-title">Account types</div>
+        <div class="panel-card"><div class="panel-card-head"><span class="panel-card-name">🏠 Tenant Account</span><span class="panel-card-tag tag-live">Free</span></div><div class="panel-card-desc">Apply for properties using your Tenant Pass. Track applications and viewings.</div></div>
+        <div class="panel-card"><div class="panel-card-head"><span class="panel-card-name">🤝 Agent Account</span><span class="panel-card-tag tag-new">Register</span></div><div class="panel-card-desc">List and co-broker globally. Auto-import your listings. Manage splits.</div></div>
+        <div class="panel-card"><div class="panel-card-head"><span class="panel-card-name">🔑 Keyholder Account</span><span class="panel-card-tag tag-new">Register</span></div><div class="panel-card-desc">Accept viewing requests. Get paid per completed visit.</div></div>
+        <div class="panel-card"><div class="panel-card-head"><span class="panel-card-name">🏛 Investor / Landlord</span><span class="panel-card-tag tag-req">Pro</span></div><div class="panel-card-desc">Manage portfolio, guaranteed rent tools and analytics.</div></div>
+      </div>
+    `
+  },
+  keyholder: {
+    title: 'Keyholder Account',
+    html: `
+      <div class="panel-section">
+        <div class="panel-section-title">How it works</div>
+        <div class="panel-card"><div class="panel-card-head"><span class="panel-card-name">1 — Register</span></div><div class="panel-card-desc">Create your free keyholder account. Submit your ID and a local address.</div></div>
+        <div class="panel-card"><div class="panel-card-head"><span class="panel-card-name">2 — Accept viewings</span></div><div class="panel-card-desc">Agents assign you properties in your area. You receive viewing requests on your phone.</div></div>
+        <div class="panel-card"><div class="panel-card-head"><span class="panel-card-name">3 — Get paid</span></div><div class="panel-card-desc">£20–£45 per completed viewing, paid within 24 hours. No minimum commitment.</div></div>
+      </div>
+      <hr class="panel-divider">
+      <div class="panel-section">
+        <div class="panel-section-title">Register as keyholder</div>
+        <div class="panel-form-group"><label class="panel-label">Full name</label><input class="panel-input" placeholder="Your full name"></div>
+        <div class="panel-form-group"><label class="panel-label">City / area you cover</label><input class="panel-input" placeholder="e.g. North London, Dubai Marina…"></div>
+        <div class="panel-form-group"><label class="panel-label">Phone number</label><input class="panel-input" placeholder="+44 7700 000000"></div>
+        <div class="panel-form-group"><label class="panel-label">Email</label><input class="panel-input" placeholder="you@example.com"></div>
+        <button class="panel-btn primary">Apply to become a keyholder</button>
+      </div>
+    `
+  },
+  'tenant-pass': {
+    title: 'Tenant Pass',
+    html: `
+      <div style="background:var(--black);border-radius:16px;padding:24px;margin-bottom:24px;color:#fff;position:relative;overflow:hidden">
+        <div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;opacity:0.4;margin-bottom:8px">00.house</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;margin-bottom:16px">Tenant Pass</div>
+        <div style="display:flex;gap:8px;margin-bottom:16px">
+          <div style="background:rgba(255,255,255,0.08);border-radius:8px;padding:8px 14px;font-size:11px;color:rgba(255,255,255,0.5)">Verified ✓</div>
+          <div style="background:rgba(200,168,85,0.15);border-radius:8px;padding:8px 14px;font-size:11px;color:#c8a855">Global</div>
+        </div>
+        <div style="font-size:12px;opacity:0.35;letter-spacing:0.06em">•••• •••• •••• 0047</div>
+        <div style="position:absolute;right:-30px;bottom:-30px;width:120px;height:120px;border-radius:50%;border:24px solid rgba(255,255,255,0.04)"></div>
+      </div>
+      <div class="panel-section">
+        <div class="panel-section-title">What the pass includes</div>
+        <div class="panel-link-row"><span class="panel-link-name">✓ &nbsp; Identity verification</span></div>
+        <div class="panel-link-row"><span class="panel-link-name">✓ &nbsp; Credit & affordability check</span></div>
+        <div class="panel-link-row"><span class="panel-link-name">✓ &nbsp; Right to Rent confirmation</span></div>
+        <div class="panel-link-row"><span class="panel-link-name">✓ &nbsp; Previous landlord references</span></div>
+        <div class="panel-link-row"><span class="panel-link-name">✓ &nbsp; Employment verification</span></div>
+        <div class="panel-link-row"><span class="panel-link-name">✓ &nbsp; Accepted across 40+ countries</span></div>
+      </div>
+      <hr class="panel-divider">
+      <div class="panel-section">
+        <div class="panel-section-title">Apply now — free</div>
+        <div class="panel-form-group"><label class="panel-label">Full legal name</label><input class="panel-input" placeholder="As on your passport"></div>
+        <div class="panel-form-group"><label class="panel-label">Nationality</label><select class="panel-select"><option>Select country…</option><option>British</option><option>UAE National</option><option>Saudi</option><option>French</option><option>Other</option></select></div>
+        <div class="panel-form-group"><label class="panel-label">Email</label><input class="panel-input" placeholder="you@example.com"></div>
+        <button class="panel-btn primary">Start application</button>
+      </div>
+    `
+  },
+  guarantor: {
+    title: 'Rent Guarantor',
+    html: `
+      <div class="panel-section">
+        <div class="panel-section-title">Who is it for?</div>
+        <div class="panel-card"><div class="panel-card-head"><span class="panel-card-name">Foreign tenants</span><span class="panel-card-tag tag-req">Required</span></div><div class="panel-card-desc">No local credit history? Our guarantor partners cover you in UK, UAE, France, Germany and Singapore.</div></div>
+        <div class="panel-card"><div class="panel-card-head"><span class="panel-card-name">Self-employed</span></div><div class="panel-card-desc">Income hard to evidence? We work with specialist underwriters who accept SA302 and bank statements.</div></div>
+        <div class="panel-card"><div class="panel-card-head"><span class="panel-card-name">Students</span></div><div class="panel-card-desc">University students accepted. Parental co-guarantor option available.</div></div>
+      </div>
+      <hr class="panel-divider">
+      <div class="panel-section">
+        <div class="panel-section-title">Cost & coverage</div>
+        <div class="panel-link-row"><span class="panel-link-name">UK — 5–7% of annual rent</span><span class="panel-link-arrow">Homelet / Barbon</span></div>
+        <div class="panel-link-row"><span class="panel-link-name">France — 3.5% monthly (GLI)</span><span class="panel-link-arrow">Cautionéo</span></div>
+        <div class="panel-link-row"><span class="panel-link-name">UAE — On application</span><span class="panel-link-arrow">›</span></div>
+        <div class="panel-link-row"><span class="panel-link-name">Germany — 2 months deposit bond</span><span class="panel-link-arrow">›</span></div>
+        <button class="panel-btn primary" style="margin-top:18px">Get a guarantor quote</button>
+      </div>
+    `
+  },
+  insurance: {
+    title: 'Landlord Insurance',
+    html: `
+      <div class="panel-section">
+        <div class="panel-section-title">What's covered</div>
+        <div class="panel-link-row"><span class="panel-link-name">✓ &nbsp; Rent default protection</span></div>
+        <div class="panel-link-row"><span class="panel-link-name">✓ &nbsp; Legal expenses cover</span></div>
+        <div class="panel-link-row"><span class="panel-link-name">✓ &nbsp; Property damage by tenant</span></div>
+        <div class="panel-link-row"><span class="panel-link-name">✓ &nbsp; Eviction cost cover</span></div>
+        <div class="panel-link-row"><span class="panel-link-name">✓ &nbsp; Alternative accommodation</span></div>
+        <div class="panel-link-row"><span class="panel-link-name">✓ &nbsp; Malicious damage</span></div>
+      </div>
+      <hr class="panel-divider">
+      <div class="panel-section">
+        <div class="panel-section-title">Get a quote</div>
+        <div class="panel-form-group"><label class="panel-label">Property country</label><select class="panel-select"><option>United Kingdom</option><option>UAE</option><option>France</option><option>Germany</option><option>Singapore</option></select></div>
+        <div class="panel-form-group"><label class="panel-label">Monthly rent (local currency)</label><input class="panel-input" placeholder="e.g. £2,500"></div>
+        <div class="panel-form-group"><label class="panel-label">Number of properties</label><input class="panel-input" placeholder="1"></div>
+        <button class="panel-btn primary">Get instant quote</button>
+      </div>
+    `
+  },
+  legal: {
+    title: 'Legal Hub',
+    html: `
+      <div class="panel-section">
+        <div class="panel-section-title">Official government portals</div>
+        <div class="panel-gov-link" onclick="window.open('https://www.gov.uk/government/collections/renters-reform-bill','_blank')"><div class="panel-gov-flag">🇬🇧</div><div class="panel-gov-info"><div class="panel-gov-country">UK — Renters' Rights Act 2025</div><div class="panel-gov-url">gov.uk</div></div><div class="panel-gov-ext">↗</div></div>
+        <div class="panel-gov-link" onclick="window.open('https://www.gov.uk/landlord-immigration-check','_blank')"><div class="panel-gov-flag">🇬🇧</div><div class="panel-gov-info"><div class="panel-gov-country">UK — Right to Rent Check</div><div class="panel-gov-url">gov.uk</div></div><div class="panel-gov-ext">↗</div></div>
+        <div class="panel-gov-link" onclick="window.open('https://www.rera.gov.ae','_blank')"><div class="panel-gov-flag">🇦🇪</div><div class="panel-gov-info"><div class="panel-gov-country">UAE — RERA Tenancy Law</div><div class="panel-gov-url">rera.gov.ae</div></div><div class="panel-gov-ext">↗</div></div>
+        <div class="panel-gov-link" onclick="window.open('https://www.mom.gov.sa','_blank')"><div class="panel-gov-flag">🇸🇦</div><div class="panel-gov-info"><div class="panel-gov-country">Saudi Arabia — Ejar System</div><div class="panel-gov-url">mom.gov.sa</div></div><div class="panel-gov-ext">↗</div></div>
+        <div class="panel-gov-link" onclick="window.open('https://www.anil.org','_blank')"><div class="panel-gov-flag">🇫🇷</div><div class="panel-gov-info"><div class="panel-gov-country">France — ANIL / Loi Alur</div><div class="panel-gov-url">anil.org</div></div><div class="panel-gov-ext">↗</div></div>
+        <div class="panel-gov-link" onclick="window.open('https://www.ura.gov.sg','_blank')"><div class="panel-gov-flag">🇸🇬</div><div class="panel-gov-info"><div class="panel-gov-country">Singapore — URA Tenancy</div><div class="panel-gov-url">ura.gov.sg</div></div><div class="panel-gov-ext">↗</div></div>
+        <div class="panel-gov-link" onclick="window.open('https://www.hud.gov','_blank')"><div class="panel-gov-flag">🇺🇸</div><div class="panel-gov-info"><div class="panel-gov-country">USA — HUD Fair Housing</div><div class="panel-gov-url">hud.gov</div></div><div class="panel-gov-ext">↗</div></div>
+        <div class="panel-gov-link" onclick="window.open('https://www.bmj.bund.de','_blank')"><div class="panel-gov-flag">🇩🇪</div><div class="panel-gov-info"><div class="panel-gov-country">Germany — Mietrecht</div><div class="panel-gov-url">bmj.bund.de</div></div><div class="panel-gov-ext">↗</div></div>
+        <div class="panel-gov-link" onclick="window.open('https://www.mlit.go.jp','_blank')"><div class="panel-gov-flag">🇯🇵</div><div class="panel-gov-info"><div class="panel-gov-country">Japan — MLIT Housing</div><div class="panel-gov-url">mlit.go.jp</div></div><div class="panel-gov-ext">↗</div></div>
+      </div>
+    `
+  },
+  interior: {
+    title: 'Interior Design',
+    html: `
+      <div class="panel-section">
+        <div class="panel-section-title">Services</div>
+        <div class="panel-card"><div class="panel-card-head"><span class="panel-card-name">Property Staging</span><span class="panel-card-tag tag-live">Available</span></div><div class="panel-card-desc">Professional staging to maximise rental value and photography quality before listing.</div></div>
+        <div class="panel-card"><div class="panel-card-head"><span class="panel-card-name">Full Interior Design</span></div><div class="panel-card-desc">End-to-end design for new builds, refurbishments and buy-to-let investments.</div></div>
+        <div class="panel-card"><div class="panel-card-head"><span class="panel-card-name">Virtual Styling</span><span class="panel-card-tag tag-new">New</span></div><div class="panel-card-desc">AI-powered virtual staging for your listing photos. Ready in 24 hours.</div></div>
+        <div class="panel-card"><div class="panel-card-head"><span class="panel-card-name">Property Management</span></div><div class="panel-card-desc">Full property management including maintenance, inspections and tenant liaison.</div></div>
+      </div>
+      <hr class="panel-divider">
+      <div class="panel-section">
+        <div class="panel-section-title">Request a consultation</div>
+        <div class="panel-form-group"><label class="panel-label">Property location</label><input class="panel-input" placeholder="City, country"></div>
+        <div class="panel-form-group"><label class="panel-label">Service needed</label><select class="panel-select"><option>Staging</option><option>Interior design</option><option>Virtual styling</option><option>Property management</option></select></div>
+        <button class="panel-btn primary">Book consultation</button>
+      </div>
+    `
+  },
+  'agent-reg': {
+    title: 'Agent Registration',
+    html: `
+      <div class="panel-section">
+        <div class="panel-section-title">Why list on 00.house?</div>
+        <div class="panel-link-row"><span class="panel-link-name">✓ &nbsp; Auto-import from your existing portal</span></div>
+        <div class="panel-link-row"><span class="panel-link-name">✓ &nbsp; Co-broking splits managed automatically</span></div>
+        <div class="panel-link-row"><span class="panel-link-name">✓ &nbsp; Global GCC & European tenant audience</span></div>
+        <div class="panel-link-row"><span class="panel-link-name">✓ &nbsp; Integrated keyholder viewing network</span></div>
+        <div class="panel-link-row"><span class="panel-link-name">✓ &nbsp; Built-in tenant referencing & guarantor</span></div>
+        <div class="panel-link-row"><span class="panel-link-name">✓ &nbsp; Free to register — no monthly fee</span></div>
+      </div>
+      <hr class="panel-divider">
+      <div class="panel-section">
+        <div class="panel-section-title">Register your agency</div>
+        <div class="panel-form-group"><label class="panel-label">Agency / company name</label><input class="panel-input" placeholder="Your agency name"></div>
+        <div class="panel-form-group"><label class="panel-label">Country of operation</label><select class="panel-select"><option>United Kingdom</option><option>UAE</option><option>Saudi Arabia</option><option>France</option><option>Germany</option><option>Singapore</option><option>Other</option></select></div>
+        <div class="panel-form-group"><label class="panel-label">Licence / registration number</label><input class="panel-input" placeholder="e.g. RICS / RERA / DTCM"></div>
+        <div class="panel-form-group"><label class="panel-label">Your name & email</label><input class="panel-input" placeholder="Name · email@agency.com"></div>
+        <div class="panel-form-group"><label class="panel-label">Existing portal URL (for auto-import)</label><input class="panel-input" placeholder="https://yourportalpageurl.com"></div>
+        <button class="panel-btn primary">Submit registration</button>
+      </div>
+    `
+  },
+  faq: {
+    title: 'FAQ',
+    html: `
+      <div class="panel-section">
+        ${[
+          ['What is the 00.house Tenant Pass?','The Tenant Pass is a verified digital identity card for renters. Apply once with your documents, credit history and references — then use it with any agent or landlord on the 00.house network worldwide.'],
+          ['How does the keyholder viewing system work?','Property owners or agents register keyholders — trusted local individuals who can facilitate viewings on demand. Prospective tenants book a viewing slot through the platform.'],
+          ['Can foreign tenants use the guarantor service?','Yes. Our guarantor partners cover international tenants in the UK, UAE, France, Germany and Singapore.'],
+          ['How do agents list properties?','Agents register a free account and listings are pulled automatically via our scraping engine from their existing portals. No manual entry required.'],
+          ['Which government portals does the legal hub link to?','UK GOV, UAE RERA, Saudi Ejar, French ANIL, Singapore URA, US HUD and more. All verified monthly.'],
+          ['Is 00.house available in my country?','We cover UK, UAE, Saudi Arabia, France, Germany, Singapore, Japan and the USA. Search your city to check coverage.'],
+          ['How do co-broking splits work?','Agents set their co-broking terms when listing. Platform automates the split on deal completion. Minimum 30% to introducing agent.'],
+        ].map(([q,a])=>`<div style="margin-bottom:18px"><div style="font-size:13px;font-weight:500;margin-bottom:6px">${q}</div><div style="font-size:12px;color:var(--muted);line-height:1.6">${a}</div></div>`).join('')}
+      </div>
+    `
+  },
+  pr: {
+    title: 'Press & Media',
+    html: `
+      <div class="panel-section">
+        <div class="panel-section-title">Press releases</div>
+        ${[
+          ['Aug 2026','00.house launches global co-broking network for GCC & European agents','Press release'],
+          ['Jul 2026','How the Tenant Pass is reshaping cross-border rental applications','Feature'],
+          ['Jun 2026','00.house integrates with leading keyholder networks across 12 markets','Partnership'],
+          ['May 2026','PropTech platforms with scraping-based MLS see 3x agent adoption','Industry'],
+        ].map(([date,title,tag])=>`
+          <div class="panel-card">
+            <div class="panel-card-head"><span class="panel-card-name" style="font-size:13px;line-height:1.4">${title}</span><span class="panel-card-tag tag-live" style="white-space:nowrap">${tag}</span></div>
+            <div class="panel-card-desc">${date}</div>
+          </div>
+        `).join('')}
+      </div>
+      <hr class="panel-divider">
+      <div class="panel-section">
+        <div class="panel-section-title">Media enquiries</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6">For press, interviews and media partnerships, contact our communications team.</div>
+        <div class="panel-form-group"><label class="panel-label">Your name & publication</label><input class="panel-input" placeholder="Name · Publication"></div>
+        <div class="panel-form-group"><label class="panel-label">Email</label><input class="panel-input" placeholder="press@publication.com"></div>
+        <div class="panel-form-group"><label class="panel-label">Query</label><input class="panel-input" placeholder="Brief description…"></div>
+        <button class="panel-btn primary">Send media request</button>
+      </div>
+    `
+  }
+};
+
+function openPanel(key) {
+  const p = panels[key];
+  if (!p) return;
+  document.getElementById('panelTitle').textContent = p.title;
+  document.getElementById('panelBody').innerHTML = p.html;
+  document.getElementById('sidePanel').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePanel() {
+  document.getElementById('sidePanel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function toggleFaq(el) {
+  el.classList.toggle('open');
+  const icon = el.querySelector('.faq-icon');
+  icon.textContent = el.classList.contains('open') ? '−' : '+';
+}
+
+// Map filter toggle
+document.querySelectorAll('.map-filter').forEach(f => {
+  f.addEventListener('click', e => {
+    e.stopPropagation();
+    document.querySelectorAll('.map-filter').forEach(x => x.classList.remove('on'));
+    f.classList.add('on');
+  });
+});
+
+// Animate tenant bar on scroll
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) document.getElementById('tBar').style.width = '35%';
+  });
+}, {threshold: 0.5});
+const tCard = document.querySelector('.tenant-card');
+if (tCard) observer.observe(tCard);
+
+// Keyboard close
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closePanel(); });
+</script>
+</body>
+</html>
