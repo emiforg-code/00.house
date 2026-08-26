@@ -5,122 +5,121 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>00.house — Are you looking for a house?</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<!-- Leaflet CSS for Interactive Map -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<!-- Leaflet CSS for Movable Map -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 
 <style>
-/* ══ BASE CSS ═════════════════════════════════════════ */
+/* ══ BASE CSS (Restored Original) ═════════════════════ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --black:#000000;
-  --white:#ffffff;
-  --off:#f4f4f4;
-  --rose:#c57b83; /* Matching the tenant card pink */
-  --muted:#6b6b6b;
-  --border:rgba(0,0,0,0.15);
-  --panel-w:560px;
+  --black:#0a0a0a; --white:#ffffff; --off:#f8f6f2; --warm:#e8e2d8;
+  --rose:#c57b83; --muted:#6b6b6b; --border:rgba(0,0,0,0.1);
+  --panel-w:520px;
 }
 html{scroll-behavior:smooth}
 body{font-family:'Inter',sans-serif;background:var(--white);color:var(--black);overflow-x:hidden}
-
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--black);border-radius:2px}
 
-/* ══ NAVIGATION ═══════════════════════════════════════ */
+/* ══ NAVIGATION (Restored Original) ═══════════════════ */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 40px;height:70px;
-  background:rgba(255,255,255,0.95);
-  backdrop-filter:blur(10px);
-  border-bottom:1.5px solid var(--black);
+  padding:0 40px;height:60px;
+  background:rgba(255,255,255,0.94);
+  backdrop-filter:blur(12px);
+  border-bottom:0.5px solid var(--border);
   transition:all 0.3s;
 }
 .nav-logo{
-  display:flex;align-items:center;gap:12px;
-  font-size:20px;font-weight:400;letter-spacing:-0.02em;
-  color:var(--black);text-decoration:none;
+  display:flex;align-items:center;gap:10px;
+  font-family:'Inter',sans-serif;font-weight:400;font-size:17px;
+  letter-spacing:-0.01em;color:var(--black);text-decoration:none;
 }
-.nav-logo svg{width:24px;height:24px;stroke:var(--black);fill:none;stroke-width:1.5}
-.nav-pills{display:flex;align-items:center;gap:10px}
+.nav-logo svg{width:20px;height:20px;stroke:var(--black);fill:none;stroke-width:1.4}
+.nav-pills{display:flex;align-items:center;gap:6px}
 .pill{
-  font-size:12px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;
-  padding:10px 20px;border:1.5px solid var(--black);border-radius:100px;
+  font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;
+  padding:8px 18px;border:1px solid var(--black);border-radius:100px;
   background:transparent;color:var(--black);cursor:pointer;
-  transition:all 0.2s;font-family:'Inter',sans-serif;
+  transition:all 0.2s;white-space:nowrap;font-family:'Inter',sans-serif;
 }
 .pill:hover,.pill.active{background:var(--black);color:var(--white)}
+.pill.lang{display:flex;align-items:center;gap:6px;padding:8px 14px}
+.pill.account{background:var(--black);color:var(--white)}
 
 /* ══ HERO SECTION ════════════════════════════════════ */
 .hero{
   position:relative;width:100%;height:100vh;overflow:hidden;
-  border-bottom: 2px solid var(--black);
+  cursor:pointer;background:var(--warm);
 }
-.hero-photo{
+.hero-img{
   width:100%;height:100%;object-fit:cover;object-position:center;
-  display:block;
+  display:block;transition:transform 8s ease;
+}
+.hero:hover .hero-img{transform:scale(1.02)}
+.hero::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:140px;
+  background:linear-gradient(to top,rgba(255,255,255,1),transparent);
+  pointer-events:none;
 }
 
-/* ══ SEARCH & TAGLINE ════════════════════════════════ */
+/* ══ TAGLINE & SEARCH (Restored Original Layout) ═════ */
 .tagline-section{
   display:flex;flex-direction:column;align-items:center;
-  padding:60px 24px 40px;text-align:center;
+  padding:40px 24px 56px;background:var(--white);text-align:center;
 }
 .tagline{
-  font-family:'Inter',sans-serif;
-  font-size:clamp(24px, 3vw, 36px);font-weight:400;
-  letter-spacing:-0.01em;margin-bottom:24px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(32px,4vw,52px);font-weight:300;
+  letter-spacing:-0.02em;line-height:1.15;margin-bottom:32px;
+  color:var(--black);
 }
-.search-container {
-  width: 100%; max-width: 480px;
-  display: flex; flex-direction: column; gap: 0;
-  border: 1.5px solid var(--black); border-radius: 16px;
-  overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+.tagline em{font-style:italic;font-weight:300}
+.search-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  border:1.5px solid var(--black);border-radius:100px;
+  padding:0 22px 0 28px;height:52px;width:100%;max-width:460px;
+  background:var(--white);cursor:pointer;
+  transition:box-shadow 0.2s;
 }
-.search-bar-top, .search-bar-bottom {
-  display:flex;align-items:center; justify-content:space-between;
-  padding:0 24px;height:56px;background:var(--white);cursor:text;
+.search-bar:hover{box-shadow:0 0 0 3px rgba(0,0,0,0.06)}
+.search-bar span{
+  font-size:12px;font-weight:500;color:var(--black);
+  letter-spacing:0.08em;text-transform:uppercase;
 }
-.search-bar-top { border-bottom: 1.5px solid var(--black); }
-.search-bar-top span{ font-size:13px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase; }
-.search-bar-top svg{ width:20px;height:20px;stroke:var(--black);fill:none;stroke-width:2; }
-.search-bar-bottom span { font-size: 16px; color: var(--black); }
-.search-bar-bottom svg { width:20px;height:20px;stroke:var(--black);fill:none;stroke-width:2; }
+.search-bar svg{width:18px;height:18px;stroke:var(--black);fill:none;stroke-width:1.5;}
 
 /* ══ FLORAL MAP SECTION ══════════════════════════════ */
 .floral-map-wrapper {
-  margin:0 auto 40px; max-width: 800px;
-  position: relative; border-radius:24px; padding: 20px;
-  /* Wisteria background placeholder */
-  background-image: url('https://images.unsplash.com/photo-1543227448-971c26123490?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'); 
+  margin:0 auto 40px; max-width: 800px; width: 90%;
+  position: relative; border-radius:24px; padding: 16px;
+  background-image: url('https://images.unsplash.com/photo-1543227448-971c26123490?auto=format&fit=crop&w=1200&q=80'); 
   background-size: cover; background-position: center;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.1);
 }
 .floral-map-wrapper::before {
   content: ''; position: absolute; inset: 0;
   background: rgba(255,255,255,0.6); backdrop-filter: blur(3px);
   border-radius: 24px; pointer-events: none;
 }
-.map-badge-mockup {
-  position: absolute; top: -18px; left: 50%; transform: translateX(-50%);
+.map-badge {
+  position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
   background: var(--white); border: 1.5px solid var(--black);
   padding: 8px 24px; border-radius: 100px;
-  font-size: 15px; font-weight: 500; z-index: 10;
+  font-size: 14px; font-weight: 500; z-index: 10;
+  white-space: nowrap;
 }
-.map-section{
-  border-radius:16px;overflow:hidden;
-  border:1.5px solid var(--black);
-  position:relative; height:400px; z-index: 2;
+.map-box {
+  width: 100%; height: 380px; min-height: 380px; 
+  background: #e8ede4; border-radius: 16px;
+  border: 1.5px solid var(--black); position: relative; z-index: 2;
 }
-#map { width: 100%; height: 100%; background: #e8ede4; }
 
 /* ══ SERVICES GRID ═══════════════════════════════════ */
-.services-section{
-  max-width: 480px; margin: 0 auto 50px; padding: 0 24px;
-}
-.section-title {
-  font-size: 28px; font-weight: 400; text-align: center; margin-bottom: 20px;
-}
+.services-section{ max-width: 520px; margin: 0 auto 50px; padding: 0 24px; width: 100%; }
+.section-title { font-size: 26px; font-weight: 400; text-align: center; margin-bottom: 20px; }
 .svc-grid { display: flex; flex-direction: column; gap: 12px; }
 .svc-full, .svc-half {
   border: 1.5px solid var(--black); border-radius: 12px;
@@ -129,32 +128,25 @@ nav{
 }
 .svc-full:hover, .svc-half:hover { transform: translateY(-3px); }
 .svc-full { padding: 16px 20px; gap: 16px; }
-.svc-half-row { display: flex; gap: 12px; }
-.svc-half { flex: 1; padding: 16px; gap: 12px; justify-content: center; }
-
+.svc-half-row { display: flex; gap: 12px; flex-wrap: wrap; }
+.svc-half { flex: 1; min-width: 180px; padding: 16px; gap: 12px; justify-content: center; }
 .svc-icon { width: 44px; height: 44px; flex-shrink: 0; }
 .svc-icon svg { width: 100%; height: 100%; stroke: var(--black); fill: none; stroke-width: 1.2; }
 .svc-text-full { flex: 1; }
-.svc-text-full h3 { font-size: 17px; font-weight: 500; margin-bottom: 4px; }
-.svc-text-full p { font-size: 13px; color: var(--black); line-height: 1.3; }
-.svc-text-half { font-size: 16px; font-weight: 500; text-align: center; line-height: 1.2; }
-.svc-count { border: 1.5px solid var(--black); border-radius: 6px; padding: 2px 8px; font-size: 12px; font-weight: 600; }
+.svc-text-full h3 { font-size: 16px; font-weight: 500; margin-bottom: 4px; }
+.svc-text-full p { font-size: 12px; color: var(--black); line-height: 1.3; }
+.svc-text-half { font-size: 15px; font-weight: 500; text-align: center; line-height: 1.2; }
+.svc-count { border: 1.5px solid var(--black); border-radius: 6px; padding: 2px 8px; font-size: 11px; font-weight: 600; }
 
-/* ══ ROSE TENANT PASS (Popping Out) ══════════════════ */
-.tenant-pass-container {
-  max-width: 480px; margin: 0 auto 60px; padding: 0 24px;
-}
+/* ══ ROSE TENANT PASS ════════════════════════════════ */
+.tenant-pass-container { max-width: 520px; margin: 0 auto 60px; padding: 0 24px; width: 100%; }
 .tenant-card-rose {
-  background-color: var(--rose);
-  border-radius: 16px; padding: 32px 24px;
-  color: var(--white); cursor: pointer;
-  position: relative; overflow: hidden;
+  background-color: var(--rose); border-radius: 16px; padding: 32px 24px;
+  color: var(--white); cursor: pointer; position: relative; overflow: hidden;
   box-shadow: 0 12px 30px rgba(197, 123, 131, 0.4);
   transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-.tenant-card-rose:hover { transform: scale(1.03) translateY(-5px); }
-
-/* SVG Rose Background Patterns */
+.tenant-card-rose:hover { transform: scale(1.03) translateY(-4px); }
 .tenant-card-rose::before, .tenant-card-rose::after {
   content: ''; position: absolute;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50,10 C30,10 10,30 10,50 C10,70 30,90 50,90 C70,90 90,70 90,50 C90,30 70,10 50,10 Z M50,20 C65,20 80,35 80,50 C80,65 65,80 50,80 C35,80 20,65 20,50 C20,35 35,20 50,20 Z M50,30 C60,30 70,40 70,50 C70,60 60,70 50,70 C40,70 30,60 30,50 C30,40 40,30 50,30 Z M50,40 C55,40 60,45 60,50 C60,55 55,60 50,60 C45,60 40,55 40,50 C40,45 45,40 50,40 Z' fill='none' stroke='rgba(255,255,255,0.2)' stroke-width='1.5'/%3E%3C/svg%3E");
@@ -162,14 +154,12 @@ nav{
 }
 .tenant-card-rose::before { width: 250px; height: 250px; bottom: -80px; right: -60px; transform: rotate(15deg); }
 .tenant-card-rose::after { width: 150px; height: 150px; top: -40px; left: -40px; transform: rotate(-20deg); }
-
 .tc-content { position: relative; z-index: 2; }
-.tc-title { font-size: 26px; font-weight: 400; margin-bottom: 8px; }
+.tc-title { font-size: 24px; font-weight: 400; margin-bottom: 8px; }
 .tc-desc { font-size: 14px; line-height: 1.5; margin-bottom: 24px; color: rgba(255,255,255,0.9); }
 .tc-desc a { color: var(--white); text-decoration: underline; font-weight: 600; }
-
 .tc-interactive { display: flex; align-items: center; gap: 16px; }
-.tc-checkbox { width: 40px; height: 40px; }
+.tc-checkbox { width: 40px; height: 40px; flex-shrink: 0;}
 .tc-progress { flex: 1; }
 .tc-bar-bg { height: 6px; border-radius: 10px; background: rgba(255,255,255,0.3); margin-bottom: 8px; }
 .tc-bar-fill { height: 100%; border-radius: 10px; background: var(--white); width: 45%; }
@@ -177,82 +167,52 @@ nav{
 
 /* ══ FOOTER ══════════════════════════════════════════ */
 footer{
-  border-top: 2px solid var(--black);
-  padding: 40px 24px; max-width: 800px; margin: 0 auto;
-  display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+  border-top: 1px solid var(--border); padding: 40px 24px; 
+  max-width: 800px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
 }
-.footer-col h4 { font-size: 16px; font-weight: 700; text-transform: uppercase; margin-bottom: 16px; letter-spacing: 0.05em; }
-.footer-col a { display: block; font-size: 16px; color: var(--black); text-decoration: none; margin-bottom: 8px; font-weight: 400; }
-.footer-col a:hover { text-decoration: underline; }
+.footer-col h4 { font-size: 14px; font-weight: 600; text-transform: uppercase; margin-bottom: 16px; letter-spacing: 0.05em; }
+.footer-col a { display: block; font-size: 14px; color: var(--black); text-decoration: none; margin-bottom: 8px; }
 
-/* ══ BLACK & WHITE SIDE PANEL (Right Side) ═══════════ */
+/* ══ BLACK & WHITE SIDE PANEL ════════════════════════ */
 .panel-overlay{
   position:fixed;inset:0;background:rgba(255,255,255,0);
-  backdrop-filter: blur(0px);
-  z-index:200;pointer-events:none; transition:all 0.4s ease;
+  backdrop-filter: blur(0px); z-index:200;pointer-events:none; transition:all 0.4s ease;
 }
 .panel-overlay.open{background:rgba(255,255,255,0.7); backdrop-filter: blur(5px); pointer-events:all;}
 .side-panel{
   position:fixed;top:0;right:-100%; width:var(--panel-w);max-width:100vw;
   height:100vh;background:var(--white); z-index:201;overflow-y:auto;
   transition:right 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-  border-left: 4px solid var(--black); /* Heavy B&W frame */
-  box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+  border-left: 3px solid var(--black); box-shadow: -10px 0 30px rgba(0,0,0,0.1);
 }
 .side-panel.open{right:0}
-
-/* Panel Internal Styling (Matching cards_2.jpeg exactly) */
-.panel-head {
-  padding: 30px 40px; display: flex; align-items: center; justify-content: space-between;
-}
+.panel-head { padding: 30px 40px; display: flex; align-items: center; justify-content: space-between; }
 .panel-menu-icon { width: 30px; height: 30px; cursor: pointer; }
 .panel-menu-icon svg { width: 100%; height: 100%; stroke: var(--black); stroke-width: 2; }
 .panel-user-icon { width: 34px; height: 34px; border: 2px solid var(--black); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-
 .panel-body { padding: 0 40px 40px; }
-.panel-main-title {
-  font-size: 42px; font-weight: 800; text-transform: uppercase;
-  line-height: 1; letter-spacing: -0.02em; margin-bottom: 30px;
-}
-
-/* BW Card Styling */
-.bw-card {
-  border: 2px solid var(--black); border-radius: 12px;
-  overflow: hidden; margin-bottom: 30px;
-}
-.bw-card-header {
-  background: var(--black); color: var(--white);
-  padding: 8px 16px; font-size: 13px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
-}
-.bw-card-img {
-  width: 100%; height: 280px; object-fit: cover; border-bottom: 2px solid var(--black);
-}
-
-.panel-sub-title {
-  font-size: 16px; font-weight: 700; text-transform: uppercase;
-  display: flex; justify-content: space-between; margin-bottom: 16px;
-}
-.highlights-scroll {
-  display: flex; gap: 12px; overflow-x: auto; padding-bottom: 12px;
-}
+.panel-main-title { font-size: 38px; font-weight: 800; text-transform: uppercase; line-height: 1; letter-spacing: -0.02em; margin-bottom: 30px; }
+.bw-card { border: 2px solid var(--black); border-radius: 12px; overflow: hidden; margin-bottom: 30px; }
+.bw-card-header { background: var(--black); color: var(--white); padding: 8px 16px; font-size: 12px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
+.bw-card-img { width: 100%; height: 260px; object-fit: cover; border-bottom: 2px solid var(--black); }
+.panel-sub-title { font-size: 15px; font-weight: 700; text-transform: uppercase; display: flex; justify-content: space-between; margin-bottom: 16px; }
+.highlights-scroll { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 12px; }
 .highlights-scroll::-webkit-scrollbar { display: none; }
-.highlight-img {
-  width: 140px; height: 100px; border: 2px solid var(--black);
-  border-radius: 8px; object-fit: cover; flex-shrink: 0;
-}
-
-/* Panel Buttons */
-.panel-actions {
-  display: flex; gap: 12px; margin-top: 20px;
-}
+.highlight-img { width: 140px; height: 100px; border: 2px solid var(--black); border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+.panel-actions { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap;}
 .bw-btn {
-  flex: 1; padding: 12px; text-align: center;
+  flex: 1; min-width: 140px; padding: 12px; text-align: center;
   border: 2px solid var(--black); border-radius: 100px;
-  font-size: 13px; font-weight: 700; text-transform: uppercase;
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
   cursor: pointer; background: var(--white); transition: all 0.2s;
 }
 .bw-btn:hover { background: var(--black); color: var(--white); }
 
+/* Responsive Adjustments */
+@media(max-width:760px){
+  nav{padding:0 20px}
+  .pill:not(.account):not(.lang){display:none}
+}
 </style>
 </head>
 <body>
@@ -264,44 +224,37 @@ footer{
     00.house
   </a>
   <div class="nav-pills">
-    <button class="pill" onclick="openPanel()">Explore</button>
-    <button class="pill" onclick="openPanel()">Find your home</button>
-    <button class="pill" onclick="openPanel()">🇺🇸 EN ▾</button>
-    <button class="pill active" onclick="openPanel()">Account</button>
+    <button class="pill" onclick="openPanel()">EXPLORE</button>
+    <button class="pill" onclick="openPanel()">FIND YOUR HOME</button>
+    <button class="pill lang" onclick="openPanel()"><span>🇺🇸</span> EN ▾</button>
+    <button class="pill account" onclick="openPanel()">ACCOUNT</button>
   </div>
 </nav>
 
-<!-- HEADER IMAGE -->
+<!-- HEADER IMAGE (Fallback added so it never breaks layout) -->
 <section class="hero" onclick="openPanel()">
-  <img src="home-house-rent.jpeg" class="hero-photo" alt="Luxury Home Render">
+  <img src="home-house-rent.jpeg" class="hero-img" alt="Luxury Home Render" onerror="this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=2000&q=80'">
 </section>
 
 <!-- TAGLINE & SEARCH -->
 <section class="tagline-section">
-  <h1 class="tagline">00.house — Are you looking for a house?</h1>
-  <div class="search-container" onclick="openPanel()">
-    <div class="search-bar-top">
-      <span>[Search by city or country]</span>
-      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-    </div>
-    <div class="search-bar-bottom">
-      <span>Choose a city...</span>
-      <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-    </div>
+  <h1 class="tagline">00.house — <em>Are you looking for a house?</em></h1>
+  <div class="search-bar" onclick="openPanel()">
+    <span>[SEARCH BY CITY OR COUNTRY]</span>
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
   </div>
 </section>
 
 <!-- FLORAL MAP -->
 <div class="floral-map-wrapper">
-  <div class="map-badge-mockup">73 properties</div>
-  <div class="map-section" id="map"></div>
+  <div class="map-badge">73 properties</div>
+  <div id="map" class="map-box"></div>
 </div>
 
-<!-- ADDITIONAL SERVICES (1 Top, 2 Bottom Grid) -->
+<!-- ADDITIONAL SERVICES -->
 <div class="services-section">
   <h2 class="section-title">Additional Services</h2>
   <div class="svc-grid">
-    <!-- Top Full -->
     <div class="svc-full" onclick="openPanel()">
       <div class="svc-icon">
         <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/><circle cx="12" cy="12" r="3"/></svg>
@@ -312,7 +265,6 @@ footer{
       </div>
       <div class="svc-count">[1]</div>
     </div>
-    <!-- Bottom Half -->
     <div class="svc-half-row">
       <div class="svc-half" onclick="openPanel()">
         <div class="svc-icon" style="width:36px;height:36px;">
@@ -336,7 +288,6 @@ footer{
     <div class="tc-content">
       <h2 class="tc-title">Tenant Application Card</h2>
       <p class="tc-desc">Required to apply. Secure your properties with our tenant card. <a>[Learn More]</a></p>
-      
       <div class="tc-interactive">
         <div class="tc-checkbox">
           <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
@@ -373,7 +324,7 @@ footer{
   </div>
 </footer>
 
-<!-- B&W RIGHT SIDE PANEL (Pop out as new page to register) -->
+<!-- B&W RIGHT SIDE PANEL -->
 <div class="panel-overlay" id="overlay" onclick="closePanel()"></div>
 <div class="side-panel" id="sidePanel">
   <div class="panel-head">
@@ -387,10 +338,10 @@ footer{
   
   <div class="panel-body">
     <h1 class="panel-main-title">Explore Properties</h1>
-    
     <div class="bw-card">
       <div class="bw-card-header">Live Feed</div>
-      <img src="watermarked_img_6083006709610084108.jpg" class="bw-card-img" alt="Property Render">
+      <!-- Fallback images used here for reliability inside the panel -->
+      <img src="home-house-rent.jpeg" onerror="this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80'" class="bw-card-img" alt="Property Render">
     </div>
 
     <div class="panel-sub-title">
@@ -399,9 +350,9 @@ footer{
     </div>
     
     <div class="highlights-scroll">
-      <img src="watermarked_img_6083006709610084108.jpg" class="highlight-img">
-      <img src="128974e6-988f-40b2-8028-49acb2e9b308.jpg" class="highlight-img">
-      <img src="home-house-rent.jpeg" class="highlight-img" onerror="this.src='watermarked_img_6083006709610084108.jpg'">
+      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=300&q=80" class="highlight-img">
+      <img src="https://images.unsplash.com/photo-1600607687931-cebf00346ce2?auto=format&fit=crop&w=300&q=80" class="highlight-img">
+      <img src="https://images.unsplash.com/photo-1600607688969-a5bfcd64bd40?auto=format&fit=crop&w=300&q=80" class="highlight-img">
     </div>
 
     <div class="panel-actions">
@@ -412,28 +363,32 @@ footer{
   </div>
 </div>
 
-<!-- LEAFLET MAP SCRIPT -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- LEAFLET MAP SCRIPT & LOGIC -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
-  // Init Map
-  var map = L.map('map', { zoomControl: false, scrollWheelZoom: false }).setView([34.0522, -118.2437], 11);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; OpenStreetMap'
-  }).addTo(map);
+  // Ensure the map script runs ONLY after HTML is fully loaded on the screen to prevent height collapsing
+  document.addEventListener("DOMContentLoaded", function() {
+    var map = L.map('map', { zoomControl: false, scrollWheelZoom: false }).setView([34.0522, -118.2437], 11);
+    
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
 
-  // Custom B&W Pin
-  var pinHtml = `
-    <div style="background: var(--white); border: 2px solid var(--black); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--black)" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path></svg>
-    </div>`;
-  var customIcon = L.divIcon({ className: 'custom-pin', html: pinHtml, iconSize: [32, 32], iconAnchor: [16, 16] });
+    var pinHtml = `
+      <div style="background: var(--white); border: 2px solid var(--black); border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--black)" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path></svg>
+      </div>`;
+    var customIcon = L.divIcon({ className: 'custom-pin', html: pinHtml, iconSize: [28, 28], iconAnchor: [14, 14] });
 
-  // Add sample pins
-  L.marker([34.05, -118.25], {icon: customIcon}).addTo(map);
-  L.marker([34.10, -118.10], {icon: customIcon}).addTo(map);
-  L.marker([33.95, -118.35], {icon: customIcon}).addTo(map);
+    L.marker([34.05, -118.25], {icon: customIcon}).addTo(map);
+    L.marker([34.10, -118.10], {icon: customIcon}).addTo(map);
+    L.marker([33.95, -118.35], {icon: customIcon}).addTo(map);
 
-  // Panel Logic
+    // Force map to recalculate its size after it's rendered
+    setTimeout(function(){ map.invalidateSize(); }, 500);
+  });
+
+  // Slide Panel Logic
   function openPanel() {
     document.getElementById('sidePanel').classList.add('open');
     document.getElementById('overlay').classList.add('open');
