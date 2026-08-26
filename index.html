@@ -5,128 +5,144 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>00.house — Are you looking for a house?</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<!-- Leaflet CSS for Movable Map -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 
 <style>
-/* ══ BASE CSS (Restored Original) ═════════════════════ */
+/* ══ BASE CSS & RENDERING ════════════════════════════ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --black:#0a0a0a; --white:#ffffff; --off:#f8f6f2; --warm:#e8e2d8;
-  --rose:#c57b83; --muted:#6b6b6b; --border:rgba(0,0,0,0.1);
+  --black:#0a0a0a; --white:#ffffff; --off:#f8f6f2; 
+  --rose:#c57b83; --muted:#6b6b6b; --border:rgba(0,0,0,0.15);
   --panel-w:520px;
 }
-html{scroll-behavior:smooth}
-body{font-family:'Inter',sans-serif;background:var(--white);color:var(--black);overflow-x:hidden}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Inter',sans-serif; background:var(--white); 
+  color:var(--black); overflow-x:hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+img { image-rendering: high-quality; }
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--black);border-radius:2px}
 
-/* ══ NAVIGATION (Restored Original) ═══════════════════ */
+/* ══ NAVIGATION ══════════════════════════════════════ */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 40px;height:60px;
-  background:rgba(255,255,255,0.94);
-  backdrop-filter:blur(12px);
-  border-bottom:0.5px solid var(--border);
+  padding:0 40px;height:70px;
+  background:rgba(255,255,255,0.95);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border-bottom:1.5px solid var(--black);
   transition:all 0.3s;
 }
 .nav-logo{
   display:flex;align-items:center;gap:10px;
-  font-family:'Inter',sans-serif;font-weight:400;font-size:17px;
+  font-family:'Inter',sans-serif;font-weight:400;font-size:18px;
   letter-spacing:-0.01em;color:var(--black);text-decoration:none;
 }
-.nav-logo svg{width:20px;height:20px;stroke:var(--black);fill:none;stroke-width:1.4}
-.nav-pills{display:flex;align-items:center;gap:6px}
+.nav-logo svg{width:22px;height:22px;stroke:var(--black);fill:none;stroke-width:1.5}
+.nav-pills{display:flex;align-items:center;gap:8px}
 .pill{
-  font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;
-  padding:8px 18px;border:1px solid var(--black);border-radius:100px;
+  font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
+  padding:10px 22px;border:1.5px solid var(--black);border-radius:100px;
   background:transparent;color:var(--black);cursor:pointer;
   transition:all 0.2s;white-space:nowrap;font-family:'Inter',sans-serif;
 }
 .pill:hover,.pill.active{background:var(--black);color:var(--white)}
-.pill.lang{display:flex;align-items:center;gap:6px;padding:8px 14px}
-.pill.account{background:var(--black);color:var(--white)}
 
-/* ══ HERO SECTION ════════════════════════════════════ */
+/* ══ HERO SECTION & SEARCH OVERLAY ═══════════════════ */
 .hero{
   position:relative;width:100%;height:100vh;overflow:hidden;
-  cursor:pointer;background:var(--warm);
+  border-bottom: 2px solid var(--black);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background-color: #e8ede4;
 }
 .hero-img{
-  width:100%;height:100%;object-fit:cover;object-position:center;
-  display:block;transition:transform 8s ease;
+  position:absolute; top:0; left:0; width:100%; height:100%; 
+  object-fit:cover; object-position:center; z-index:1;
 }
-.hero:hover .hero-img{transform:scale(1.02)}
-.hero::after{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:140px;
-  background:linear-gradient(to top,rgba(255,255,255,1),transparent);
-  pointer-events:none;
+.hero::after {
+  content:''; position:absolute; inset:0; 
+  background: rgba(0,0,0,0.15); z-index:2; pointer-events:none;
 }
-
-/* ══ TAGLINE & SEARCH (Restored Original Layout) ═════ */
-.tagline-section{
-  display:flex;flex-direction:column;align-items:center;
-  padding:40px 24px 56px;background:var(--white);text-align:center;
+.hero-search-wrapper {
+  position: relative; z-index: 10;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  padding: 40px; border-radius: 24px;
+  border: 1.5px solid var(--black);
+  width: 90%; max-width: 560px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
 }
 .tagline{
   font-family:'Cormorant Garamond',serif;
-  font-size:clamp(32px,4vw,52px);font-weight:300;
-  letter-spacing:-0.02em;line-height:1.15;margin-bottom:32px;
+  font-size:clamp(32px, 4vw, 42px);font-weight:400;
+  letter-spacing:-0.02em;line-height:1.15;margin-bottom:24px;
   color:var(--black);
 }
-.tagline em{font-style:italic;font-weight:300}
-.search-bar{
-  display:flex;align-items:center;justify-content:space-between;
-  border:1.5px solid var(--black);border-radius:100px;
-  padding:0 22px 0 28px;height:52px;width:100%;max-width:460px;
-  background:var(--white);cursor:pointer;
-  transition:box-shadow 0.2s;
+.tagline em { font-style: italic; }
+.search-container {
+  display: flex; flex-direction: column; gap: 0;
+  border: 1.5px solid var(--black); border-radius: 12px;
+  overflow: hidden; background: var(--white);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
-.search-bar:hover{box-shadow:0 0 0 3px rgba(0,0,0,0.06)}
-.search-bar span{
-  font-size:12px;font-weight:500;color:var(--black);
-  letter-spacing:0.08em;text-transform:uppercase;
+.search-bar-top, .search-bar-bottom {
+  display:flex;align-items:center; justify-content:space-between;
+  padding:0 24px;height:56px;background:var(--white);cursor:pointer;
 }
-.search-bar svg{width:18px;height:18px;stroke:var(--black);fill:none;stroke-width:1.5;}
+.search-bar-top { border-bottom: 1.5px solid var(--black); }
+.search-bar-top span{ font-size:13px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase; }
+.search-bar-top svg{ width:20px;height:20px;stroke:var(--black);fill:none;stroke-width:2; }
+.search-bar-bottom span { font-size: 15px; color: var(--black); }
+.search-bar-bottom svg { width:20px;height:20px;stroke:var(--black);fill:none;stroke-width:2; }
+.search-bar-bottom:hover { background: var(--off); }
 
 /* ══ FLORAL MAP SECTION ══════════════════════════════ */
 .floral-map-wrapper {
-  margin:0 auto 40px; max-width: 800px; width: 90%;
-  position: relative; border-radius:24px; padding: 16px;
+  margin: 60px auto 40px; 
+  width: 100%; max-width: 560px; 
+  position: relative; border-radius: 20px; padding: 16px;
+  background-color: #d1d8c5;
   background-image: url('https://images.unsplash.com/photo-1543227448-971c26123490?auto=format&fit=crop&w=1200&q=80'); 
   background-size: cover; background-position: center;
   box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+  scroll-margin-top: 100px;
 }
 .floral-map-wrapper::before {
   content: ''; position: absolute; inset: 0;
-  background: rgba(255,255,255,0.6); backdrop-filter: blur(3px);
-  border-radius: 24px; pointer-events: none;
+  background: rgba(255,255,255,0.65); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  border-radius: 20px; pointer-events: none;
 }
 .map-badge {
   position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
   background: var(--white); border: 1.5px solid var(--black);
   padding: 8px 24px; border-radius: 100px;
   font-size: 14px; font-weight: 500; z-index: 10;
-  white-space: nowrap;
+  white-space: nowrap; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 .map-box {
-  width: 100%; height: 380px; min-height: 380px; 
-  background: #e8ede4; border-radius: 16px;
+  width: 100%; height: 380px;
+  background: #e8ede4; border-radius: 12px;
   border: 1.5px solid var(--black); position: relative; z-index: 2;
+  overflow: hidden; cursor: pointer;
+}
+.map-box svg {
+  width: 100%; height: 100%; display: block;
 }
 
 /* ══ SERVICES GRID ═══════════════════════════════════ */
-.services-section{ max-width: 520px; margin: 0 auto 50px; padding: 0 24px; width: 100%; }
-.section-title { font-size: 26px; font-weight: 400; text-align: center; margin-bottom: 20px; }
+.services-section{ max-width: 560px; margin: 0 auto 50px; padding: 0 24px; width: 100%; }
+.section-title { font-size: 26px; font-weight: 400; text-align: center; margin-bottom: 20px; color: var(--black); }
 .svc-grid { display: flex; flex-direction: column; gap: 12px; }
 .svc-full, .svc-half {
   border: 1.5px solid var(--black); border-radius: 12px;
-  background: var(--white); cursor: pointer; transition: transform 0.2s;
-  display: flex; align-items: center;
+  background: var(--white); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+  display: flex; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.03);
 }
-.svc-full:hover, .svc-half:hover { transform: translateY(-3px); }
+.svc-full:hover, .svc-half:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.08); }
 .svc-full { padding: 16px 20px; gap: 16px; }
 .svc-half-row { display: flex; gap: 12px; flex-wrap: wrap; }
 .svc-half { flex: 1; min-width: 180px; padding: 16px; gap: 12px; justify-content: center; }
@@ -134,12 +150,12 @@ nav{
 .svc-icon svg { width: 100%; height: 100%; stroke: var(--black); fill: none; stroke-width: 1.2; }
 .svc-text-full { flex: 1; }
 .svc-text-full h3 { font-size: 16px; font-weight: 500; margin-bottom: 4px; }
-.svc-text-full p { font-size: 12px; color: var(--black); line-height: 1.3; }
+.svc-text-full p { font-size: 12px; color: var(--muted); line-height: 1.4; }
 .svc-text-half { font-size: 15px; font-weight: 500; text-align: center; line-height: 1.2; }
 .svc-count { border: 1.5px solid var(--black); border-radius: 6px; padding: 2px 8px; font-size: 11px; font-weight: 600; }
 
 /* ══ ROSE TENANT PASS ════════════════════════════════ */
-.tenant-pass-container { max-width: 520px; margin: 0 auto 60px; padding: 0 24px; width: 100%; }
+.tenant-pass-container { max-width: 560px; margin: 0 auto 60px; padding: 0 24px; width: 100%; }
 .tenant-card-rose {
   background-color: var(--rose); border-radius: 16px; padding: 32px 24px;
   color: var(--white); cursor: pointer; position: relative; overflow: hidden;
@@ -155,45 +171,48 @@ nav{
 .tenant-card-rose::before { width: 250px; height: 250px; bottom: -80px; right: -60px; transform: rotate(15deg); }
 .tenant-card-rose::after { width: 150px; height: 150px; top: -40px; left: -40px; transform: rotate(-20deg); }
 .tc-content { position: relative; z-index: 2; }
-.tc-title { font-size: 24px; font-weight: 400; margin-bottom: 8px; }
-.tc-desc { font-size: 14px; line-height: 1.5; margin-bottom: 24px; color: rgba(255,255,255,0.9); }
+.tc-title { font-size: 24px; font-weight: 500; margin-bottom: 8px; }
+.tc-desc { font-size: 13px; line-height: 1.5; margin-bottom: 24px; color: rgba(255,255,255,0.9); }
 .tc-desc a { color: var(--white); text-decoration: underline; font-weight: 600; }
 .tc-interactive { display: flex; align-items: center; gap: 16px; }
-.tc-checkbox { width: 40px; height: 40px; flex-shrink: 0;}
+.tc-checkbox { width: 44px; height: 44px; flex-shrink: 0;}
 .tc-progress { flex: 1; }
 .tc-bar-bg { height: 6px; border-radius: 10px; background: rgba(255,255,255,0.3); margin-bottom: 8px; }
-.tc-bar-fill { height: 100%; border-radius: 10px; background: var(--white); width: 45%; }
-.tc-label { font-size: 12px; font-weight: 500; }
+.tc-bar-fill { height: 100%; border-radius: 10px; background: var(--white); width: 45%; transition: width 1.5s ease-out; }
+.tc-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
 
 /* ══ FOOTER ══════════════════════════════════════════ */
 footer{
-  border-top: 1px solid var(--border); padding: 40px 24px; 
+  border-top: 1.5px solid var(--black); padding: 40px 24px; 
   max-width: 800px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
 }
-.footer-col h4 { font-size: 14px; font-weight: 600; text-transform: uppercase; margin-bottom: 16px; letter-spacing: 0.05em; }
-.footer-col a { display: block; font-size: 14px; color: var(--black); text-decoration: none; margin-bottom: 8px; }
+.footer-col h4 { font-size: 14px; font-weight: 700; text-transform: uppercase; margin-bottom: 16px; letter-spacing: 0.05em; }
+.footer-col a { display: block; font-size: 14px; color: var(--black); text-decoration: none; margin-bottom: 10px; transition: color 0.2s;}
+.footer-col a:hover { color: var(--muted); }
 
 /* ══ BLACK & WHITE SIDE PANEL ════════════════════════ */
 .panel-overlay{
   position:fixed;inset:0;background:rgba(255,255,255,0);
-  backdrop-filter: blur(0px); z-index:200;pointer-events:none; transition:all 0.4s ease;
+  backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px);
+  z-index:200;pointer-events:none; transition:all 0.4s ease;
 }
-.panel-overlay.open{background:rgba(255,255,255,0.7); backdrop-filter: blur(5px); pointer-events:all;}
+.panel-overlay.open{background:rgba(255,255,255,0.7); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); pointer-events:all;}
 .side-panel{
   position:fixed;top:0;right:-100%; width:var(--panel-w);max-width:100vw;
   height:100vh;background:var(--white); z-index:201;overflow-y:auto;
   transition:right 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-  border-left: 3px solid var(--black); box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+  border-left: 3px solid var(--black); box-shadow: -10px 0 40px rgba(0,0,0,0.15);
 }
 .side-panel.open{right:0}
 .panel-head { padding: 30px 40px; display: flex; align-items: center; justify-content: space-between; }
 .panel-menu-icon { width: 30px; height: 30px; cursor: pointer; }
-.panel-menu-icon svg { width: 100%; height: 100%; stroke: var(--black); stroke-width: 2; }
-.panel-user-icon { width: 34px; height: 34px; border: 2px solid var(--black); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.panel-menu-icon svg { width: 100%; height: 100%; stroke: var(--black); stroke-width: 2; transition: transform 0.2s; }
+.panel-menu-icon:hover svg { transform: scale(1.1); }
+.panel-user-icon { width: 36px; height: 36px; border: 2px solid var(--black); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 .panel-body { padding: 0 40px 40px; }
 .panel-main-title { font-size: 38px; font-weight: 800; text-transform: uppercase; line-height: 1; letter-spacing: -0.02em; margin-bottom: 30px; }
 .bw-card { border: 2px solid var(--black); border-radius: 12px; overflow: hidden; margin-bottom: 30px; }
-.bw-card-header { background: var(--black); color: var(--white); padding: 8px 16px; font-size: 12px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
+.bw-card-header { background: var(--black); color: var(--white); padding: 10px 16px; font-size: 12px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
 .bw-card-img { width: 100%; height: 260px; object-fit: cover; border-bottom: 2px solid var(--black); }
 .panel-sub-title { font-size: 15px; font-weight: 700; text-transform: uppercase; display: flex; justify-content: space-between; margin-bottom: 16px; }
 .highlights-scroll { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 12px; }
@@ -201,23 +220,22 @@ footer{
 .highlight-img { width: 140px; height: 100px; border: 2px solid var(--black); border-radius: 8px; object-fit: cover; flex-shrink: 0; }
 .panel-actions { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap;}
 .bw-btn {
-  flex: 1; min-width: 140px; padding: 12px; text-align: center;
+  flex: 1; min-width: 140px; padding: 14px; text-align: center;
   border: 2px solid var(--black); border-radius: 100px;
-  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
   cursor: pointer; background: var(--white); transition: all 0.2s;
 }
 .bw-btn:hover { background: var(--black); color: var(--white); }
 
-/* Responsive Adjustments */
 @media(max-width:760px){
   nav{padding:0 20px}
   .pill:not(.account):not(.lang){display:none}
+  .side-panel { border-left: none; }
 }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <a class="nav-logo" href="#">
     <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
@@ -231,27 +249,59 @@ footer{
   </div>
 </nav>
 
-<!-- HEADER IMAGE (Fallback added so it never breaks layout) -->
-<section class="hero" onclick="openPanel()">
-  <img src="home-house-rent.jpeg" class="hero-img" alt="Luxury Home Render" onerror="this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=2000&q=80'">
-</section>
-
-<!-- TAGLINE & SEARCH -->
-<section class="tagline-section">
-  <h1 class="tagline">00.house — <em>Are you looking for a house?</em></h1>
-  <div class="search-bar" onclick="openPanel()">
-    <span>[SEARCH BY CITY OR COUNTRY]</span>
-    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+<section class="hero">
+  <img src="home-house-rent.jpeg" onerror="this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=2000&q=80'" class="hero-img" alt="Luxury Home Render">
+  
+  <div class="hero-search-wrapper">
+    <h1 class="tagline">00.house — <em>Are you looking for a house?</em></h1>
+    <div class="search-container">
+      <div class="search-bar-top" onclick="openPanel()">
+        <span>[Search by city or country]</span>
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      </div>
+      <div class="search-bar-bottom" onclick="scrollToMap()">
+        <span>Choose a city...</span>
+        <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- FLORAL MAP -->
-<div class="floral-map-wrapper">
+<div class="floral-map-wrapper" id="map-target">
   <div class="map-badge">73 properties</div>
-  <div id="map" class="map-box"></div>
+  <div class="map-box" onclick="openPanel()">
+    <svg viewBox="0 0 700 320" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,160 Q180,145 350,160 Q520,175 700,152" stroke="#d4cfc0" stroke-width="8" fill="none"/>
+      <path d="M0,95 Q130,92 270,112 Q420,132 540,108 Q620,95 700,104" stroke="#d4cfc0" stroke-width="6" fill="none"/>
+      <path d="M350,0 Q347,80 350,160 Q353,235 350,320" stroke="#d4cfc0" stroke-width="6" fill="none"/>
+      <path d="M150,0 Q152,90 150,160 Q148,240 152,320" stroke="#d4cfc0" stroke-width="5" fill="none"/>
+      <path d="M550,0 Q548,80 550,160 Q552,240 548,320" stroke="#d4cfc0" stroke-width="5" fill="none"/>
+      <path d="M0,245 Q220,238 350,245 Q480,252 700,240" stroke="#d4cfc0" stroke-width="5" fill="none"/>
+      <rect x="165" y="48" width="130" height="55" rx="3" fill="#c8d8a8" opacity="0.7"/>
+      <rect x="365" y="62" width="110" height="50" rx="3" fill="#c0d0a0" opacity="0.65"/>
+      <rect x="35" y="188" width="95" height="45" rx="3" fill="#c8d8a8" opacity="0.65"/>
+      <rect x="565" y="120" width="110" height="55" rx="3" fill="#c8d8a8" opacity="0.65"/>
+      <rect x="410" y="200" width="80" height="40" rx="3" fill="#c0d8a8" opacity="0.6"/>
+      <path d="M0,280 Q180,272 350,280 Q520,288 700,275 L700,320 L0,320 Z" fill="#a8c4d8" opacity="0.5"/>
+      
+      <g transform="translate(320,128)"><circle r="22" fill="#1a1a1a" opacity="0.1"/><circle r="14" fill="#1a1a1a"/><circle r="6" fill="#fff"/></g>
+      <g transform="translate(440,95)"><circle r="18" fill="#1a1a1a" opacity="0.1"/><circle r="11" fill="#1a1a1a" opacity="0.75"/><circle r="4.5" fill="#fff"/></g>
+      <g transform="translate(185,162)"><circle r="16" fill="#1a1a1a" opacity="0.08"/><circle r="10" fill="#1a1a1a" opacity="0.65"/><circle r="4" fill="#fff"/></g>
+      <g transform="translate(560,178)"><circle r="14" fill="#1a1a1a" opacity="0.08"/><circle r="9" fill="#1a1a1a" opacity="0.6"/><circle r="3.5" fill="#fff"/></g>
+      <g transform="translate(80,108)"><circle r="14" fill="#1a1a1a" opacity="0.08"/><circle r="9" fill="#1a1a1a" opacity="0.6"/><circle r="3.5" fill="#fff"/></g>
+      <g transform="translate(630,88)"><circle r="13" fill="#1a1a1a" opacity="0.08"/><circle r="8" fill="#1a1a1a" opacity="0.55"/><circle r="3" fill="#fff"/></g>
+      
+      <circle cx="250" cy="90" r="5" fill="#1a1a1a" opacity="0.4"/>
+      <circle cx="500" cy="195" r="5" fill="#1a1a1a" opacity="0.4"/>
+      <circle cx="140" cy="220" r="4" fill="#1a1a1a" opacity="0.35"/>
+      <circle cx="600" cy="240" r="4" fill="#1a1a1a" opacity="0.35"/>
+      <circle cx="380" cy="255" r="4" fill="#1a1a1a" opacity="0.3"/>
+      <circle cx="50" cy="260" r="4" fill="#1a1a1a" opacity="0.3"/>
+      <circle cx="670" cy="148" r="4" fill="#1a1a1a" opacity="0.3"/>
+    </svg>
+  </div>
 </div>
 
-<!-- ADDITIONAL SERVICES -->
 <div class="services-section">
   <h2 class="section-title">Additional Services</h2>
   <div class="svc-grid">
@@ -282,7 +332,6 @@ footer{
   </div>
 </div>
 
-<!-- ROSE TENANT PASS -->
 <div class="tenant-pass-container">
   <div class="tenant-card-rose" onclick="openPanel()">
     <div class="tc-content">
@@ -298,7 +347,7 @@ footer{
           </svg>
         </div>
         <div class="tc-progress">
-          <div class="tc-bar-bg"><div class="tc-bar-fill"></div></div>
+          <div class="tc-bar-bg"><div class="tc-bar-fill" id="tBarMockup"></div></div>
           <div class="tc-label">Application progress</div>
         </div>
       </div>
@@ -306,7 +355,6 @@ footer{
   </div>
 </div>
 
-<!-- FOOTER -->
 <footer>
   <div class="footer-col">
     <h4>Company</h4>
@@ -324,7 +372,6 @@ footer{
   </div>
 </footer>
 
-<!-- B&W RIGHT SIDE PANEL -->
 <div class="panel-overlay" id="overlay" onclick="closePanel()"></div>
 <div class="side-panel" id="sidePanel">
   <div class="panel-head">
@@ -340,7 +387,6 @@ footer{
     <h1 class="panel-main-title">Explore Properties</h1>
     <div class="bw-card">
       <div class="bw-card-header">Live Feed</div>
-      <!-- Fallback images used here for reliability inside the panel -->
       <img src="home-house-rent.jpeg" onerror="this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80'" class="bw-card-img" alt="Property Render">
     </div>
 
@@ -363,32 +409,13 @@ footer{
   </div>
 </div>
 
-<!-- LEAFLET MAP SCRIPT & LOGIC -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
-  // Ensure the map script runs ONLY after HTML is fully loaded on the screen to prevent height collapsing
-  document.addEventListener("DOMContentLoaded", function() {
-    var map = L.map('map', { zoomControl: false, scrollWheelZoom: false }).setView([34.0522, -118.2437], 11);
-    
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; OpenStreetMap'
-    }).addTo(map);
+  // Scroll to Map smoothly when "Choose a city..." is clicked
+  function scrollToMap() {
+    document.getElementById('map-target').scrollIntoView({ behavior: 'smooth' });
+  }
 
-    var pinHtml = `
-      <div style="background: var(--white); border: 2px solid var(--black); border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--black)" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path></svg>
-      </div>`;
-    var customIcon = L.divIcon({ className: 'custom-pin', html: pinHtml, iconSize: [28, 28], iconAnchor: [14, 14] });
-
-    L.marker([34.05, -118.25], {icon: customIcon}).addTo(map);
-    L.marker([34.10, -118.10], {icon: customIcon}).addTo(map);
-    L.marker([33.95, -118.35], {icon: customIcon}).addTo(map);
-
-    // Force map to recalculate its size after it's rendered
-    setTimeout(function(){ map.invalidateSize(); }, 500);
-  });
-
-  // Slide Panel Logic
+  // Panel Logic
   function openPanel() {
     document.getElementById('sidePanel').classList.add('open');
     document.getElementById('overlay').classList.add('open');
@@ -399,6 +426,19 @@ footer{
     document.getElementById('overlay').classList.remove('open');
     document.body.style.overflow = '';
   }
+
+  // Animate Pink Tenant Progress Bar on scroll
+  document.addEventListener("DOMContentLoaded", function() {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          document.getElementById('tBarMockup').style.width = '65%';
+        }
+      });
+    }, {threshold: 0.5});
+    const tCard = document.querySelector('.tenant-card-rose');
+    if (tCard) observer.observe(tCard);
+  });
 </script>
 </body>
 </html>
