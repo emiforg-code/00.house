@@ -51,8 +51,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:120;display:flex;align-items:cen
 /* Tenant card flourishes */
 .tenant-card-rose{position:relative;overflow:hidden;border-radius:14px;padding:28px;color:#fff;background:var(--rose);box-shadow:0 12px 30px rgba(197,123,131,0.25)}
 .tenant-card-rose::before,.tenant-card-rose::after{content:'';position:absolute;pointer-events:none;z-index:1;background-repeat:no-repeat;background-size:contain}
-.tenant-card-rose::before{left:-6%;top:-10%;width:44%;height:56%;background-image:url('/assets/rose-modern.svg');opacity:0.08;transform:rotate(-8deg)}
-.tenant-card-rose::after{right:-6%;bottom:-8%;width:42%;height:62%;background-image:url('/assets/rose-classic.svg');opacity:0.06;transform:rotate(12deg)}
+/* Use relative asset paths (no leading slash) so assets load on GitHub Pages and subpaths */
+.tenant-card-rose::before{left:-6%;top:-10%;width:44%;height:56%;background-image:url('assets/rose-modern.svg');opacity:0.08;transform:rotate(-8deg)}
+.tenant-card-rose::after{right:-6%;bottom:-8%;width:42%;height:62%;background-image:url('assets/rose-classic.svg');opacity:0.06;transform:rotate(12deg)}
 .tenant-card-rose .tc-content{position:relative;z-index:2}
 
 /* Theme variants: modern (default) and classic */
@@ -63,8 +64,8 @@ body.theme-modern .tenant-card-rose{background:linear-gradient(135deg,var(--rose
 body.theme-classic .floral-frame{filter:drop-shadow(0 8px 18px rgba(0,0,0,0.12));opacity:0.98}
 body.theme-classic .floral-frame rect{stroke:rgba(26,26,26,0.12)}
 body.theme-classic .tenant-card-rose{background:linear-gradient(180deg,#b54b5d,#8b2f3f);box-shadow:0 18px 48px rgba(0,0,0,0.18)}
-body.theme-classic .tenant-card-rose::before{background-image:url('/assets/rose-classic.svg');opacity:0.10}
-body.theme-classic .tenant-card-rose::after{background-image:url('/assets/rose-modern.svg');opacity:0.08}
+body.theme-classic .tenant-card-rose::before{background-image:url('assets/rose-classic.svg');opacity:0.10}
+body.theme-classic .tenant-card-rose::after{background-image:url('assets/rose-modern.svg');opacity:0.08}
 
 /* Responsive */
 @media(max-width:760px){nav{padding:0 14px}.hero{height:72vh}.hero-search-wrapper{padding:18px}.floral-map-wrapper{margin:36px 12px}.tenant-card-rose{padding:20px}}
@@ -88,6 +89,7 @@ body.theme-classic .tenant-card-rose::after{background-image:url('/assets/rose-m
     <form id="searchForm" class="search-form" role="search" aria-label="Find a city to center the map">
       <div class="search-pill">
         <label for="country" class="sr-only">Country</label>
+        <!-- default to USA so datalist is populated on load -->
         <select id="country" name="country" aria-label="Country">
           <option value="">Choose country</option>
           <option value="england">England</option>
@@ -109,7 +111,7 @@ body.theme-classic .tenant-card-rose::after{background-image:url('/assets/rose-m
           <option value="bahrain">Bahrain</option>
           <option value="saudi">Saudi Arabia</option>
           <option value="egypt">Egypt</option>
-          <option value="usa">United States</option>
+          <option value="usa" selected>United States</option>
           <option value="canada">Canada</option>
           <option value="mexico">Mexico</option>
           <option value="other">Other</option>
@@ -211,10 +213,11 @@ function closePanel(){document.getElementById('sidePanel').classList.remove('ope
 
 // Map + search logic (simplified)
 document.addEventListener('DOMContentLoaded', function(){
-  const map = L.map('map',{zoomControl:true,scrollWheelZoom:false}).setView([51.5074,-0.1278],11);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
+  // create a global map reference so we can debug in console
+  window.map = L.map('map',{zoomControl:true,scrollWheelZoom:false}).setView([51.5074,-0.1278],11);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap contributors'}).addTo(window.map);
   let marker=null;
-  function setMarker(latlng,title){ if(marker) map.removeLayer(marker); marker=L.marker(latlng).addTo(map); if(title) marker.bindPopup(title).openPopup(); }
+  function setMarker(latlng,title){ if(marker) window.map.removeLayer(marker); marker=L.marker(latlng).addTo(window.map); if(title) marker.bindPopup(title).openPopup(); }
 
   const cityCoordinates = {"London":[51.5074,-0.1278],"Windsor":[51.4839,-0.6044],"Edinburgh":[55.9533,-3.1883],"Dublin":[53.3498,-6.2603],"Paris":[48.8566,2.3522],"Nice":[43.7102,7.2620],"Milan":[45.4642,9.19],"Rome":[41.9028,12.4964],"Munich":[48.1351,11.582],"Dubai":[25.2048,55.2708],"Abu Dhabi":[24.4539,54.3773],"Doha":[25.2854,51.5310],"Riyadh":[24.7136,46.6753],"Cairo":[30.0444,31.2357],"Beirut":[33.8938,35.5018],"Los Angeles":[34.0522,-118.2437],"Palo Alto":[37.4419,-122.1430],"San Francisco":[37.7749,-122.4194],"New York":[40.7128,-74.0060],"Toronto":[43.6532,-79.3832]};
 
@@ -222,10 +225,19 @@ document.addEventListener('DOMContentLoaded', function(){
 
   const countrySelect=document.getElementById('country');const cityInput=document.getElementById('city');const cityList=document.getElementById('city-list');const searchForm=document.getElementById('searchForm');
   function updateCityList(){const code=countrySelect.value;const cities=(countryCities[code])?countryCities[code]:[];cityList.innerHTML=cities.map(c=>`<option value="${c}"></option>`).join('');cityInput.value='';}
+
   countrySelect.addEventListener('change',updateCityList);
+
+  // Make sure a default is set and datalist is populated
+  if(!countrySelect.value) countrySelect.value = 'usa';
   updateCityList();
 
-  searchForm.addEventListener('submit',function(e){e.preventDefault();const city=cityInput.value.trim();if(!city){alert('Please select or enter a city.');return;} if(cityCoordinates[city]){map.flyTo(cityCoordinates[city],12);setMarker(cityCoordinates[city],city);document.getElementById('mapBadge').textContent='Properties around '+city;setTimeout(()=>map.invalidateSize(),300);document.getElementById('map-target').scrollIntoView({behavior:'smooth',block:'center'});return;} const countryText=countrySelect.options[countrySelect.selectedIndex]?.text||'';const q=encodeURIComponent(city+(countryText?(' '+countryText):''));fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${q}&limit=1`).then(r=>r.json()).then(results=>{if(!results||results.length===0){alert('Location not found. Try a suggestion.');return;}const lat=parseFloat(results[0].lat),lon=parseFloat(results[0].lon);map.flyTo([lat,lon],12);setMarker([lat,lon],city);document.getElementById('mapBadge').textContent='Properties around '+city;setTimeout(()=>map.invalidateSize(),300);document.getElementById('map-target').scrollIntoView({behavior:'smooth',block:'center'});}).catch(err=>{console.error(err);alert('Geocoding failed.');}); });
+  searchForm.addEventListener('submit',function(e){e.preventDefault();const city=cityInput.value.trim();if(!city){alert('Please select or enter a city.');return;} if(cityCoordinates[city]){window.map.flyTo(cityCoordinates[city],12);setMarker(cityCoordinates[city],city);document.getElementById('mapBadge').textContent='Properties around '+city;setTimeout(()=>window.map.invalidateSize(),300);document.getElementById('map-target').scrollIntoView({behavior:'smooth',block:'center'});return;} const countryText=countrySelect.options[countrySelect.selectedIndex]?.text||'';const q=encodeURIComponent(city+(countryText?(' '+countryText):''));fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${q}&limit=1`).then(r=>r.json()).then(results=>{if(!results||results.length===0){alert('Location not found. Try a suggestion.');return;}const lat=parseFloat(results[0].lat),lon=parseFloat(results[0].lon);window.map.flyTo([lat,lon],12);setMarker([lat,lon],city);document.getElementById('mapBadge').textContent='Properties around '+city;setTimeout(()=>window.map.invalidateSize(),300);document.getElementById('map-target').scrollIntoView({behavior:'smooth',block:'center'});}).catch(err=>{console.error(err);alert('Geocoding failed.');});
+  });
+
+  // Ensure map redraw after load
+  setTimeout(()=>{ try{ window.map.invalidateSize(); }catch(e){} },600);
+  window.addEventListener('resize', ()=> setTimeout(()=>{ try{ window.map.invalidateSize(); }catch(e){} },300));
 });
 </script>
 </body>
