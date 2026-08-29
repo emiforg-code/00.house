@@ -42,31 +42,8 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .lang-menu button:hover{background:#f6f2ea}
 
 /* ============ HERO ============ */
-.hero{position:relative;width:100%;height:640px;overflow:hidden;background:url('home-house-rent.jpeg') center/cover no-repeat;background-attachment:fixed}
-.hero-scene{position:absolute;inset:0;display:flex}
-.hero-interior{flex:0 0 46%;background:linear-gradient(160deg,#fbfaf7 0%,#f1efe8 60%,#e9e6dc 100%);position:relative;overflow:hidden}
-.hero-interior .sofa{position:absolute;left:-40px;bottom:-30px;width:340px;height:190px;background:var(--racing);border-radius:26px 60px 20px 20px;box-shadow:0 30px 60px rgba(0,0,0,0.18)}
-.hero-interior .sofa:before{content:"";position:absolute;left:20px;top:-40px;width:90px;height:90px;background:var(--racing);border-radius:16px}
-.hero-interior .island{position:absolute;right:-60px;bottom:0;width:70%;height:110px;background:#fff;border-top:6px solid #d8d3c6;box-shadow:0 -6px 18px rgba(0,0,0,0.06)}
-.hero-interior .pendant{position:absolute;width:26px;height:34px;background:var(--brass);border-radius:0 0 50% 50%;top:60px}
-.hero-interior .pendant:nth-child(2){left:38%;top:40px;width:22px;height:28px}
-.hero-interior .pendant:nth-child(3){left:48%;top:30px}
-.hero-interior .pendant:nth-child(4){left:58%;top:50px;width:20px;height:26px}
-.hero-exterior{flex:1;position:relative;background:linear-gradient(180deg,#dce7e0 0%,#c9dccb 40%,#aebf9c 75%,#8fa475 100%)}
-.hero-exterior .sun{position:absolute;right:14%;top:14%;width:64px;height:64px;border-radius:50%;background:radial-gradient(circle,#fff6df,#f2d98a);box-shadow:0 0 60px 20px rgba(242,217,138,0.5)}
-.hero-exterior .hill{position:absolute;left:0;right:0;bottom:0;height:45%;background:#7f9866;border-radius:50% 50% 0 0 / 30% 30% 0 0}
-.hero-exterior .hill.back{bottom:8%;height:36%;background:#93aa78;opacity:0.85}
-.hero-house{position:absolute;bottom:18%;width:120px;height:80px}
-.hero-house .roof{width:0;height:0;border-left:66px solid transparent;border-right:66px solid transparent;border-bottom:34px solid #a9583f}
-.hero-house .body{width:120px;height:56px;background:#f3ead9;border:1px solid rgba(0,0,0,0.08)}
-.hero-house.h1{left:10%}
-.hero-house.h2{left:34%;bottom:16%;transform:scale(0.8)}
-.hero-house.h3{left:60%;bottom:20%;transform:scale(0.65)}
-.mullions{position:absolute;inset:0;pointer-events:none}
-.mullions .v,.mullions .h{position:absolute;background:rgba(255,255,255,0.9)}
-.mullions .v{top:0;bottom:0;width:10px}
-.mullions .v1{left:14%} .mullions .v2{left:37%} .mullions .v3{left:60%} .mullions .v4{left:83%}
-.mullions .h{left:0;right:0;height:10px;top:50%}
+.hero{position:relative;width:100%;height:640px;overflow:hidden;background:#e9e6dc url('home-house-rent.jpg') center/cover no-repeat;background-attachment:fixed}
+.hero-veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0) 35%,rgba(255,255,255,0.6) 100%);z-index:20}
 .hero-content{position:relative;z-index:30;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 20px 46px;text-align:center}
 .hero-content h1{font-size:clamp(26px,4vw,42px);color:#1b1b1b;text-shadow:0 2px 20px rgba(255,255,255,0.6);max-width:720px}
 .hero-search{margin-top:18px;display:flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 8px 8px 8px;box-shadow:0 14px 40px rgba(0,0,0,0.14);min-width:min(560px,92vw)}
@@ -74,7 +51,6 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .hero-search input{border:0;background:transparent;flex:1;font-size:14px;font-family:inherit;outline:none;padding:0 6px}
 .hero-search button{background:var(--black);border:0;color:#fff;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 38px}
 .hero-search-hint{margin-top:10px;font-size:11.5px;color:#3a3a3a;text-shadow:0 1px 10px rgba(255,255,255,0.9)}
-.hero-veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0) 40%,rgba(255,255,255,0.55) 100%);z-index:20}
 
 /* ============ EXPLORE PANEL ============ */
 .explore-wrap{max-width:1200px;margin:0 auto;padding:60px 24px}
@@ -181,7 +157,6 @@ footer a:hover{color:var(--black)}
 
 @media(max-width:760px){
   .hero{height:560px}
-  .hero-interior{flex:0 0 60%}
   nav{padding:12px 16px}
   .nav-right{gap:6px}
   .nav-btn{padding:8px 10px;font-size:10px}
@@ -211,25 +186,6 @@ footer a:hover{color:var(--black)}
 
 <!-- ============ HERO ============ -->
 <section class="hero">
-  <div class="hero-scene">
-    <div class="hero-interior">
-      <div class="pendant"></div><div class="pendant"></div><div class="pendant"></div><div class="pendant"></div>
-      <div class="sofa"></div>
-      <div class="island"></div>
-    </div>
-    <div class="hero-exterior">
-      <div class="sun"></div>
-      <div class="hero-house h3"><div class="roof"></div><div class="body"></div></div>
-      <div class="hero-house h2"><div class="roof"></div><div class="body"></div></div>
-      <div class="hero-house h1"><div class="roof"></div><div class="body"></div></div>
-      <div class="hill back"></div>
-      <div class="hill"></div>
-    </div>
-    <div class="mullions">
-      <div class="v v1"></div><div class="v v2"></div><div class="v v3"></div><div class="v v4"></div>
-      <div class="h"></div>
-    </div>
-  </div>
   <div class="hero-veil"></div>
   <div class="hero-content">
     <h1 data-i18n="hero_title">00.house — Are you looking for a house?</h1>
