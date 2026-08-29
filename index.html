@@ -69,18 +69,19 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .mullions .h{left:0;right:0;height:10px;top:50%}
 .hero-content{position:relative;z-index:30;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 20px 46px;text-align:center}
 .hero-content h1{font-size:clamp(26px,4vw,42px);color:#1b1b1b;text-shadow:0 2px 20px rgba(255,255,255,0.6);max-width:720px}
-.hero-search{margin-top:18px;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 8px 8px 20px;box-shadow:0 14px 40px rgba(0,0,0,0.14);min-width:min(480px,90vw)}
-.hero-search input{border:0;background:transparent;flex:1;font-size:14px;font-family:inherit;outline:none}
-.hero-search button{background:var(--black);border:0;color:#fff;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.hero-search{margin-top:18px;display:flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 8px 8px 8px;box-shadow:0 14px 40px rgba(0,0,0,0.14);min-width:min(560px,92vw)}
+.hero-search select{border:0;border-right:1px solid var(--line);background:transparent;padding:0 12px 0 14px;font-size:13px;font-family:inherit;color:var(--black);cursor:pointer;max-width:150px;outline:none}
+.hero-search input{border:0;background:transparent;flex:1;font-size:14px;font-family:inherit;outline:none;padding:0 6px}
+.hero-search button{background:var(--black);border:0;color:#fff;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 38px}
+.hero-search-hint{margin-top:10px;font-size:11.5px;color:#3a3a3a;text-shadow:0 1px 10px rgba(255,255,255,0.9)}
 .hero-veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0) 40%,rgba(255,255,255,0.55) 100%);z-index:20}
 
 /* ============ EXPLORE PANEL ============ */
 .explore-wrap{max-width:1200px;margin:0 auto;padding:60px 24px}
 .explore-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}
 .eyebrow{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--brass);font-weight:700;margin-bottom:6px;display:block}
-.live-feed{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);height:360px;background:linear-gradient(160deg,#eef1ea,#cfd6c4)}
-.live-feed .tag{position:absolute;top:16px;left:16px;background:rgba(255,255,255,0.94);padding:6px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;z-index:5;display:flex;align-items:center;gap:6px}
-.live-feed .tag .dot{width:7px;height:7px;border-radius:50%;background:#e0435a;animation:pulse 1.6s infinite}
+.map-wrapper .tag{position:absolute;top:16px;left:16px;background:rgba(255,255,255,0.94);padding:6px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;z-index:30;display:flex;align-items:center;gap:6px}
+.map-wrapper .tag .dot{width:7px;height:7px;border-radius:50%;background:#e0435a;animation:pulse 1.6s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
 .highlights{display:flex;gap:14px;margin-top:22px;overflow-x:auto;padding-bottom:6px}
 .highlight-card{flex:0 0 200px;height:140px;border-radius:12px;position:relative;overflow:hidden;border:1px solid var(--line)}
@@ -94,19 +95,12 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .explore-actions button.filled{background:var(--black);color:#fff}
 .explore-actions button:hover{opacity:0.85}
 
-/* ============ MAP SECTION ============ */
-.map-section{max-width:1200px;margin:0 auto 20px;padding:0 24px}
+/* ============ MAP (lives inside Explore Properties as the live feed) ============ */
 .map-wrapper{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line)}
-#map{width:100%;height:560px;display:block}
-.map-badge{position:absolute;left:16px;top:16px;background:#fff;padding:8px 12px;border-radius:999px;border:1px solid var(--line);z-index:30;box-shadow:0 6px 18px rgba(0,0,0,0.06);font-size:13px}
+#map{width:100%;height:460px;display:block}
+.map-badge{position:absolute;left:16px;top:60px;background:#fff;padding:8px 12px;border-radius:999px;border:1px solid var(--line);z-index:30;box-shadow:0 6px 18px rgba(0,0,0,0.06);font-size:13px}
 .map-note{position:absolute;right:16px;bottom:16px;background:rgba(255,255,255,0.92);padding:6px 10px;border-radius:8px;font-size:11px;color:var(--muted);z-index:30;max-width:220px;border:1px solid var(--line)}
 .wisteria{position:absolute;top:0;left:0;right:0;height:64px;z-index:25;pointer-events:none;opacity:0.92}
-.map-search-bar{display:flex;flex-direction:column;gap:10px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:16px;box-shadow:0 6px 18px rgba(0,0,0,0.04)}
-.map-search-row{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:8px 8px 8px 16px}
-.map-search-row input{border:0;flex:1;font-family:inherit;font-size:13.5px;outline:none;background:transparent}
-.map-search-row button{background:var(--black);border:0;color:#fff;width:34px;height:34px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.city-select-row select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:999px;font-family:inherit;font-size:13.5px;background:#fff}
-.search-hint{font-size:11px;color:var(--muted);padding:2px 4px 0 6px}
 
 /* ============ SERVICES ============ */
 .services-wrap{max-width:1200px;margin:0 auto;padding:10px 24px 0}
@@ -240,9 +234,20 @@ footer a:hover{color:var(--black)}
   <div class="hero-content">
     <h1 data-i18n="hero_title">00.house — Are you looking for a house?</h1>
     <form class="hero-search" id="heroSearchForm">
-      <input type="text" id="heroSearchInput" data-i18n-placeholder="hero_search_ph" placeholder="Search by city or postcode">
+      <select id="hero-country" aria-label="Country">
+        <option value="uk" selected>United Kingdom</option>
+        <option value="usa">United States</option>
+        <option value="france">France</option>
+        <option value="germany">Germany</option>
+        <option value="uae">United Arab Emirates</option>
+        <option value="canada">Canada</option>
+        <option value="other">Other</option>
+      </select>
+      <input type="text" id="heroSearchInput" list="hero-city-list" autocomplete="off" data-i18n-placeholder="hero_search_ph" placeholder="Search by city or postcode">
+      <datalist id="hero-city-list"></datalist>
       <button type="submit" aria-label="Search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
     </form>
+    <div class="hero-search-hint" id="searchHint">Searching United Kingdom — pick a city or enter a postcode (e.g. SW1A 1AA, EC1A 1BB)</div>
   </div>
 </section>
 
@@ -255,47 +260,8 @@ footer a:hover{color:var(--black)}
     </div>
   </div>
 
-  <div class="live-feed" id="liveFeedPreview">
+  <div class="map-wrapper" id="liveFeedPreview">
     <div class="tag"><span class="dot"></span><span data-i18n="live_feed">Live feed</span></div>
-  </div>
-
-  <div class="highlights">
-    <div class="highlight-card hl1"><div class="cap" data-i18n="hl_1">Marble &amp; brass kitchens</div></div>
-    <div class="highlight-card hl2"><div class="cap" data-i18n="hl_2">Racing-green interiors</div></div>
-    <div class="highlight-card hl3"><div class="cap" data-i18n="hl_3">Garden &amp; terrace views</div></div>
-    <div class="highlight-card hl4"><div class="cap" data-i18n="hl_4">Open house gardens</div></div>
-  </div>
-
-  <div class="explore-actions">
-    <button class="filled" onclick="document.getElementById('mapSection').scrollIntoView({behavior:'smooth'})" data-i18n="btn_explore_all">Explore all</button>
-    <button onclick="openPanel('register-choice')" data-i18n="btn_find_home">Find your home</button>
-    <button onclick="openPanel('account')" data-i18n="btn_my_account">My account</button>
-  </div>
-</section>
-
-<!-- ============ MAP + SEARCH ============ -->
-<section class="map-section" id="mapSection">
-  <div class="map-search-bar">
-    <div class="map-search-row">
-      <input type="text" id="h-city" list="h-city-list" placeholder="City, town, or UK postcode e.g. SW1A 1AA" autocomplete="off" data-i18n-placeholder="map_search_ph">
-      <button id="mapSearchBtn" aria-label="Search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
-    </div>
-    <datalist id="h-city-list"></datalist>
-    <div class="city-select-row">
-      <select id="h-country" aria-label="Country">
-        <option value="uk" selected>United Kingdom</option>
-        <option value="usa">United States</option>
-        <option value="france">France</option>
-        <option value="germany">Germany</option>
-        <option value="uae">United Arab Emirates</option>
-        <option value="canada">Canada</option>
-        <option value="other">Other</option>
-      </select>
-    </div>
-    <div class="search-hint" id="searchHint">Searching United Kingdom — pick a city or enter a postcode (e.g. SW1A 1AA, EC1A 1BB)</div>
-  </div>
-
-  <div class="map-wrapper">
     <svg class="wisteria" viewBox="0 0 1200 64" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M0 0 Q60 40 120 10 T240 14 T360 8 T480 16 T600 6 T720 18 T840 10 T960 14 T1080 8 T1200 12" stroke="#5b7a52" stroke-width="3" fill="none" opacity="0.55"/>
       <g fill="#b48fc0" opacity="0.85">
@@ -311,6 +277,19 @@ footer a:hover{color:var(--black)}
     <div class="map-badge" id="mapBadge">73 properties</div>
     <div class="map-note" data-i18n="map_note">Listings are supplied and maintained by independent third-party agents and landlords.</div>
     <div id="map"></div>
+  </div>
+
+  <div class="highlights">
+    <div class="highlight-card hl1"><div class="cap" data-i18n="hl_1">Marble &amp; brass kitchens</div></div>
+    <div class="highlight-card hl2"><div class="cap" data-i18n="hl_2">Racing-green interiors</div></div>
+    <div class="highlight-card hl3"><div class="cap" data-i18n="hl_3">Garden &amp; terrace views</div></div>
+    <div class="highlight-card hl4"><div class="cap" data-i18n="hl_4">Open house gardens</div></div>
+  </div>
+
+  <div class="explore-actions">
+    <button class="filled" onclick="document.getElementById('liveFeedPreview').scrollIntoView({behavior:'smooth'})" data-i18n="btn_explore_all">Explore all</button>
+    <button onclick="openPanel('register-choice')" data-i18n="btn_find_home">Find your home</button>
+    <button onclick="openPanel('account')" data-i18n="btn_my_account">My account</button>
   </div>
 </section>
 
@@ -781,9 +760,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
     map.whenReady(()=>setTimeout(()=>map.invalidateSize(),300));
     window.addEventListener('resize', ()=>setTimeout(()=>map.invalidateSize(),200));
 
-    const cSelect = document.getElementById('h-country');
-    const cInput = document.getElementById('h-city');
-    const cList = document.getElementById('h-city-list');
+    const cSelect = document.getElementById('hero-country');
+    const cInput = document.getElementById('heroSearchInput');
+    const cList = document.getElementById('hero-city-list');
     const hint = document.getElementById('searchHint');
 
     function populateCities(){
@@ -809,7 +788,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
           const lat=parseFloat(results[0].lat), lon=parseFloat(results[0].lon);
           map.flyTo([lat,lon],13); setMarker([lat,lon],label);
           document.getElementById('mapBadge').textContent = 'Properties around '+label;
-          document.getElementById('mapSection').scrollIntoView({behavior:'smooth'});
+          document.getElementById('liveFeedPreview').scrollIntoView({behavior:'smooth'});
         })
         .catch(()=>alert('Search failed — please try again.'));
     }
@@ -829,21 +808,15 @@ document.addEventListener('DOMContentLoaded', ()=>{
         const coords = cityCoords[raw];
         map.flyTo(coords,12); setMarker(coords,raw);
         document.getElementById('mapBadge').textContent = 'Properties around '+raw;
-        document.getElementById('mapSection').scrollIntoView({behavior:'smooth'});
+        document.getElementById('liveFeedPreview').scrollIntoView({behavior:'smooth'});
         return;
       }
       geocode(raw + (countryLabels[countryCode] ? (', '+countryLabels[countryCode]) : ''), raw);
     }
 
-    document.getElementById('mapSearchBtn').addEventListener('click', function(e){ e.preventDefault(); runSearch(cInput.value.trim()); });
-    cInput.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); runSearch(cInput.value.trim()); } });
-
-    // hero search feeds the same map search
     document.getElementById('heroSearchForm').addEventListener('submit', function(e){
       e.preventDefault();
-      const val = document.getElementById('heroSearchInput').value.trim();
-      cInput.value = val;
-      runSearch(val);
+      runSearch(cInput.value.trim());
     });
 
   }catch(err){ console.error('Map initialization error', err); }
