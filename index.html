@@ -1,171 +1,849 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="htmlRoot">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>00.house — Find your home</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<title>00.house — Are you looking for a house?</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 
 <style>
-:root{--black:#0a0a0a;--muted:#6b6b6b;--white:#fff;--accent:#c57b83}
+:root{
+  --black:#0a0a0a; --muted:#6b6b6b; --white:#fff;
+  --accent:#c57b83;           /* dusty rose */
+  --racing:#1f4632;           /* British racing green */
+  --brass:#b98a3f;            /* brass gold */
+  --cream:#f6f2ea;
+  --line:rgba(0,0,0,0.08);
+  --ok:#2f6b4f;
+}
 *{box-sizing:border-box}
 body{font-family:Inter,system-ui,-apple-system,Helvetica,Arial,sans-serif;margin:0;color:var(--black);background:var(--white)}
-nav{position:fixed;left:0;right:0;top:0;height:72px;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:rgba(255,255,255,0.96);z-index:120;border-bottom:1px solid rgba(0,0,0,0.04)}
-.nav-left{display:flex;align-items:center;gap:14px}
-.logo{display:flex;align-items:center;gap:10px;font-weight:600}
-.nav-right{display:flex;align-items:center;gap:10px}
-.pill{border:1px solid rgba(0,0,0,0.08);padding:8px 12px;border-radius:999px;background:transparent;cursor:pointer}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:500;margin:0 0 8px}
+h4{font-weight:600;margin:0 0 8px;font-family:Inter,sans-serif}
+p{line-height:1.55;color:var(--muted)}
+a{color:inherit}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+[dir="rtl"] body{font-family:'Segoe UI',Tahoma,Inter,sans-serif}
 
-/* Header search pill */
-.header-search{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid rgba(0,0,0,0.08);background:var(--white);min-width:360px}
-.header-search select,input{border:0;background:transparent;font-size:14px}
-.header-search input{flex:1}
-.header-search button{background:var(--black);color:#fff;border:0;padding:8px 10px;border-radius:999px;cursor:pointer}
+/* ============ NAV ============ */
+nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:rgba(255,255,255,0.97);z-index:200;border-bottom:1px solid var(--line);backdrop-filter:blur(6px)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:600;cursor:pointer;background:none;border:0;font-size:16px;font-family:inherit;letter-spacing:-0.01em}
+.nav-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.nav-btn{border:1px solid var(--black);padding:9px 16px;border-radius:3px;background:transparent;cursor:pointer;font-family:inherit;font-size:11.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--black);font-weight:600}
+.nav-btn:hover{background:var(--black);color:#fff}
+.nav-btn.filled{background:var(--black);color:#fff}
+.nav-btn.filled:hover{background:#222}
+.lang-wrap{position:relative}
+.lang-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:#fff;border:1px solid var(--line);border-radius:3px;box-shadow:0 10px 24px rgba(0,0,0,0.10);overflow:hidden;min-width:140px;z-index:210}
+[dir="rtl"] .lang-menu{right:auto;left:0}
+.lang-menu.open{display:block}
+.lang-menu button{display:flex;align-items:center;gap:8px;width:100%;border:0;background:#fff;padding:10px 14px;font-size:13px;cursor:pointer;font-family:inherit;text-align:left}
+.lang-menu button:hover{background:#f6f2ea}
 
-main{padding-top:92px;max-width:1200px;margin:0 auto}
-.map-section{margin:20px;padding:0 20px}
-.map-wrapper{position:relative;border-radius:14px;overflow:hidden;border:1px solid rgba(0,0,0,0.06)}
-#map{width:100%;height:620px;display:block}
-.map-badge{position:absolute;left:16px;top:16px;background:#fff;padding:8px 12px;border-radius:999px;border:1px solid rgba(0,0,0,0.06);z-index:20;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+/* ============ HERO ============ */
+.hero{position:relative;width:100%;height:640px;overflow:hidden;background:linear-gradient(180deg,#eef1ea 0%,#e2e6dc 55%,#cfd6c4 100%)}
+.hero-scene{position:absolute;inset:0;display:flex}
+.hero-interior{flex:0 0 46%;background:linear-gradient(160deg,#fbfaf7 0%,#f1efe8 60%,#e9e6dc 100%);position:relative;overflow:hidden}
+.hero-interior .sofa{position:absolute;left:-40px;bottom:-30px;width:340px;height:190px;background:var(--racing);border-radius:26px 60px 20px 20px;box-shadow:0 30px 60px rgba(0,0,0,0.18)}
+.hero-interior .sofa:before{content:"";position:absolute;left:20px;top:-40px;width:90px;height:90px;background:var(--racing);border-radius:16px}
+.hero-interior .island{position:absolute;right:-60px;bottom:0;width:70%;height:110px;background:#fff;border-top:6px solid #d8d3c6;box-shadow:0 -6px 18px rgba(0,0,0,0.06)}
+.hero-interior .pendant{position:absolute;width:26px;height:34px;background:var(--brass);border-radius:0 0 50% 50%;top:60px}
+.hero-interior .pendant:nth-child(2){left:38%;top:40px;width:22px;height:28px}
+.hero-interior .pendant:nth-child(3){left:48%;top:30px}
+.hero-interior .pendant:nth-child(4){left:58%;top:50px;width:20px;height:26px}
+.hero-exterior{flex:1;position:relative;background:linear-gradient(180deg,#dce7e0 0%,#c9dccb 40%,#aebf9c 75%,#8fa475 100%)}
+.hero-exterior .sun{position:absolute;right:14%;top:14%;width:64px;height:64px;border-radius:50%;background:radial-gradient(circle,#fff6df,#f2d98a);box-shadow:0 0 60px 20px rgba(242,217,138,0.5)}
+.hero-exterior .hill{position:absolute;left:0;right:0;bottom:0;height:45%;background:#7f9866;border-radius:50% 50% 0 0 / 30% 30% 0 0}
+.hero-exterior .hill.back{bottom:8%;height:36%;background:#93aa78;opacity:0.85}
+.hero-house{position:absolute;bottom:18%;width:120px;height:80px}
+.hero-house .roof{width:0;height:0;border-left:66px solid transparent;border-right:66px solid transparent;border-bottom:34px solid #a9583f}
+.hero-house .body{width:120px;height:56px;background:#f3ead9;border:1px solid rgba(0,0,0,0.08)}
+.hero-house.h1{left:10%}
+.hero-house.h2{left:34%;bottom:16%;transform:scale(0.8)}
+.hero-house.h3{left:60%;bottom:20%;transform:scale(0.65)}
+.mullions{position:absolute;inset:0;pointer-events:none}
+.mullions .v,.mullions .h{position:absolute;background:rgba(255,255,255,0.9)}
+.mullions .v{top:0;bottom:0;width:10px}
+.mullions .v1{left:14%} .mullions .v2{left:37%} .mullions .v3{left:60%} .mullions .v4{left:83%}
+.mullions .h{left:0;right:0;height:10px;top:50%}
+.hero-content{position:relative;z-index:30;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 20px 46px;text-align:center}
+.hero-content h1{font-size:clamp(26px,4vw,42px);color:#1b1b1b;text-shadow:0 2px 20px rgba(255,255,255,0.6);max-width:720px}
+.hero-search{margin-top:18px;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 8px 8px 20px;box-shadow:0 14px 40px rgba(0,0,0,0.14);min-width:min(480px,90vw)}
+.hero-search input{border:0;background:transparent;flex:1;font-size:14px;font-family:inherit;outline:none}
+.hero-search button{background:var(--black);border:0;color:#fff;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.hero-veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0) 40%,rgba(255,255,255,0.55) 100%);z-index:20}
 
-/* Floating service cards */
+/* ============ EXPLORE PANEL ============ */
+.explore-wrap{max-width:1200px;margin:0 auto;padding:60px 24px}
+.explore-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}
+.eyebrow{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--brass);font-weight:700;margin-bottom:6px;display:block}
+.live-feed{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);height:360px;background:linear-gradient(160deg,#eef1ea,#cfd6c4)}
+.live-feed .tag{position:absolute;top:16px;left:16px;background:rgba(255,255,255,0.94);padding:6px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;z-index:5;display:flex;align-items:center;gap:6px}
+.live-feed .tag .dot{width:7px;height:7px;border-radius:50%;background:#e0435a;animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.highlights{display:flex;gap:14px;margin-top:22px;overflow-x:auto;padding-bottom:6px}
+.highlight-card{flex:0 0 200px;height:140px;border-radius:12px;position:relative;overflow:hidden;border:1px solid var(--line)}
+.highlight-card .cap{position:absolute;left:0;right:0;bottom:0;padding:8px 10px;font-size:11.5px;color:#fff;background:linear-gradient(0deg,rgba(0,0,0,0.55),transparent)}
+.hl1{background:linear-gradient(150deg,#fbfaf7,#e9e6dc)}
+.hl2{background:linear-gradient(150deg,var(--racing),#0f271b)}
+.hl3{background:linear-gradient(150deg,#e7dcc8,var(--brass))}
+.hl4{background:linear-gradient(150deg,#cfd6c4,#8fa475)}
+.explore-actions{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap}
+.explore-actions button{border:1px solid var(--black);background:#fff;padding:11px 18px;border-radius:3px;font-family:inherit;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;font-weight:600;cursor:pointer}
+.explore-actions button.filled{background:var(--black);color:#fff}
+.explore-actions button:hover{opacity:0.85}
+
+/* ============ MAP SECTION ============ */
+.map-section{max-width:1200px;margin:0 auto 20px;padding:0 24px}
+.map-wrapper{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line)}
+#map{width:100%;height:560px;display:block}
+.map-badge{position:absolute;left:16px;top:16px;background:#fff;padding:8px 12px;border-radius:999px;border:1px solid var(--line);z-index:30;box-shadow:0 6px 18px rgba(0,0,0,0.06);font-size:13px}
+.map-note{position:absolute;right:16px;bottom:16px;background:rgba(255,255,255,0.92);padding:6px 10px;border-radius:8px;font-size:11px;color:var(--muted);z-index:30;max-width:220px;border:1px solid var(--line)}
+.wisteria{position:absolute;top:0;left:0;right:0;height:64px;z-index:25;pointer-events:none;opacity:0.92}
+.map-search-bar{display:flex;flex-direction:column;gap:10px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:16px;box-shadow:0 6px 18px rgba(0,0,0,0.04)}
+.map-search-row{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:8px 8px 8px 16px}
+.map-search-row input{border:0;flex:1;font-family:inherit;font-size:13.5px;outline:none;background:transparent}
+.map-search-row button{background:var(--black);border:0;color:#fff;width:34px;height:34px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.city-select-row select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:999px;font-family:inherit;font-size:13.5px;background:#fff}
+.search-hint{font-size:11px;color:var(--muted);padding:2px 4px 0 6px}
+
+/* ============ SERVICES ============ */
+.services-wrap{max-width:1200px;margin:0 auto;padding:10px 24px 0}
 .services{display:flex;gap:12px;flex-wrap:wrap;padding:18px 0}
-.card{background:#fff;border:1px solid rgba(0,0,0,0.06);padding:12px 16px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.06);display:flex;align-items:center;gap:12px;min-width:180px}
-.card button{border:0;background:var(--accent);color:#fff;padding:8px 10px;border-radius:8px;cursor:pointer}
+.card{background:#fff;border:1px solid var(--line);padding:14px 16px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.05);display:flex;align-items:center;gap:12px;min-width:220px;flex:1;position:relative}
+.card .num{position:absolute;top:10px;right:12px;font-size:10px;color:#bbb;font-weight:700}
+.card button{border:0;background:var(--accent);color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;white-space:nowrap}
 
-/* Tenant card */
-.tenant-card{margin:20px 0;background:linear-gradient(135deg,#c87b86,#b14b5c);color:#fff;padding:20px;border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,0.12)}
+/* ============ CTA ROW ============ */
+.cta-row{display:flex;gap:16px;margin:20px 0;flex-wrap:wrap}
+.cta-card{flex:1;min-width:260px;padding:22px;border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,0.10);color:#fff}
+.cta-card.tenant{background:linear-gradient(135deg,#c87b86,#b14b5c)}
+.cta-card.agent{background:linear-gradient(135deg,var(--racing),#0d2317)}
+.cta-card p{color:rgba(255,255,255,0.82)}
+.cta-card button{margin-top:10px;background:#fff;color:var(--black);border:0;padding:9px 14px;border-radius:8px;cursor:pointer;font-weight:600;font-size:13px}
 
-/* Side panel */
+/* ============ TENANT APPLICATION CARD ============ */
+.app-card{background:linear-gradient(135deg,#c87b86,#a8434f);border-radius:16px;padding:24px;color:#fff;position:relative;overflow:hidden;margin:24px 0}
+.app-card .rose{position:absolute;right:-20px;bottom:-30px;width:150px;height:150px;opacity:0.18}
+.app-card h3{color:#fff}
+.app-check{display:flex;flex-direction:column;gap:6px;margin:14px 0}
+.app-check .item{display:flex;align-items:center;gap:8px;font-size:13px}
+.app-check .box{width:16px;height:16px;border:1.5px solid rgba(255,255,255,0.8);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;flex:0 0 16px}
+.app-check .box.done{background:#fff;color:var(--accent)}
+.progress-track{height:8px;background:rgba(255,255,255,0.3);border-radius:999px;overflow:hidden;margin-top:8px}
+.progress-fill{height:100%;width:40%;background:#fff;border-radius:999px}
+.progress-label{font-size:11px;margin-top:6px;color:rgba(255,255,255,0.85)}
+
+/* ============ LEGAL STRIP ============ */
+.legal-strip{display:flex;align-items:flex-start;gap:10px;background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:20px 0;font-size:12.5px;color:var(--muted)}
+.legal-strip strong{color:var(--black)}
+.legal-strip a{color:var(--black);text-decoration:underline;cursor:pointer;font-weight:600}
+
+/* ============ SIDE PANEL ============ */
 .panel-overlay{position:fixed;inset:0;background:rgba(0,0,0,0);pointer-events:none;z-index:230;transition:all 0.3s}
 .panel-overlay.open{background:rgba(0,0,0,0.35);pointer-events:all}
-.side-panel{position:fixed;right:-440px;top:0;width:420px;height:100vh;background:#fff;z-index:240;box-shadow:-18px 0 40px rgba(0,0,0,0.08);transition:right 0.35s;padding:18px;overflow:auto}
+.side-panel{position:fixed;right:-460px;top:0;width:440px;max-width:92vw;height:100vh;background:#fff;z-index:240;box-shadow:-18px 0 40px rgba(0,0,0,0.08);transition:right 0.35s;padding:22px 22px 40px;overflow:auto}
+[dir="rtl"] .side-panel{right:auto;left:-460px;transition:left 0.35s}
+[dir="rtl"] .side-panel.open{left:0;right:auto}
 .side-panel.open{right:0}
-.sample-card{border:1px solid rgba(0,0,0,0.06);padding:12px;border-radius:10px;margin-bottom:12px}
+.panel-close{position:sticky;top:0;float:right;background:transparent;border:1px solid var(--line);border-radius:999px;width:32px;height:32px;cursor:pointer;font-size:16px}
+[dir="rtl"] .panel-close{float:left}
+.sample-card{border:1px solid var(--line);padding:12px;border-radius:10px;margin-bottom:12px}
+.sample-card button{margin-top:6px;border:1px solid var(--line);background:#fff;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:12px}
 
-footer{padding:40px 20px;color:var(--muted)}
-@media(max-width:760px){.header-search{min-width:unset;width:100%}.map-wrapper #map{height:520px}}
+/* Forms */
+.form-field{margin-bottom:14px}
+.form-field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:5px}
+.form-row{display:flex;gap:10px}
+.form-row .form-field{flex:1}
+input[type=text],input[type=email],input[type=tel],input[type=date],input[type=number],select,textarea{
+  width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:13.5px;background:#fff;color:var(--black)
+}
+textarea{resize:vertical;min-height:70px}
+.checkbox-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:12px;font-size:12.5px;color:var(--muted)}
+.checkbox-row input{margin-top:3px}
+.submit-btn{width:100%;background:var(--black);color:#fff;border:0;padding:12px;border-radius:8px;cursor:pointer;font-weight:600;font-size:14px;margin-top:6px}
+.submit-btn:hover{background:#222}
+.form-success{background:#eef6f0;border:1px solid #cfe6d6;color:var(--ok);padding:12px;border-radius:8px;font-size:13px;margin-top:14px}
+.panel-eyebrow{font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:4px}
+
+/* Legal panel */
+.legal-section{margin-bottom:18px}
+.legal-section h4{font-size:13.5px;margin-bottom:5px}
+.legal-section p,.legal-section li{font-size:12.5px;color:var(--muted);line-height:1.6}
+.legal-section ul{margin:0;padding-left:18px}
+.legal-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.legal-tab{border:1px solid var(--line);background:#fff;padding:6px 10px;border-radius:999px;font-size:12px;cursor:pointer}
+.legal-tab.active{background:var(--black);color:#fff;border-color:var(--black)}
+.legal-callout{background:#fdf3f2;border:1px solid #f0d9d7;border-radius:10px;padding:12px 14px;font-size:12px;color:#7a3a37;margin-bottom:16px}
+
+footer{padding:40px 20px;color:var(--muted);border-top:1px solid var(--line);margin-top:20px}
+footer .foot-grid{display:flex;gap:56px;flex-wrap:wrap;max-width:1200px;margin:0 auto}
+footer h4{color:var(--black);font-size:13px;margin-bottom:10px}
+footer a{display:block;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:7px;cursor:pointer;background:none;border:0;padding:0;font-family:inherit;text-align:left}
+footer a:hover{color:var(--black)}
+.foot-legal-note{max-width:1200px;margin:24px auto 0;padding-top:20px;border-top:1px solid var(--line);font-size:11.5px;color:#9a9a9a;line-height:1.6}
+
+@media(max-width:760px){
+  .hero{height:560px}
+  .hero-interior{flex:0 0 60%}
+  nav{padding:12px 16px}
+  .nav-right{gap:6px}
+  .nav-btn{padding:8px 10px;font-size:10px}
+  .side-panel{width:100vw;max-width:100vw}
+}
 </style>
 </head>
 <body>
 <nav>
-  <div class="nav-left">
-    <div class="logo"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="#111" stroke-width="1.2" fill="none"/></svg>00.house</div>
+  <button class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="#111" stroke-width="1.2" fill="none"/></svg>
+    <span data-i18n="brand">00.house</span>
+  </button>
+  <div class="nav-right">
+    <button class="nav-btn" onclick="document.getElementById('exploreSection').scrollIntoView({behavior:'smooth'})" data-i18n="nav_explore">Explore</button>
+    <button class="nav-btn" onclick="openPanel('register-choice')" data-i18n="nav_find">Find your home</button>
+    <div class="lang-wrap">
+      <button class="nav-btn" onclick="toggleLangMenu()" data-i18n="nav_lang">Languages ▾</button>
+      <div class="lang-menu" id="langMenu">
+        <button onclick="setLanguage('en')">🇺🇸 English</button>
+        <button onclick="setLanguage('ar')">🇦🇪 العربية</button>
+      </div>
+    </div>
+    <button class="nav-btn filled" onclick="openPanel('account')" data-i18n="nav_account">Account</button>
   </div>
-  <div style="flex:1;display:flex;justify-content:center;padding:0 12px">
-    <form id="headerSearch" class="header-search" role="search" aria-label="Search by city or country">
-      <label class="sr-only" for="h-country">Country</label>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-scene">
+    <div class="hero-interior">
+      <div class="pendant"></div><div class="pendant"></div><div class="pendant"></div><div class="pendant"></div>
+      <div class="sofa"></div>
+      <div class="island"></div>
+    </div>
+    <div class="hero-exterior">
+      <div class="sun"></div>
+      <div class="hero-house h3"><div class="roof"></div><div class="body"></div></div>
+      <div class="hero-house h2"><div class="roof"></div><div class="body"></div></div>
+      <div class="hero-house h1"><div class="roof"></div><div class="body"></div></div>
+      <div class="hill back"></div>
+      <div class="hill"></div>
+    </div>
+    <div class="mullions">
+      <div class="v v1"></div><div class="v v2"></div><div class="v v3"></div><div class="v v4"></div>
+      <div class="h"></div>
+    </div>
+  </div>
+  <div class="hero-veil"></div>
+  <div class="hero-content">
+    <h1 data-i18n="hero_title">00.house — Are you looking for a house?</h1>
+    <form class="hero-search" id="heroSearchForm">
+      <input type="text" id="heroSearchInput" data-i18n-placeholder="hero_search_ph" placeholder="Search by city or postcode">
+      <button type="submit" aria-label="Search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
+    </form>
+  </div>
+</section>
+
+<!-- ============ EXPLORE PROPERTIES PANEL ============ -->
+<section class="explore-wrap" id="exploreSection">
+  <div class="explore-head">
+    <div>
+      <span class="eyebrow" data-i18n="explore_eyebrow">Explore</span>
+      <h2 data-i18n="explore_title">Explore Properties</h2>
+    </div>
+  </div>
+
+  <div class="live-feed" id="liveFeedPreview">
+    <div class="tag"><span class="dot"></span><span data-i18n="live_feed">Live feed</span></div>
+  </div>
+
+  <div class="highlights">
+    <div class="highlight-card hl1"><div class="cap" data-i18n="hl_1">Marble &amp; brass kitchens</div></div>
+    <div class="highlight-card hl2"><div class="cap" data-i18n="hl_2">Racing-green interiors</div></div>
+    <div class="highlight-card hl3"><div class="cap" data-i18n="hl_3">Garden &amp; terrace views</div></div>
+    <div class="highlight-card hl4"><div class="cap" data-i18n="hl_4">Open house gardens</div></div>
+  </div>
+
+  <div class="explore-actions">
+    <button class="filled" onclick="document.getElementById('mapSection').scrollIntoView({behavior:'smooth'})" data-i18n="btn_explore_all">Explore all</button>
+    <button onclick="openPanel('register-choice')" data-i18n="btn_find_home">Find your home</button>
+    <button onclick="openPanel('account')" data-i18n="btn_my_account">My account</button>
+  </div>
+</section>
+
+<!-- ============ MAP + SEARCH ============ -->
+<section class="map-section" id="mapSection">
+  <div class="map-search-bar">
+    <div class="map-search-row">
+      <input type="text" id="h-city" list="h-city-list" placeholder="City, town, or UK postcode e.g. SW1A 1AA" autocomplete="off" data-i18n-placeholder="map_search_ph">
+      <button id="mapSearchBtn" aria-label="Search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
+    </div>
+    <datalist id="h-city-list"></datalist>
+    <div class="city-select-row">
       <select id="h-country" aria-label="Country">
-        <option value="">Country</option>
+        <option value="uk" selected>United Kingdom</option>
         <option value="usa">United States</option>
-        <option value="uk">United Kingdom</option>
         <option value="france">France</option>
         <option value="germany">Germany</option>
         <option value="uae">United Arab Emirates</option>
         <option value="canada">Canada</option>
         <option value="other">Other</option>
       </select>
-      <label class="sr-only" for="h-city">City</label>
-      <input id="h-city" list="h-city-list" placeholder="Search by city or country" aria-label="City or town" />
-      <datalist id="h-city-list"></datalist>
-      <button type="submit" aria-label="Search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
-    </form>
+    </div>
+    <div class="search-hint" id="searchHint">Searching United Kingdom — pick a city or enter a postcode (e.g. SW1A 1AA, EC1A 1BB)</div>
   </div>
-  <div class="nav-right">
-    <button class="pill" onclick="openPanel('explore')">Explore</button>
-    <button class="pill" onclick="openPanel('account')">Account</button>
+
+  <div class="map-wrapper">
+    <svg class="wisteria" viewBox="0 0 1200 64" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0 Q60 40 120 10 T240 14 T360 8 T480 16 T600 6 T720 18 T840 10 T960 14 T1080 8 T1200 12" stroke="#5b7a52" stroke-width="3" fill="none" opacity="0.55"/>
+      <g fill="#b48fc0" opacity="0.85">
+        <circle cx="90" cy="22" r="4"/><circle cx="98" cy="30" r="3.5"/><circle cx="104" cy="20" r="3"/>
+        <circle cx="260" cy="26" r="4"/><circle cx="268" cy="34" r="3.5"/><circle cx="274" cy="22" r="3"/>
+        <circle cx="430" cy="20" r="4"/><circle cx="438" cy="28" r="3.5"/><circle cx="444" cy="18" r="3"/>
+        <circle cx="620" cy="24" r="4"/><circle cx="628" cy="32" r="3.5"/><circle cx="634" cy="20" r="3"/>
+        <circle cx="800" cy="22" r="4"/><circle cx="808" cy="30" r="3.5"/><circle cx="814" cy="18" r="3"/>
+        <circle cx="980" cy="26" r="4"/><circle cx="988" cy="34" r="3.5"/><circle cx="994" cy="22" r="3"/>
+        <circle cx="1120" cy="22" r="4"/><circle cx="1128" cy="30" r="3.5"/>
+      </g>
+    </svg>
+    <div class="map-badge" id="mapBadge">73 properties</div>
+    <div class="map-note" data-i18n="map_note">Listings are supplied and maintained by independent third-party agents and landlords.</div>
+    <div id="map"></div>
   </div>
-</nav>
+</section>
 
-<main>
-  <section class="map-section">
-    <div class="map-wrapper">
-      <div class="map-badge" id="mapBadge">73 properties</div>
-      <div id="map"></div>
+<section class="services-wrap">
+  <div class="services">
+    <div class="card">
+      <span class="num">[1]</span>
+      <div style="font-size:20px;">🎨</div>
+      <div><strong data-i18n="svc1_title">Interior Design</strong><div style="font-size:12.5px;color:var(--muted)" data-i18n="svc1_sub">Independent design partners to help you settle in.</div></div>
+      <div style="margin-left:auto"><button onclick="openPanel('interior')" data-i18n="open">Open</button></div>
     </div>
+    <div class="card">
+      <span class="num">[2]</span>
+      <div style="font-size:20px;">🧾</div>
+      <div><strong data-i18n="svc2_title">Tenant Screening</strong><div style="font-size:12.5px;color:var(--muted)" data-i18n="svc2_sub">Reference and right-to-rent checks via third parties.</div></div>
+      <div style="margin-left:auto"><button onclick="openPanel('screening')" data-i18n="open">Open</button></div>
+    </div>
+    <div class="card">
+      <span class="num">[3]</span>
+      <div style="font-size:20px;">🛡️</div>
+      <div><strong data-i18n="svc3_title">Landlord Insurance</strong><div style="font-size:12.5px;color:var(--muted)" data-i18n="svc3_sub">Cover arranged through independent insurers.</div></div>
+      <div style="margin-left:auto"><button onclick="openPanel('insurance')" data-i18n="open">Open</button></div>
+    </div>
+  </div>
 
-    <div class="services">
-      <div class="card"><div style="font-size:20px;">🏠</div><div><strong>Interior Design</strong><div style="font-size:13px;color:var(--muted)">Blow property management your property Management.</div></div><div style="margin-left:auto"><button onclick="openPanel('interior')">[1]</button></div></div>
-      <div class="card"><div style="font-size:20px;">🧾</div><div><strong>Tenant Screening</strong></div><div style="margin-left:auto"><button onclick="openPanel('screening')">Open</button></div></div>
-      <div class="card"><div style="font-size:20px;">🛡️</div><div><strong>Landlord Insurance</strong></div><div style="margin-left:auto"><button onclick="openPanel('insurance')">Open</button></div></div>
+  <div class="app-card">
+    <svg class="rose" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="#fff"/></svg>
+    <h3 data-i18n="app_title">Tenant Application Card</h3>
+    <p data-i18n="app_sub" style="color:rgba(255,255,255,0.85)">Required to apply. Secure your properties with our tenant card.</p>
+    <div class="app-check">
+      <div class="item"><span class="box done">✓</span><span data-i18n="app_step1">Profile registered</span></div>
+      <div class="item"><span class="box done">✓</span><span data-i18n="app_step2">Preferences saved</span></div>
+      <div class="item"><span class="box">3</span><span data-i18n="app_step3">Screening &amp; references (via agent)</span></div>
+      <div class="item"><span class="box">4</span><span data-i18n="app_step4">Viewing booked</span></div>
     </div>
+    <div class="progress-track"><div class="progress-fill"></div></div>
+    <div class="progress-label" data-i18n="app_progress">2 of 4 steps complete — the rest happens with your chosen agent</div>
+    <button style="margin-top:14px;background:#fff;color:var(--accent);border:0;padding:9px 14px;border-radius:8px;cursor:pointer;font-weight:600;font-size:13px" onclick="openPanel('tenant-form')" data-i18n="app_cta">Continue application</button>
+  </div>
 
-    <div class="tenant-card">
-      <h3>Tenant Application Card</h3>
-      <p>Required to apply. Secure your properties with our tenant card. <a href="#" style="color:#fff;text-decoration:underline">Learn More</a></p>
+  <div class="cta-row">
+    <div class="cta-card tenant">
+      <h3 data-i18n="cta_tenant_title" style="color:#fff">Register as a tenant</h3>
+      <p data-i18n="cta_tenant_sub">Tell us what you're looking for and get matched with agents and landlords who have relevant open houses.</p>
+      <button onclick="openPanel('tenant-form')" data-i18n="cta_tenant_btn">Register as a tenant</button>
     </div>
-  </section>
+    <div class="cta-card agent">
+      <h3 data-i18n="cta_agent_title" style="color:#fff">Register as an agent or landlord</h3>
+      <p data-i18n="cta_agent_sub">List your open houses on 00.house and reach verified, ready-to-view tenants across your area.</p>
+      <button onclick="openPanel('agent-form')" data-i18n="cta_agent_btn">Register as an agent</button>
+    </div>
+  </div>
 
-  <footer>
-    <div style="display:flex;gap:40px;flex-wrap:wrap">
-      <div>
-        <h4>Company</h4>
-        <a href="#">About Us</a><br>
-        <a href="#">Careers</a><br>
-        <a href="#">Contact</a>
-      </div>
-      <div>
-        <h4>Legal</h4>
-        <a href="#">Terms</a><br>
-        <a href="#">Privacy</a>
-      </div>
+  <div class="legal-strip">
+    <div style="font-size:18px">ℹ️</div>
+    <div data-i18n="legal_strip">
+      <strong>00.house is a property listings portal, not a letting agent.</strong>
+      We do not collect, hold or handle rent, deposits or any other payments. Every listing, viewing and tenancy is provided and managed directly by the third-party agent, landlord or developer named on it.
+      <a onclick="openPanel('legal')" data-i18n="legal_strip_link">Read the full disclaimer</a>
     </div>
-  </footer>
-</main>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-grid">
+    <div>
+      <h4 data-i18n="foot_company">Company</h4>
+      <a onclick="openPanel('about')" data-i18n="foot_about">About Us</a>
+      <a onclick="alert('Careers page — coming soon')" data-i18n="foot_careers">Careers</a>
+      <a onclick="openPanel('contact')" data-i18n="foot_contact">Contact</a>
+    </div>
+    <div>
+      <h4 data-i18n="foot_users">For users</h4>
+      <a onclick="openPanel('tenant-form')" data-i18n="foot_tenant">Tenant registration</a>
+      <a onclick="openPanel('agent-form')" data-i18n="foot_agent">Agent / landlord registration</a>
+      <a onclick="document.getElementById('exploreSection').scrollIntoView({behavior:'smooth'})" data-i18n="foot_browse">Browse properties</a>
+    </div>
+    <div>
+      <h4 data-i18n="foot_legal">Legal</h4>
+      <a onclick="openPanel('legal','terms')" data-i18n="foot_terms">Terms of Service</a>
+      <a onclick="openPanel('legal','privacy')" data-i18n="foot_privacy">Privacy Policy</a>
+      <a onclick="openPanel('legal','disclaimer')" data-i18n="foot_disclosures">Disclosures</a>
+      <a onclick="openPanel('legal','cookies')" data-i18n="foot_licenses">Licenses</a>
+    </div>
+  </div>
+  <div class="foot-legal-note">
+    00.house Ltd is a property listings and open-house scheduling portal registered in England &amp; Wales. We are not a licensed estate agent, letting agent, property manager, financial adviser or holder of client money. We do not collect rent, deposits, holding fees or any other payment on behalf of any party. All property information, availability, pricing and viewing arrangements are provided directly by independent third-party agents, landlords, developers and service providers, and have not been independently verified by 00.house. Users should independently verify all details and seek independent legal, financial and surveying advice before entering into any tenancy, purchase or related agreement. See our <a onclick="openPanel('legal','disclaimer')" style="display:inline;color:inherit;text-decoration:underline;cursor:pointer">full disclaimer</a> for details. This summary is provided for general guidance and is not legal advice; the underlying policies should be reviewed by a qualified solicitor before publication.
+  </div>
+</footer>
 
 <div class="panel-overlay" id="overlay" onclick="closePanel()"></div>
-<div class="side-panel" id="sidePanel" aria-hidden="true"><div class="panel-body" id="panelBody"></div></div>
+<div class="side-panel" id="sidePanel" aria-hidden="true">
+  <button class="panel-close" onclick="closePanel()" aria-label="Close">✕</button>
+  <div class="panel-body" id="panelBody" style="clear:both;padding-top:6px"></div>
+</div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
-// UI helpers
-function openPanel(mode){ document.getElementById('sidePanel').classList.add('open'); document.getElementById('overlay').classList.add('open'); document.getElementById('sidePanel').setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; renderPanel(mode); }
-function closePanel(){ document.getElementById('sidePanel').classList.remove('open'); document.getElementById('overlay').classList.remove('open'); document.getElementById('sidePanel').setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+/* ============ LANGUAGE TOGGLE (EN/AR demo) ============ */
+const i18n = {
+  en:{
+    brand:'00.house', nav_explore:'Explore', nav_find:'Find your home', nav_lang:'Languages ▾', nav_account:'Account',
+    hero_title:'00.house — Are you looking for a house?', hero_search_ph:'Search by city or postcode',
+    explore_eyebrow:'Explore', explore_title:'Explore Properties', live_feed:'Live feed',
+    hl_1:'Marble & brass kitchens', hl_2:'Racing-green interiors', hl_3:'Garden & terrace views', hl_4:'Open house gardens',
+    btn_explore_all:'Explore all', btn_find_home:'Find your home', btn_my_account:'My account',
+    map_search_ph:'City, town, or UK postcode e.g. SW1A 1AA', map_note:'Listings are supplied and maintained by independent third-party agents and landlords.',
+    svc1_title:'Interior Design', svc1_sub:'Independent design partners to help you settle in.',
+    svc2_title:'Tenant Screening', svc2_sub:'Reference and right-to-rent checks via third parties.',
+    svc3_title:'Landlord Insurance', svc3_sub:'Cover arranged through independent insurers.', open:'Open',
+    app_title:'Tenant Application Card', app_sub:'Required to apply. Secure your properties with our tenant card.',
+    app_step1:'Profile registered', app_step2:'Preferences saved', app_step3:'Screening & references (via agent)', app_step4:'Viewing booked',
+    app_progress:'2 of 4 steps complete — the rest happens with your chosen agent', app_cta:'Continue application',
+    cta_tenant_title:'Register as a tenant', cta_tenant_sub:"Tell us what you're looking for and get matched with agents and landlords who have relevant open houses.", cta_tenant_btn:'Register as a tenant',
+    cta_agent_title:'Register as an agent or landlord', cta_agent_sub:'List your open houses on 00.house and reach verified, ready-to-view tenants across your area.', cta_agent_btn:'Register as an agent',
+    legal_strip_link:'Read the full disclaimer',
+    foot_company:'Company', foot_about:'About Us', foot_careers:'Careers', foot_contact:'Contact',
+    foot_users:'For users', foot_tenant:'Tenant registration', foot_agent:'Agent / landlord registration', foot_browse:'Browse properties',
+    foot_legal:'Legal', foot_terms:'Terms of Service', foot_privacy:'Privacy Policy', foot_disclosures:'Disclosures', foot_licenses:'Licenses'
+  },
+  ar:{
+    brand:'00.house', nav_explore:'استكشف', nav_find:'ابحث عن منزلك', nav_lang:'اللغة ▾', nav_account:'الحساب',
+    hero_title:'00.house — هل تبحث عن منزل؟', hero_search_ph:'ابحث حسب المدينة أو الرمز البريدي',
+    explore_eyebrow:'استكشاف', explore_title:'استكشف العقارات', live_feed:'بث مباشر',
+    hl_1:'مطابخ من الرخام والنحاس', hl_2:'تصاميم داخلية بأخضر داكن', hl_3:'إطلالات على الحدائق والشرفات', hl_4:'حدائق البيوت المفتوحة',
+    btn_explore_all:'استكشف الكل', btn_find_home:'ابحث عن منزلك', btn_my_account:'حسابي',
+    map_search_ph:'المدينة أو الرمز البريدي البريطاني', map_note:'يتم توفير الإعلانات وصيانتها من قبل وكلاء وملاك عقارات مستقلين من طرف ثالث.',
+    svc1_title:'التصميم الداخلي', svc1_sub:'شركاء تصميم مستقلون لمساعدتك على الاستقرار.',
+    svc2_title:'فحص المستأجرين', svc2_sub:'التحقق من المراجع وحق الإيجار عبر أطراف ثالثة.',
+    svc3_title:'تأمين الملاك', svc3_sub:'تغطية تُرتّب من خلال شركات تأمين مستقلة.', open:'فتح',
+    app_title:'بطاقة طلب المستأجر', app_sub:'مطلوبة للتقديم. أمّن عقارك ببطاقة المستأجر الخاصة بنا.',
+    app_step1:'تم تسجيل الملف الشخصي', app_step2:'تم حفظ التفضيلات', app_step3:'الفحص والمراجع (عبر الوكيل)', app_step4:'تم حجز المعاينة',
+    app_progress:'اكتملت خطوتان من أصل 4 — البقية تتم مع الوكيل الذي تختاره', app_cta:'متابعة الطلب',
+    cta_tenant_title:'سجّل كمستأجر', cta_tenant_sub:'أخبرنا بما تبحث عنه وسنطابقك مع وكلاء وملاك لديهم بيوت مفتوحة مناسبة.', cta_tenant_btn:'سجّل كمستأجر',
+    cta_agent_title:'سجّل كوكيل أو مالك عقار', cta_agent_sub:'أدرج بيوتك المفتوحة على 00.house وتواصل مع مستأجرين موثوقين وجاهزين للمعاينة.', cta_agent_btn:'سجّل كوكيل',
+    legal_strip_link:'اقرأ إخلاء المسؤولية الكامل',
+    foot_company:'الشركة', foot_about:'من نحن', foot_careers:'الوظائف', foot_contact:'تواصل معنا',
+    foot_users:'للمستخدمين', foot_tenant:'تسجيل المستأجر', foot_agent:'تسجيل الوكيل / المالك', foot_browse:'تصفح العقارات',
+    foot_legal:'قانوني', foot_terms:'شروط الخدمة', foot_privacy:'سياسة الخصوصية', foot_disclosures:'إفصاحات', foot_licenses:'تراخيص'
+  }
+};
+let currentLang = 'en';
+function toggleLangMenu(){ document.getElementById('langMenu').classList.toggle('open'); }
+function setLanguage(lang){
+  currentLang = lang;
+  document.getElementById('htmlRoot').setAttribute('lang', lang);
+  document.getElementById('htmlRoot').setAttribute('dir', lang==='ar' ? 'rtl':'ltr');
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(i18n[lang][key] !== undefined) el.textContent = i18n[lang][key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-placeholder');
+    if(i18n[lang][key] !== undefined) el.setAttribute('placeholder', i18n[lang][key]);
+  });
+  document.getElementById('langMenu').classList.remove('open');
+}
+document.addEventListener('click', function(e){
+  const wrap = document.querySelector('.lang-wrap');
+  if(wrap && !wrap.contains(e.target)) document.getElementById('langMenu').classList.remove('open');
+});
 
-function renderPanel(mode){ const body = document.getElementById('panelBody'); if(mode==='account'){ body.innerHTML=`<h2>Account</h2><p><button onclick="alert('Login stub')">Login</button> <button onclick="alert('Register stub')">Register</button></p><p style='color:var(--muted)'>Auth stubs — connect your auth provider</p>`; return;} if(mode==='interior'){ body.innerHTML='<h2>Interior Design</h2><p>Design services details.</p>'; return;} if(mode==='screening'){ body.innerHTML='<h2>Tenant Screening</h2><p>Screening details.</p>'; return;} if(mode==='insurance'){ body.innerHTML='<h2>Landlord Insurance</h2><p>Insurance details.</p>'; return;} // default explore
- body.innerHTML = `<h2>Explore Properties</h2><p style="color:var(--muted)">Sample properties near you</p>` + sampleProperties.map(p=>`<div class='sample-card'><strong>${p.title}</strong><div style='font-size:13px;color:var(--muted)'>${p.price}</div><div style='margin-top:8px'><button onclick="focusProperty(${p.id})">View</button> <button onclick="contactStub(${p.id})">Contact</button></div></div>`).join(''); }
+/* ============ PANEL SYSTEM ============ */
+function openPanel(mode, sub){
+  document.getElementById('sidePanel').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('sidePanel').setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+  renderPanel(mode, sub);
+  document.getElementById('sidePanel').scrollTop = 0;
+}
+function closePanel(){
+  document.getElementById('sidePanel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('sidePanel').setAttribute('aria-hidden','true');
+  document.body.style.overflow='';
+}
 
-function contactStub(id){ alert('Contact request sent (stub) for property '+id); }
+function renderPanel(mode, sub){
+  const body = document.getElementById('panelBody');
 
-// Sample property dataset
-const sampleProperties = [
-  {id:1,title:'Luxury Villa — Windsor',price:'£6,500 / month',lat:51.4839,lng:-0.6044},
-  {id:2,title:'Penthouse — London',price:'£8,200 / month',lat:51.5074,lng:-0.1278},
-  {id:3,title:'Villa — Palo Alto',price:'$12,500 / month',lat:37.4419,lng:-122.1430}
+  if(mode==='account'){
+    body.innerHTML = `
+      <div class="panel-eyebrow">Account</div>
+      <h2>Sign in to 00.house</h2>
+      <p>Tenants, agents and landlords use the same account system.</p>
+      <div class="form-field"><label for="acc-email">Email</label><input type="email" id="acc-email" placeholder="you@example.com"></div>
+      <div class="form-field"><label for="acc-pass">Password</label><input type="text" id="acc-pass" placeholder="••••••••"></div>
+      <button class="submit-btn" onclick="alert('Login stub — connect an auth provider to enable real sign-in.')">Log in</button>
+      <p style="margin-top:14px;font-size:12.5px">New here? <a onclick="openPanel('register-choice')" style="text-decoration:underline;cursor:pointer;color:var(--black)">Create an account</a></p>
+      <p style="margin-top:18px;font-size:11px;color:#9a9a9a">Authentication is a stub in this prototype — wire up your identity provider (e.g. Auth0, Clerk, Firebase Auth) before launch.</p>
+    `;
+    return;
+  }
+
+  if(mode==='register-choice'){
+    body.innerHTML = `
+      <div class="panel-eyebrow">Get started</div>
+      <h2>How would you like to register?</h2>
+      <p>Choose the account type that matches what you're here to do.</p>
+      <div class="sample-card">
+        <strong>I'm looking for a home</strong>
+        <p style="margin:4px 0 0">Register as a tenant to save searches, book open house viewings and get matched with agents.</p>
+        <button onclick="openPanel('tenant-form')">Register as a tenant →</button>
+      </div>
+      <div class="sample-card">
+        <strong>I'm an agent, landlord or developer</strong>
+        <p style="margin:4px 0 0">Register to list properties and host open houses on 00.house.</p>
+        <button onclick="openPanel('agent-form')">Register as an agent / landlord →</button>
+      </div>
+    `;
+    return;
+  }
+
+  if(mode==='tenant-form'){ body.innerHTML = tenantFormHTML(); return; }
+  if(mode==='agent-form'){ body.innerHTML = agentFormHTML(); return; }
+  if(mode==='legal'){ body.innerHTML = legalHTML(sub||'disclaimer'); return; }
+
+  if(mode==='interior'){
+    body.innerHTML = `
+      <div class="panel-eyebrow">Service · Third party</div>
+      <h2>Interior Design</h2>
+      <p>Independent interior design studios and stylists partnered with 00.house to help new tenants and buyers settle into a property quickly.</p>
+      <div class="sample-card"><strong>Studio Linden</strong><p style="margin:4px 0 0">Full-room styling from £450. Books within 48 hours of move-in.</p><button onclick="contactStub('Studio Linden')">Request a quote</button></div>
+      <div class="sample-card"><strong>Marlowe &amp; Co Interiors</strong><p style="margin:4px 0 0">Furniture packages for short lets and relocations.</p><button onclick="contactStub('Marlowe & Co Interiors')">Request a quote</button></div>
+      <div class="legal-callout">These providers are independent businesses. 00.house does not employ, supervise or guarantee their work, and is not a party to any contract you enter with them.</div>
+    `;
+    return;
+  }
+  if(mode==='screening'){
+    body.innerHTML = `
+      <div class="panel-eyebrow">Service · Third party</div>
+      <h2>Tenant Screening</h2>
+      <p>Reference checks, right-to-rent checks and affordability assessments, carried out by independent screening providers on behalf of the agent or landlord.</p>
+      <div class="sample-card"><strong>Right-to-rent check</strong><p style="margin:4px 0 0">Required by UK law before any tenancy begins. Carried out by the letting agent or landlord, not by 00.house.</p></div>
+      <div class="sample-card"><strong>Reference &amp; credit check</strong><p style="margin:4px 0 0">Typically arranged directly with the agent once a viewing has taken place.</p></div>
+      <div class="legal-callout">00.house does not perform screening, hold screening results, or make letting decisions. All checks and outcomes are managed entirely by the relevant agent or landlord and their chosen provider.</div>
+    `;
+    return;
+  }
+  if(mode==='insurance'){
+    body.innerHTML = `
+      <div class="panel-eyebrow">Service · Third party</div>
+      <h2>Landlord Insurance</h2>
+      <p>Buildings, contents and rent-guarantee cover arranged through independent, FCA-regulated insurers and brokers.</p>
+      <div class="sample-card"><strong>Get a quote</strong><p style="margin:4px 0 0">You'll be introduced to an independent insurance broker to arrange cover directly.</p><button onclick="contactStub('Insurance broker')">Get a quote</button></div>
+      <div class="legal-callout">00.house is not an insurer or insurance intermediary and does not receive premiums. Any policy is a contract solely between you and the insurer/broker.</div>
+    `;
+    return;
+  }
+  if(mode==='about'){
+    body.innerHTML = `
+      <div class="panel-eyebrow">Company</div>
+      <h2>About 00.house</h2>
+      <p>00.house is a London-born property portal built around one idea: open house viewings that start exactly on the hour, GMT. We help tenants and buyers discover verified open houses, and help agents, landlords and developers fill them.</p>
+      <p>We are a technology platform, not a letting or estate agency — every listing, viewing and transaction is owned and managed by the independent third party who posted it.</p>
+    `;
+    return;
+  }
+  if(mode==='contact'){
+    body.innerHTML = `
+      <div class="panel-eyebrow">Get in touch</div>
+      <h2>Contact 00.house</h2>
+      <div class="form-field"><label for="ct-name">Name</label><input type="text" id="ct-name"></div>
+      <div class="form-field"><label for="ct-email">Email</label><input type="email" id="ct-email"></div>
+      <div class="form-field"><label for="ct-msg">Message</label><textarea id="ct-msg"></textarea></div>
+      <button class="submit-btn" onclick="stubSubmit(this,'Thanks — we\\'ll get back to you within one working day.')">Send message</button>
+    `;
+    return;
+  }
+}
+
+/* ============ FORMS ============ */
+function tenantFormHTML(){
+  return `
+    <div class="panel-eyebrow">Register</div>
+    <h2>Tenant registration</h2>
+    <p>Tell us what you're looking for. Agents and landlords with matching open houses will be able to contact you directly — 00.house does not charge tenants to register.</p>
+    <form id="tenantForm" onsubmit="return handleTenantSubmit(event)">
+      <div class="form-row">
+        <div class="form-field"><label for="t-first">First name</label><input required type="text" id="t-first"></div>
+        <div class="form-field"><label for="t-last">Last name</label><input required type="text" id="t-last"></div>
+      </div>
+      <div class="form-field"><label for="t-email">Email</label><input required type="email" id="t-email"></div>
+      <div class="form-field"><label for="t-phone">Phone</label><input required type="tel" id="t-phone" placeholder="+44"></div>
+      <div class="form-field"><label for="t-areas">Preferred areas or postcodes</label><input type="text" id="t-areas" placeholder="e.g. Marylebone, NW1, SW1A"></div>
+      <div class="form-row">
+        <div class="form-field"><label for="t-budget-min">Min budget (pcm)</label><input type="number" id="t-budget-min" placeholder="£"></div>
+        <div class="form-field"><label for="t-budget-max">Max budget (pcm)</label><input type="number" id="t-budget-max" placeholder="£"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-field"><label for="t-movein">Earliest move-in date</label><input type="date" id="t-movein"></div>
+        <div class="form-field"><label for="t-occupants">Occupants</label><input type="number" id="t-occupants" min="1" value="1"></div>
+      </div>
+      <div class="form-field">
+        <label for="t-employment">Employment status</label>
+        <select id="t-employment">
+          <option>Employed (full-time)</option>
+          <option>Employed (part-time)</option>
+          <option>Self-employed</option>
+          <option>Student</option>
+          <option>Retired</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-field"><label for="t-notes">Anything else agents should know?</label><textarea id="t-notes" placeholder="Pets, guarantor, sharers, accessibility needs, etc."></textarea></div>
+
+      <div class="checkbox-row"><input type="checkbox" id="t-consent-share" required><label for="t-consent-share">I consent to my details being shared with agents and landlords whose open houses I book or enquire about, so they can contact me directly. 00.house does not sell my data to third parties for marketing.</label></div>
+      <div class="checkbox-row"><input type="checkbox" id="t-consent-terms" required><label for="t-consent-terms">I have read and agree to the <a onclick="event.preventDefault();openPanel('legal','terms')" style="text-decoration:underline;cursor:pointer;color:var(--black)">Terms of Use</a> and <a onclick="event.preventDefault();openPanel('legal','privacy')" style="text-decoration:underline;cursor:pointer;color:var(--black)">Privacy Policy</a>, and understand that 00.house is a listings portal only and is not party to any tenancy I enter into.</label></div>
+
+      <button type="submit" class="submit-btn">Submit registration</button>
+      <div id="tenantSuccess"></div>
+    </form>
+  `;
+}
+
+function agentFormHTML(){
+  return `
+    <div class="panel-eyebrow">Register</div>
+    <h2>Agent &amp; landlord registration</h2>
+    <p>List your open houses on 00.house. You remain fully responsible for your listings, viewings, referencing and any money handled with tenants.</p>
+    <form id="agentForm" onsubmit="return handleAgentSubmit(event)">
+      <div class="form-field"><label for="a-company">Agency / company name</label><input required type="text" id="a-company"></div>
+      <div class="form-row">
+        <div class="form-field"><label for="a-type">Account type</label>
+          <select id="a-type">
+            <option>Letting agent</option>
+            <option>Estate agent</option>
+            <option>Private landlord</option>
+            <option>Developer</option>
+            <option>Property manager</option>
+          </select>
+        </div>
+        <div class="form-field"><label for="a-chnum">Companies House / registration no.</label><input type="text" id="a-chnum" placeholder="e.g. 09876543"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-field"><label for="a-contact">Contact name</label><input required type="text" id="a-contact"></div>
+        <div class="form-field"><label for="a-role">Role</label><input type="text" id="a-role" placeholder="e.g. Lettings Manager"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-field"><label for="a-email">Work email</label><input required type="email" id="a-email"></div>
+        <div class="form-field"><label for="a-phone">Phone</label><input required type="tel" id="a-phone" placeholder="+44"></div>
+      </div>
+      <div class="form-field"><label for="a-address">Registered / branch address</label><input type="text" id="a-address" placeholder="Street, city, postcode"></div>
+      <div class="form-field"><label for="a-areas">Areas you cover</label><input type="text" id="a-areas" placeholder="e.g. Central London, Windsor"></div>
+      <div class="form-field"><label for="a-cmp">Client Money Protection (CMP) scheme</label><input type="text" id="a-cmp" placeholder="e.g. Propertymark, RICS, SAFEagent — required for UK letting agents handling client money"></div>
+      <div class="form-field"><label for="a-redress">Redress scheme membership</label><input type="text" id="a-redress" placeholder="e.g. The Property Ombudsman / PRS"></div>
+
+      <div class="checkbox-row"><input type="checkbox" id="a-consent-responsibility" required><label for="a-consent-responsibility">I confirm my organisation is solely responsible for the accuracy of our listings, for conducting compliant viewings and referencing, and for any rent, deposits or fees handled with tenants — none of which are collected, held or processed by 00.house.</label></div>
+      <div class="checkbox-row"><input type="checkbox" id="a-consent-compliance" required><label for="a-consent-compliance">I confirm my organisation complies with applicable UK letting legislation (including the Tenant Fees Act 2019, Deposit Protection requirements, and Client Money Protection where applicable) or the equivalent legislation in the relevant jurisdiction.</label></div>
+      <div class="checkbox-row"><input type="checkbox" id="a-consent-terms" required><label for="a-consent-terms">I have read and agree to the <a onclick="event.preventDefault();openPanel('legal','terms')" style="text-decoration:underline;cursor:pointer;color:var(--black)">Terms of Use</a> for Agents &amp; Landlords and the <a onclick="event.preventDefault();openPanel('legal','disclaimer')" style="text-decoration:underline;cursor:pointer;color:var(--black)">Portal Disclaimer</a>.</label></div>
+
+      <button type="submit" class="submit-btn">Submit registration</button>
+      <div id="agentSuccess"></div>
+    </form>
+  `;
+}
+
+function handleTenantSubmit(e){
+  e.preventDefault();
+  document.getElementById('tenantSuccess').innerHTML = `<div class="form-success">Thanks — your tenant profile has been received (prototype stub, not yet stored). Matching agents can now reach out to you directly for viewings.</div>`;
+  return false;
+}
+function handleAgentSubmit(e){
+  e.preventDefault();
+  document.getElementById('agentSuccess').innerHTML = `<div class="form-success">Thanks — your agent/landlord application has been received (prototype stub, not yet stored). Our team reviews new listers before activating a listing account.</div>`;
+  return false;
+}
+function stubSubmit(btn,msg){
+  const div = document.createElement('div');
+  div.className='form-success';
+  div.textContent = msg;
+  btn.parentElement.appendChild(div);
+}
+function contactStub(name){ alert('Contact request sent (stub) to '+name+'. This would route to their own contact details, not to 00.house.'); }
+
+/* ============ LEGAL PANEL ============ */
+const legalTabs = [
+  {id:'disclaimer', label:'Portal Disclaimer'},
+  {id:'terms', label:'Terms of Use'},
+  {id:'privacy', label:'Privacy Policy'},
+  {id:'cookies', label:'Cookies'}
 ];
+function legalHTML(active){
+  const tabs = legalTabs.map(t=>`<button class="legal-tab ${t.id===active?'active':''}" onclick="openPanel('legal','${t.id}')">${t.label}</button>`).join('');
+  return `
+    <div class="panel-eyebrow">Legal</div>
+    <h2>Legal &amp; disclaimers</h2>
+    <div class="legal-tabs">${tabs}</div>
+    ${legalContent(active)}
+    <p style="font-size:10.5px;color:#b3b3b3;margin-top:22px">This wording is a starting draft for the prototype and is not legal advice. Have a qualified solicitor review and finalise these policies before they govern real users, listings or money.</p>
+  `;
+}
+function legalContent(active){
+  if(active==='terms'){
+    return `
+      <div class="legal-section"><h4>1. What 00.house is</h4><p>00.house ("the Platform", "we", "us") is an online property listings and open-house scheduling portal. We are a technology provider that connects prospective tenants and buyers ("Users") with independent third-party letting agents, estate agents, landlords, developers and property managers ("Listers"). We are not a letting agent, estate agent, landlord, property manager, financial adviser, or provider of legal advice, and we do not hold a Client Money Protection licence.</p></div>
+      <div class="legal-section"><h4>2. No agency relationship</h4><p>Using the Platform does not create any agency, partnership, employment, joint venture or fiduciary relationship between 00.house and any User or Lister. Listers act entirely on their own behalf.</p></div>
+      <div class="legal-section"><h4>3. Listings and content</h4><p>All property listings, descriptions, photographs, floorplans, prices, availability and open house times are supplied directly by Listers. We do not independently verify, inspect or guarantee any listing and accept no responsibility for errors, omissions or changes made by a Lister.</p></div>
+      <div class="legal-section"><h4>4. Bookings and viewings</h4><p>Open house bookings made through the Platform are scheduling requests only. The viewing itself, and any resulting tenancy, sale or other agreement, is arranged and conducted entirely between the User and the Lister. 00.house is not present at, and is not a party to, any viewing or transaction.</p></div>
+      <div class="legal-section"><h4>5. Money</h4><p>00.house does not collect, receive, hold or transmit rent, deposits, holding deposits, admin fees or any other payment between Users and Listers. All payments are made directly between the User and the Lister, using the Lister's own payment arrangements. Listers handling client money remain responsible for their own regulatory obligations, including Client Money Protection and deposit protection schemes where applicable.</p></div>
+      <div class="legal-section"><h4>6. Agent &amp; landlord obligations</h4><p>Listers are solely responsible for the accuracy of their listings, compliance with applicable property, consumer and letting legislation (including, in the UK, the Tenant Fees Act 2019 and deposit protection rules), and for conducting their own referencing, right-to-rent and affordability checks.</p></div>
+      <div class="legal-section"><h4>7. Third-party services</h4><p>Interior design, tenant screening, insurance and similar services signposted on the Platform are provided by independent businesses. 00.house does not supervise, employ or guarantee these providers and is not a party to any contract a User enters into with them.</p></div>
+      <div class="legal-section"><h4>8. No advice</h4><p>Nothing on the Platform constitutes legal, financial, tax, surveying or property investment advice. Users should obtain independent professional advice before entering into any tenancy, purchase, or related financial commitment.</p></div>
+      <div class="legal-section"><h4>9. Limitation of liability</h4><p>To the maximum extent permitted by law, 00.house excludes all liability for any loss, damage, cost or expense arising from: reliance on any listing or content; dealings, disputes, or transactions with any Lister or third-party provider; or use or inability to use the Platform. Nothing in these Terms excludes liability that cannot be excluded by law (for example, liability for death or personal injury caused by negligence, or fraud).</p></div>
+      <div class="legal-section"><h4>10. Governing law</h4><p>These Terms are governed by the laws of England &amp; Wales, without prejudice to any mandatory consumer protections in a User's country of residence.</p></div>
+    `;
+  }
+  if(active==='privacy'){
+    return `
+      <div class="legal-section"><h4>What we collect</h4><p>Contact details you provide when registering (name, email, phone), search and budget preferences, booking activity, and technical data such as device and approximate location used to show relevant listings on the map.</p></div>
+      <div class="legal-section"><h4>How we use it</h4><ul><li>To operate your account and show relevant listings</li><li>To pass your enquiry or booking details to the specific Lister you contact, so they can respond to you directly</li><li>To send service messages (booking confirmations, account notices)</li><li>With your separate marketing consent, to tell you about relevant new listings</li></ul></div>
+      <div class="legal-section"><h4>Who we share it with</h4><p>We share your enquiry/booking details only with the Lister(s) you choose to contact or book with, and with service providers who process data on our behalf (e.g. hosting, email delivery). We do not sell personal data to third parties.</p></div>
+      <div class="legal-section"><h4>Your rights (UK GDPR / Data Protection Act 2018)</h4><p>You can request access to, correction of, or deletion of your data, and can withdraw marketing consent at any time. Contact us via the Contact form to exercise these rights.</p></div>
+      <div class="legal-section"><h4>Retention</h4><p>We keep account data for as long as your account is active, and enquiry records for a limited period afterwards for support and legal purposes.</p></div>
+    `;
+  }
+  if(active==='cookies'){
+    return `
+      <div class="legal-section"><h4>Essential cookies</h4><p>Used to keep you logged in and remember basic preferences (e.g. selected country, language). The Platform cannot function correctly without these.</p></div>
+      <div class="legal-section"><h4>Analytics cookies</h4><p>Help us understand how the Platform is used so we can improve it. Used only with your consent where required by law.</p></div>
+      <div class="legal-section"><h4>Third-party map tiles</h4><p>The map is powered by OpenStreetMap contributors, with requests made to their tile servers when you browse the map.</p></div>
+    `;
+  }
+  return `
+    <div class="legal-callout"><strong>In short:</strong> 00.house is a listings portal. We never touch your rent, deposit or any payment, and every listing, viewing and tenancy is provided and managed entirely by an independent third-party agent, landlord or developer.</div>
+    <div class="legal-section"><h4>Portal status</h4><p>00.house Ltd operates a property listings and open-house scheduling website. We are not a letting agent, estate agent, landlord, property manager, or financial adviser, and are not regulated as such.</p></div>
+    <div class="legal-section"><h4>No rent or money handling</h4><p>We do not collect, hold, process or have any access to rent, deposits, holding fees, admin fees or any other payment made between a User and a Lister. All such payments are made and handled entirely by the parties themselves, outside of the Platform.</p></div>
+    <div class="legal-section"><h4>Third-party content</h4><p>Every property listing, price, photo, description, availability window and open house time is supplied directly by the relevant Lister. 00.house does not create, verify, inspect or endorse this content and cannot guarantee its accuracy or that a property remains available.</p></div>
+    <div class="legal-section"><h4>No agency, no advice</h4><p>Nothing on the Platform creates an agency or fiduciary relationship with 00.house, and nothing on it is legal, financial or property advice. Always verify details independently and take your own professional advice before committing to a tenancy or purchase.</p></div>
+    <div class="legal-section"><h4>Third-party services</h4><p>Interior design, screening, insurance and similar services shown on the Platform are delivered by independent providers under their own terms. 00.house is not a party to, and accepts no liability for, any contract you enter into with them.</p></div>
+    <div class="legal-section"><h4>Maximum extent of liability</h4><p>To the fullest extent permitted by law, 00.house disclaims all warranties about listings and third-party services, and excludes liability for any loss arising from reliance on the Platform's content or from your dealings with any Lister or third party — except where liability cannot lawfully be excluded.</p></div>
+  `;
+}
 
-function focusProperty(id){ const p = sampleProperties.find(x=>x.id===id); if(!p) return; map.flyTo([p.lat,p.lng],12); setMarker([p.lat,p.lng],p.title); }
-
-// Map init and search
+/* ============ MAP + PROPERTY DATA ============ */
+const sampleProperties = [
+  {id:1,title:'Luxury Villa — Windsor',price:'£6,500 / month',agent:'Berkshire Prime Lettings',lat:51.4839,lng:-0.6044},
+  {id:2,title:'Penthouse — London',price:'£8,200 / month',agent:'Quintain Living',lat:51.5074,lng:-0.1278},
+  {id:3,title:'Villa — Palo Alto',price:'$12,500 / month',agent:'Bay Area Estates',lat:37.4419,lng:-122.1430}
+];
 let map, currentMarker=null, tileLayerPrimary=null, tileLayerFallback=null;
 function setMarker(latlng, title){ if(currentMarker) map.removeLayer(currentMarker); currentMarker = L.marker(latlng).addTo(map); if(title) currentMarker.bindPopup(title).openPopup(); }
+function trySwitchToFallback(){ try{ if(tileLayerPrimary) map.removeLayer(tileLayerPrimary); tileLayerFallback = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap contributors'}).addTo(map); }catch(e){ console.error('Fallback tile layer failed',e); } }
 
-function trySwitchToFallback(){ try{ if(tileLayerPrimary) map.removeLayer(tileLayerPrimary); tileLayerFallback = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap contributors'}).addTo(map); console.warn('Switched to fallback tile layer'); }catch(e){ console.error('Fallback tile layer failed',e); } }
+/* ============ SEARCH: country → city / UK postcode ============ */
+const countryCities = { uk:['London','Windsor','Bath','Manchester','Bristol','Edinburgh'], usa:['New York','Los Angeles','San Francisco','Palo Alto','Miami'], france:['Paris','Nice'], germany:['Munich','Berlin'], uae:['Dubai','Abu Dhabi'], canada:['Toronto','Vancouver'], other:[] };
+const cityCoords = { 'London':[51.5074,-0.1278], 'Windsor':[51.4839,-0.6044], 'Bath':[51.3811,-2.3590], 'Manchester':[53.4808,-2.2426], 'Bristol':[51.4545,-2.5879], 'Edinburgh':[55.9533,-3.1883], 'Palo Alto':[37.4419,-122.1430], 'San Francisco':[37.7749,-122.4194], 'New York':[40.7128,-74.0060], 'Los Angeles':[34.0522,-118.2437], 'Miami':[25.7617,-80.1918], 'Paris':[48.8566,2.3522], 'Nice':[43.7102,7.2620], 'Munich':[48.1351,11.582], 'Berlin':[52.5200,13.4050], 'Dubai':[25.2048,55.2708], 'Abu Dhabi':[24.4539,54.3773], 'Toronto':[43.6532,-79.3832], 'Vancouver':[49.2827,-123.1207] };
+const countryLabels = {uk:'United Kingdom',usa:'United States',france:'France',germany:'Germany',uae:'United Arab Emirates',canada:'Canada',other:'a country'};
+const UK_POSTCODE_RE = /^[A-Z]{1,2}[0-9][A-Z0-9]?\s*[0-9][A-Z]{2}$/i;
+const UK_OUTCODE_RE = /^[A-Z]{1,2}[0-9][A-Z0-9]?$/i;
+function normaliseUkPostcode(raw){
+  const compact = raw.replace(/\s+/g,'').toUpperCase();
+  if(compact.length < 5 || compact.length > 7) return null;
+  return compact.slice(0,-3)+' '+compact.slice(-3);
+}
+function focusProperty(id){ const p = sampleProperties.find(x=>x.id===id); if(!p) return; map.flyTo([p.lat,p.lng],13); setMarker([p.lat,p.lng],p.title); }
 
 document.addEventListener('DOMContentLoaded', ()=>{
   try{
     map = L.map('map',{zoomControl:true,scrollWheelZoom:false}).setView([51.5074,-0.1278],11);
     tileLayerPrimary = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
-    tileLayerPrimary.on('tileerror', function(){ console.warn('Tile error detected — switching fallback.'); trySwitchToFallback(); });
-
-    // add sample markers
-    sampleProperties.forEach(p=>{ L.circleMarker([p.lat,p.lng],{radius:6,fill:true,fillColor:'#c57b83',color:'#8c3f46',weight:1,fillOpacity:0.9}).addTo(map).bindPopup(`<strong>${p.title}</strong><div style='font-size:13px;color:${'#555'}'>${p.price}</div>`); });
-
-    // ensure map redraw
+    tileLayerPrimary.on('tileerror', trySwitchToFallback);
+    sampleProperties.forEach(p=>{
+      L.circleMarker([p.lat,p.lng],{radius:6,fill:true,fillColor:'#c57b83',color:'#8c3f46',weight:1,fillOpacity:0.9})
+        .addTo(map).bindPopup(`<strong>${p.title}</strong><div style='font-size:13px;color:#555'>${p.price}</div><div style='font-size:11px;color:#888;margin-top:4px'>Listed by ${p.agent}</div>`);
+    });
     map.whenReady(()=>setTimeout(()=>map.invalidateSize(),300));
     window.addEventListener('resize', ()=>setTimeout(()=>map.invalidateSize(),200));
 
-    // search & geocode helpers
-    const countryCities = { usa:['New York','Los Angeles','San Francisco','Palo Alto','Miami'], uk:['London','Windsor','Bath'], france:['Paris','Nice'], germany:['Munich','Berlin'], uae:['Dubai','Abu Dhabi'], canada:['Toronto','Vancouver'], other:[] };
-    const cityCoords = { 'London':[51.5074,-0.1278], 'Windsor':[51.4839,-0.6044], 'Palo Alto':[37.4419,-122.1430], 'San Francisco':[37.7749,-122.4194], 'New York':[40.7128,-74.0060], 'Los Angeles':[34.0522,-118.2437], 'Paris':[48.8566,2.3522], 'Munich':[48.1351,11.582] };
+    const cSelect = document.getElementById('h-country');
+    const cInput = document.getElementById('h-city');
+    const cList = document.getElementById('h-city-list');
+    const hint = document.getElementById('searchHint');
 
-    const cSelect = document.getElementById('h-country'); const cInput = document.getElementById('h-city'); const cList = document.getElementById('h-city-list'); const form = document.getElementById('headerSearch');
-    function populateCities(){ const code = cSelect.value || 'usa'; const list = countryCities[code] || []; cList.innerHTML = list.map(v=>`<option value="${v}"></option>`).join(''); }
-    cSelect.addEventListener('change', populateCities); populateCities();
+    function populateCities(){
+      const code = cSelect.value || 'uk';
+      cList.innerHTML = (countryCities[code]||[]).map(v=>`<option value="${v}"></option>`).join('');
+      if(code==='uk'){
+        hint.textContent = 'Searching United Kingdom — pick a city or enter a postcode (e.g. SW1A 1AA, EC1A 1BB)';
+        cInput.placeholder = 'City, town, or UK postcode e.g. SW1A 1AA';
+      } else {
+        hint.textContent = 'Searching '+(countryLabels[code]||'')+' — pick or type a city';
+        cInput.placeholder = 'Search by city';
+      }
+    }
+    cSelect.addEventListener('change', populateCities);
+    populateCities();
 
-    form.addEventListener('submit', function(e){ e.preventDefault(); const city = cInput.value.trim(); if(!city){ alert('Please enter a city'); return; } if(city in cityCoords){ const coords = cityCoords[city]; map.flyTo(coords,12); setMarker(coords,city); document.getElementById('mapBadge').textContent = 'Properties around '+city; return; } // fallback geocode
-      const countryText = cSelect.options[cSelect.selectedIndex]?.text || ''; const q = encodeURIComponent(city + (countryText ? (' '+countryText) : '')); fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${q}&limit=1`).then(r=>r.json()).then(results=>{ if(!results || !results.length){ alert('Location not found. Try a suggestion.'); return; } const lat=parseFloat(results[0].lat), lon=parseFloat(results[0].lon); map.flyTo([lat,lon],12); setMarker([lat,lon],city); document.getElementById('mapBadge').textContent = 'Properties around '+city; }).catch(err=>{ console.error('Geocode failed',err); alert('Search failed'); });
+    function geocode(query, label){
+      const q = encodeURIComponent(query);
+      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${q}&limit=1${cSelect.value==='uk'?'&countrycodes=gb':''}`)
+        .then(r=>r.json())
+        .then(results=>{
+          if(!results || !results.length){ alert('Location not found. Try a suggestion, or check the postcode format (e.g. SW1A 1AA).'); return; }
+          const lat=parseFloat(results[0].lat), lon=parseFloat(results[0].lon);
+          map.flyTo([lat,lon],13); setMarker([lat,lon],label);
+          document.getElementById('mapBadge').textContent = 'Properties around '+label;
+          document.getElementById('mapSection').scrollIntoView({behavior:'smooth'});
+        })
+        .catch(()=>alert('Search failed — please try again.'));
+    }
+
+    function runSearch(raw){
+      if(!raw){ alert('Please enter a city or postcode'); return; }
+      const countryCode = cSelect.value || 'uk';
+      if(countryCode==='uk'){
+        const compact = raw.replace(/\s+/g,'');
+        if(UK_POSTCODE_RE.test(raw) || UK_POSTCODE_RE.test(compact)){
+          const formatted = normaliseUkPostcode(raw);
+          if(formatted){ geocode(formatted+', UK', formatted); return; }
+        }
+        if(UK_OUTCODE_RE.test(compact) && compact.length<=4){ geocode(compact.toUpperCase()+', UK', compact.toUpperCase()+' area'); return; }
+      }
+      if(raw in cityCoords){
+        const coords = cityCoords[raw];
+        map.flyTo(coords,12); setMarker(coords,raw);
+        document.getElementById('mapBadge').textContent = 'Properties around '+raw;
+        document.getElementById('mapSection').scrollIntoView({behavior:'smooth'});
+        return;
+      }
+      geocode(raw + (countryLabels[countryCode] ? (', '+countryLabels[countryCode]) : ''), raw);
+    }
+
+    document.getElementById('mapSearchBtn').addEventListener('click', function(e){ e.preventDefault(); runSearch(cInput.value.trim()); });
+    cInput.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); runSearch(cInput.value.trim()); } });
+
+    // hero search feeds the same map search
+    document.getElementById('heroSearchForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const val = document.getElementById('heroSearchInput').value.trim();
+      cInput.value = val;
+      runSearch(val);
     });
 
   }catch(err){ console.error('Map initialization error', err); }
