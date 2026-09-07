@@ -154,9 +154,8 @@ textarea{resize:vertical;min-height:70px}
 .inarea-head{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px;position:relative}
 .inarea-head h3{font-size:20px}
 .inarea-dropdown{position:relative}
-.inarea-dropdown-btn{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:#fff;padding:10px 16px;border-radius:8px;font-family:inherit;font-size:14px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.06);color:var(--black)}
-.inarea-dropdown-btn svg{transition:transform 0.2s}
-.inarea-dropdown-btn.open svg{transform:rotate(180deg)}
+.inarea-filter-btn{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.06);padding:0}
+.inarea-filter-btn:hover{background:var(--cream)}
 .inarea-dropdown-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:#fff;border-radius:10px;box-shadow:0 16px 40px rgba(0,0,0,0.16);min-width:230px;z-index:120;overflow:hidden;border:1px solid var(--line)}
 .inarea-dropdown-menu.open{display:block}
 .inarea-dropdown-menu button{display:flex;align-items:center;justify-content:space-between;width:100%;text-align:left;border:0;background:#fff;padding:13px 18px;font-family:inherit;font-size:14.5px;cursor:pointer;color:var(--black)}
@@ -272,11 +271,10 @@ footer a:hover{color:var(--black)}
 <!-- ============ IN THIS AREA ============ -->
 <section class="inarea-wrap" id="inAreaSection">
   <div class="inarea-head">
-    <h3 id="inAreaTitle">In This Area | Attractions</h3>
+    <h3 id="inAreaTitle">In This Area</h3>
     <div class="inarea-dropdown">
-      <button class="inarea-dropdown-btn" id="inAreaDropdownBtn" onclick="toggleInAreaMenu()">
-        <span id="inAreaDropdownLabel">Attractions</span>
-        <svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1 1.5L6 6.5L11 1.5" stroke="#0a0a0a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <button class="inarea-filter-btn" id="inAreaDropdownBtn" onclick="toggleInAreaMenu()" aria-label="Toggle Markers Filter" title="Toggle Markers Filter">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="1.8" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><circle cx="9" cy="6" r="2" fill="#0a0a0a" stroke="none"/><line x1="4" y1="12" x2="20" y2="12"/><circle cx="15" cy="12" r="2" fill="#0a0a0a" stroke="none"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="11" cy="18" r="2" fill="#0a0a0a" stroke="none"/></svg>
       </button>
       <div class="inarea-dropdown-menu" id="inAreaDropdownMenu"></div>
     </div>
@@ -864,7 +862,7 @@ const inAreaCategories = {
     ]}
 };
 
-let inAreaMap, inAreaMarkers = [], inAreaSubjectMarker, currentInAreaCategory = 'attractions', inAreaInfoWindow;
+let inAreaMap, inAreaMarkers = [], inAreaSubjectMarker, currentInAreaCategory = null, inAreaInfoWindow;
 
 /* Muted grayscale "Silver"-style theme, matching the reference screenshot */
 const IN_AREA_MAP_STYLE = [
@@ -915,7 +913,6 @@ function renderInAreaCategory(key){
   currentInAreaCategory = key;
   const cat = inAreaCategories[key];
   document.getElementById('inAreaTitle').textContent = 'In This Area | ' + cat.label;
-  document.getElementById('inAreaDropdownLabel').textContent = cat.label;
 
   document.querySelectorAll('#inAreaDropdownMenu button').forEach(btn=>{
     btn.classList.toggle('active', btn.dataset.key === key);
@@ -991,7 +988,8 @@ function initInAreaMap(){
       inAreaInfoWindow.open(inAreaMap, inAreaSubjectMarker);
     });
 
-    renderInAreaCategory('attractions');
+    /* No category pre-selected — matches reference: plain "In This Area" heading
+       and only the subject pin shown until the user opens the filter and picks one. */
   }catch(err){ console.error('In-area map (Google Maps) initialization error', err); }
 }
 </script>
@@ -1000,6 +998,6 @@ function initInAreaMap(){
   Google Cloud Console (Maps JavaScript API enabled, billing account attached).
   Docs: https://developers.google.com/maps/documentation/javascript/get-api-key
 -->
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-I8268eF9w7JYVrXEv7xi3WM0KnYRI0Q&callback=initInAreaMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initInAreaMap"></script>
 </body>
 </html>
