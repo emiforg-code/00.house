@@ -164,18 +164,9 @@ textarea{resize:vertical;min-height:70px}
 .inarea-dropdown-menu button .check{opacity:0;font-size:13px;color:var(--racing)}
 .inarea-dropdown-menu button.active .check{opacity:1}
 .inarea-map-wrapper{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,0.06)}
-#inAreaMap{width:100%;height:520px;display:block;background:#eef0ea}
-.inarea-ctrl{position:absolute;z-index:60;background:#fff;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,0.18);width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:0}
-.inarea-ctrl.fullscreen{top:14px;right:14px}
-.inarea-ctrl.locate{bottom:16px;right:16px;background:var(--brass);color:#fff}
-.custom-pin{position:relative;width:34px;height:44px}
-.pin-body{position:absolute;top:0;left:0;width:34px;height:34px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 8px rgba(0,0,0,0.35);border:2px solid rgba(255,255,255,0.9)}
-.pin-body .pin-icon{transform:rotate(45deg);display:flex;align-items:center;justify-content:center}
-.pin-body .pin-icon svg{width:16px;height:16px}
-.pin-body.subject{width:42px;height:42px}
-.pin-body.subject .pin-icon svg{width:20px;height:20px}
-.leaflet-popup-content-wrapper{border-radius:10px}
-.leaflet-popup-content{font-family:Inter,sans-serif;font-size:13px;margin:10px 14px}
+#inAreaMap{width:100%;height:520px;display:block;background:#f5f5f5}
+.gm-style .gm-style-iw-c{border-radius:10px}
+.gm-style .gm-style-iw-d{font-family:Inter,sans-serif;font-size:13px}
 
 footer{padding:40px 20px;color:var(--muted);border-top:1px solid var(--line);margin-top:20px}
 footer .foot-grid{display:flex;gap:56px;flex-wrap:wrap;max-width:1200px;margin:0 auto}
@@ -293,12 +284,6 @@ footer a:hover{color:var(--black)}
 
   <div class="inarea-map-wrapper">
     <div id="inAreaMap"></div>
-    <button class="inarea-ctrl fullscreen" title="Full screen" onclick="toggleInAreaFullscreen()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3M16 3h3a2 2 0 012 2v3M8 21H5a2 2 0 01-2-2v-3M16 21h3a2 2 0 002-2v-3"/></svg>
-    </button>
-    <button class="inarea-ctrl locate" title="Center on property" onclick="recenterInAreaMap()">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
-    </button>
   </div>
 </section>
 
@@ -834,15 +819,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
 /* ============ IN THIS AREA MAP (category pins, Google-style) ============ */
 const inAreaSubject = { name:'Luxury Villa — Windsor', lat:51.4839, lng:-0.6044 };
 
-const pinIcons = {
-  camera:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>',
-  fork:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M6 2v20M6 2a3 3 0 013 3v4a3 3 0 01-3 3M18 2v20M18 8a3 3 0 01-3 3"/></svg>',
-  cap:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg>',
-  cart:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 002 1.6h9.7a2 2 0 002-1.6L23 6H6"/></svg>',
-  bus:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M3 12h18M7 20v-2M17 20v-2"/></svg>',
-  house:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/></svg>'
-};
-
 const inAreaCategories = {
   attractions:{ label:'Attractions', icon:'camera', color:'#3d4451',
     points:[
@@ -888,16 +864,51 @@ const inAreaCategories = {
     ]}
 };
 
-let inAreaMap, inAreaLayer, currentInAreaCategory = 'attractions';
+let inAreaMap, inAreaMarkers = [], inAreaSubjectMarker, currentInAreaCategory = 'attractions', inAreaInfoWindow;
 
-function makePinIcon(color, iconKey, isSubject){
-  return L.divIcon({
-    className:'custom-pin',
-    html:`<div class="pin-body${isSubject?' subject':''}" style="background:${color}"><div class="pin-icon">${pinIcons[iconKey]}</div></div>`,
-    iconSize: isSubject ? [42,54] : [34,44],
-    iconAnchor: isSubject ? [21,50] : [17,40],
-    popupAnchor:[0,-38]
-  });
+/* Muted grayscale "Silver"-style theme, matching the reference screenshot */
+const IN_AREA_MAP_STYLE = [
+  {elementType:'geometry', stylers:[{color:'#f5f5f5'}]},
+  {elementType:'labels.icon', stylers:[{visibility:'off'}]},
+  {elementType:'labels.text.fill', stylers:[{color:'#9e9e9e'}]},
+  {elementType:'labels.text.stroke', stylers:[{color:'#f5f5f5'}]},
+  {featureType:'administrative.land_parcel', stylers:[{visibility:'off'}]},
+  {featureType:'poi', stylers:[{visibility:'off'}]},
+  {featureType:'road', elementType:'geometry', stylers:[{color:'#ffffff'}]},
+  {featureType:'road', elementType:'labels.text.fill', stylers:[{color:'#757575'}]},
+  {featureType:'road.arterial', elementType:'labels.text.fill', stylers:[{color:'#757575'}]},
+  {featureType:'road.highway', elementType:'geometry', stylers:[{color:'#dadada'}]},
+  {featureType:'road.highway', elementType:'labels.text.fill', stylers:[{color:'#616161'}]},
+  {featureType:'road.local', elementType:'labels.text.fill', stylers:[{color:'#9e9e9e'}]},
+  {featureType:'transit.line', stylers:[{color:'#e5e5e5'}]},
+  {featureType:'transit.station', elementType:'geometry', stylers:[{color:'#eeeeee'}]},
+  {featureType:'water', elementType:'geometry', stylers:[{color:'#dbe4e8'}]},
+  {featureType:'water', elementType:'labels.text.fill', stylers:[{color:'#9e9e9e'}]}
+];
+
+/* Bare icon glyph paths (white stroke), reused inside the pin SVGs below */
+const pinGlyphs = {
+  camera:'<path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/>',
+  fork:'<path d="M6 2v20M6 2a3 3 0 013 3v4a3 3 0 01-3 3M18 2v20M18 8a3 3 0 01-3 3"/>',
+  cap:'<path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/>',
+  cart:'<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 002 1.6h9.7a2 2 0 002-1.6L23 6H6"/>',
+  bus:'<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M3 12h18M7 20v-2M17 20v-2"/>',
+  house:'<path d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/>'
+};
+
+function pinIconUrl(color, key, isSubject){
+  const w = isSubject ? 46 : 34, h = isSubject ? 58 : 44;
+  const glyphScale = isSubject ? 1.15 : 0.85;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 34 44">
+    <path d="M17 0C7.6 0 0 7.6 0 16.5 0 28 17 44 17 44s17-16 17-27.5C34 7.6 26.4 0 17 0z" fill="${color}" stroke="#ffffff" stroke-width="2"/>
+    <g transform="translate(${17-12*glyphScale},${13-12*glyphScale}) scale(${glyphScale})" fill="none" stroke="#ffffff" stroke-width="2">${pinGlyphs[key]}</g>
+  </svg>`;
+  return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+}
+
+function clearInAreaMarkers(){
+  inAreaMarkers.forEach(m=>m.setMap(null));
+  inAreaMarkers = [];
 }
 
 function renderInAreaCategory(key){
@@ -910,12 +921,21 @@ function renderInAreaCategory(key){
     btn.classList.toggle('active', btn.dataset.key === key);
   });
 
-  if(inAreaLayer) inAreaMap.removeLayer(inAreaLayer);
-  inAreaLayer = L.layerGroup().addTo(inAreaMap);
+  if(!inAreaMap) { closeInAreaMenu(); return; }
+  clearInAreaMarkers();
+
   cat.points.forEach(p=>{
-    L.marker([p.lat,p.lng], {icon: makePinIcon(cat.color, cat.icon, false)})
-      .addTo(inAreaLayer)
-      .bindPopup(`<strong>${p.name}</strong>`);
+    const marker = new google.maps.Marker({
+      position:{lat:p.lat, lng:p.lng},
+      map:inAreaMap,
+      icon:{ url:pinIconUrl(cat.color, cat.icon, false), scaledSize:new google.maps.Size(34,44), anchor:new google.maps.Point(17,40) },
+      title:p.name
+    });
+    marker.addListener('click', ()=>{
+      inAreaInfoWindow.setContent(`<strong>${p.name}</strong>`);
+      inAreaInfoWindow.open(inAreaMap, marker);
+    });
+    inAreaMarkers.push(marker);
   });
 
   closeInAreaMenu();
@@ -934,20 +954,8 @@ document.addEventListener('click', function(e){
   if(wrap && !wrap.contains(e.target)) closeInAreaMenu();
 });
 
-function toggleInAreaFullscreen(){
-  const el = document.getElementById('inAreaMap');
-  if(!document.fullscreenElement){
-    el.requestFullscreen ? el.requestFullscreen() : null;
-  } else {
-    document.exitFullscreen();
-  }
-  setTimeout(()=>inAreaMap && inAreaMap.invalidateSize(), 250);
-}
-function recenterInAreaMap(){
-  if(inAreaMap) inAreaMap.flyTo([inAreaSubject.lat, inAreaSubject.lng], 12);
-}
-
-document.addEventListener('DOMContentLoaded', ()=>{
+/* Called by the Google Maps JS API loader once it's ready (see script tag near the closing body tag) */
+function initInAreaMap(){
   try{
     const menu = document.getElementById('inAreaDropdownMenu');
     menu.innerHTML = Object.keys(inAreaCategories).map(key=>{
@@ -955,19 +963,43 @@ document.addEventListener('DOMContentLoaded', ()=>{
       return `<button data-key="${key}" class="${key===currentInAreaCategory?'active':''}" onclick="renderInAreaCategory('${key}')"><span>${cat.label}</span><span class="check">\u2713</span></button>`;
     }).join('');
 
-    inAreaMap = L.map('inAreaMap',{zoomControl:false,scrollWheelZoom:false}).setView([inAreaSubject.lat, inAreaSubject.lng], 12);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap contributors'}).addTo(inAreaMap);
-    L.control.zoom({position:'bottomleft'}).addTo(inAreaMap);
+    inAreaMap = new google.maps.Map(document.getElementById('inAreaMap'), {
+      center:{lat:inAreaSubject.lat, lng:inAreaSubject.lng},
+      zoom:14,
+      styles:IN_AREA_MAP_STYLE,
+      disableDefaultUI:false,
+      mapTypeControl:false,
+      streetViewControl:true,
+      streetViewControlOptions:{position:google.maps.ControlPosition.RIGHT_BOTTOM},
+      fullscreenControl:true,
+      fullscreenControlOptions:{position:google.maps.ControlPosition.RIGHT_TOP},
+      zoomControl:true,
+      zoomControlOptions:{position:google.maps.ControlPosition.LEFT_BOTTOM}
+    });
 
-    L.marker([inAreaSubject.lat, inAreaSubject.lng], {icon: makePinIcon('var(--brass)'.includes('var')? '#b98a3f' : '#b98a3f','house', true)})
-      .addTo(inAreaMap)
-      .bindPopup(`<strong>${inAreaSubject.name}</strong><div style="color:#888;font-size:11.5px;margin-top:2px">This property</div>`);
+    inAreaInfoWindow = new google.maps.InfoWindow();
+
+    inAreaSubjectMarker = new google.maps.Marker({
+      position:{lat:inAreaSubject.lat, lng:inAreaSubject.lng},
+      map:inAreaMap,
+      icon:{ url:pinIconUrl('#b98a3f','house', true), scaledSize:new google.maps.Size(46,58), anchor:new google.maps.Point(23,54) },
+      title:inAreaSubject.name,
+      zIndex:999
+    });
+    inAreaSubjectMarker.addListener('click', ()=>{
+      inAreaInfoWindow.setContent(`<strong>${inAreaSubject.name}</strong><div style="color:#888;font-size:11.5px;margin-top:2px">This property</div>`);
+      inAreaInfoWindow.open(inAreaMap, inAreaSubjectMarker);
+    });
 
     renderInAreaCategory('attractions');
-    setTimeout(()=>inAreaMap.invalidateSize(), 300);
-    window.addEventListener('resize', ()=>setTimeout(()=>inAreaMap && inAreaMap.invalidateSize(),200));
-  }catch(err){ console.error('In-area map initialization error', err); }
-});
+  }catch(err){ console.error('In-area map (Google Maps) initialization error', err); }
+}
 </script>
+<!--
+  Google Maps JS API — replace YOUR_GOOGLE_MAPS_API_KEY with a real key from
+  Google Cloud Console (Maps JavaScript API enabled, billing account attached).
+  Docs: https://developers.google.com/maps/documentation/javascript/get-api-key
+-->
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-I8268eF9w7JYVrXEv7xi3WM0KnYRI0Q&callback=initInAreaMap"></script>
 </body>
 </html>
