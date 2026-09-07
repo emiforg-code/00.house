@@ -149,6 +149,34 @@ textarea{resize:vertical;min-height:70px}
 .legal-tab.active{background:var(--black);color:#fff;border-color:var(--black)}
 .legal-callout{background:#fdf3f2;border:1px solid #f0d9d7;border-radius:10px;padding:12px 14px;font-size:12px;color:#7a3a37;margin-bottom:16px}
 
+/* ============ IN THIS AREA (Google-Maps-style amenity explorer) ============ */
+.inarea-wrap{max-width:1200px;margin:0 auto;padding:10px 24px 60px}
+.inarea-head{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px;position:relative}
+.inarea-head h3{font-size:20px}
+.inarea-dropdown{position:relative}
+.inarea-dropdown-btn{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:#fff;padding:10px 16px;border-radius:8px;font-family:inherit;font-size:14px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.06);color:var(--black)}
+.inarea-dropdown-btn svg{transition:transform 0.2s}
+.inarea-dropdown-btn.open svg{transform:rotate(180deg)}
+.inarea-dropdown-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:#fff;border-radius:10px;box-shadow:0 16px 40px rgba(0,0,0,0.16);min-width:230px;z-index:120;overflow:hidden;border:1px solid var(--line)}
+.inarea-dropdown-menu.open{display:block}
+.inarea-dropdown-menu button{display:flex;align-items:center;justify-content:space-between;width:100%;text-align:left;border:0;background:#fff;padding:13px 18px;font-family:inherit;font-size:14.5px;cursor:pointer;color:var(--black)}
+.inarea-dropdown-menu button:hover{background:var(--cream)}
+.inarea-dropdown-menu button .check{opacity:0;font-size:13px;color:var(--racing)}
+.inarea-dropdown-menu button.active .check{opacity:1}
+.inarea-map-wrapper{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,0.06)}
+#inAreaMap{width:100%;height:520px;display:block;background:#eef0ea}
+.inarea-ctrl{position:absolute;z-index:60;background:#fff;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,0.18);width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:0}
+.inarea-ctrl.fullscreen{top:14px;right:14px}
+.inarea-ctrl.locate{bottom:16px;right:16px;background:var(--brass);color:#fff}
+.custom-pin{position:relative;width:34px;height:44px}
+.pin-body{position:absolute;top:0;left:0;width:34px;height:34px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 8px rgba(0,0,0,0.35);border:2px solid rgba(255,255,255,0.9)}
+.pin-body .pin-icon{transform:rotate(45deg);display:flex;align-items:center;justify-content:center}
+.pin-body .pin-icon svg{width:16px;height:16px}
+.pin-body.subject{width:42px;height:42px}
+.pin-body.subject .pin-icon svg{width:20px;height:20px}
+.leaflet-popup-content-wrapper{border-radius:10px}
+.leaflet-popup-content{font-family:Inter,sans-serif;font-size:13px;margin:10px 14px}
+
 footer{padding:40px 20px;color:var(--muted);border-top:1px solid var(--line);margin-top:20px}
 footer .foot-grid{display:flex;gap:56px;flex-wrap:wrap;max-width:1200px;margin:0 auto}
 footer h4{color:var(--black);font-size:13px;margin-bottom:10px}
@@ -247,6 +275,30 @@ footer a:hover{color:var(--black)}
     <button class="filled" onclick="document.getElementById('liveFeedPreview').scrollIntoView({behavior:'smooth'})" data-i18n="btn_explore_all">Explore all</button>
     <button onclick="openPanel('register-choice')" data-i18n="btn_find_home">Find your home</button>
     <button onclick="openPanel('account')" data-i18n="btn_my_account">My account</button>
+  </div>
+</section>
+
+<!-- ============ IN THIS AREA ============ -->
+<section class="inarea-wrap" id="inAreaSection">
+  <div class="inarea-head">
+    <h3 id="inAreaTitle">In This Area | Attractions</h3>
+    <div class="inarea-dropdown">
+      <button class="inarea-dropdown-btn" id="inAreaDropdownBtn" onclick="toggleInAreaMenu()">
+        <span id="inAreaDropdownLabel">Attractions</span>
+        <svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1 1.5L6 6.5L11 1.5" stroke="#0a0a0a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="inarea-dropdown-menu" id="inAreaDropdownMenu"></div>
+    </div>
+  </div>
+
+  <div class="inarea-map-wrapper">
+    <div id="inAreaMap"></div>
+    <button class="inarea-ctrl fullscreen" title="Full screen" onclick="toggleInAreaFullscreen()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3M16 3h3a2 2 0 012 2v3M8 21H5a2 2 0 01-2-2v-3M16 21h3a2 2 0 002-2v-3"/></svg>
+    </button>
+    <button class="inarea-ctrl locate" title="Center on property" onclick="recenterInAreaMap()">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+    </button>
   </div>
 </section>
 
@@ -777,6 +829,144 @@ document.addEventListener('DOMContentLoaded', ()=>{
     });
 
   }catch(err){ console.error('Map initialization error', err); }
+});
+
+/* ============ IN THIS AREA MAP (category pins, Google-style) ============ */
+const inAreaSubject = { name:'Luxury Villa — Windsor', lat:51.4839, lng:-0.6044 };
+
+const pinIcons = {
+  camera:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>',
+  fork:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M6 2v20M6 2a3 3 0 013 3v4a3 3 0 01-3 3M18 2v20M18 8a3 3 0 01-3 3"/></svg>',
+  cap:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg>',
+  cart:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 002 1.6h9.7a2 2 0 002-1.6L23 6H6"/></svg>',
+  bus:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M3 12h18M7 20v-2M17 20v-2"/></svg>',
+  house:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/></svg>'
+};
+
+const inAreaCategories = {
+  attractions:{ label:'Attractions', icon:'camera', color:'#3d4451',
+    points:[
+      {name:'Weybridge Riverside',lat:51.3720,lng:-0.4530},
+      {name:'St George\u2019s Hill Viewpoint',lat:51.3600,lng:-0.4610},
+      {name:'Painshill Park',lat:51.3690,lng:-0.4180},
+      {name:'Cobham Heritage Walk',lat:51.3300,lng:-0.4050},
+      {name:'Hersham Green',lat:51.3660,lng:-0.4300},
+      {name:'Oxshott Woods',lat:51.3400,lng:-0.3650},
+      {name:'Ashley Park',lat:51.3900,lng:-0.4450},
+      {name:'Byfleet Common',lat:51.3400,lng:-0.4900},
+      {name:'Downside Fishery',lat:51.3020,lng:-0.4020},
+      {name:'Fetcham Grove',lat:51.2900,lng:-0.3700}
+    ]},
+  restaurants:{ label:'Restaurants & Bars', icon:'fork', color:'#8c3f46',
+    points:[
+      {name:'The Riverside Grill',lat:51.3750,lng:-0.4500},
+      {name:'Cobham Wine Bar',lat:51.3320,lng:-0.4070},
+      {name:'Hersham Kitchen',lat:51.3670,lng:-0.4280},
+      {name:'St George\u2019s Hill Brasserie',lat:51.3580,lng:-0.4590},
+      {name:'Oxshot Tavern',lat:51.3420,lng:-0.3630}
+    ]},
+  schools:{ label:'Schools', icon:'cap', color:'#1f4632',
+    points:[
+      {name:'Weybridge Preparatory',lat:51.3740,lng:-0.4560},
+      {name:'St George\u2019s College',lat:51.3610,lng:-0.4600},
+      {name:'Cobham Free School',lat:51.3310,lng:-0.4090},
+      {name:'Hersham Primary',lat:51.3650,lng:-0.4320}
+    ]},
+  conveniences:{ label:'Conveniences', icon:'cart', color:'#b98a3f',
+    points:[
+      {name:'Weybridge High Street',lat:51.3730,lng:-0.4540},
+      {name:'Cobham Waitrose',lat:51.3300,lng:-0.4060},
+      {name:'Hersham Local Market',lat:51.3665,lng:-0.4290},
+      {name:'Byfleet Pharmacy',lat:51.3410,lng:-0.4880}
+    ]},
+  transportation:{ label:'Transportation', icon:'bus', color:'#5b6470',
+    points:[
+      {name:'Weybridge Station',lat:51.3765,lng:-0.4610},
+      {name:'Cobham & Stoke d\u2019Abernon Station',lat:51.3260,lng:-0.4030},
+      {name:'Hersham Station',lat:51.3690,lng:-0.4390},
+      {name:'A3 Slip Road',lat:51.3200,lng:-0.3800}
+    ]}
+};
+
+let inAreaMap, inAreaLayer, currentInAreaCategory = 'attractions';
+
+function makePinIcon(color, iconKey, isSubject){
+  return L.divIcon({
+    className:'custom-pin',
+    html:`<div class="pin-body${isSubject?' subject':''}" style="background:${color}"><div class="pin-icon">${pinIcons[iconKey]}</div></div>`,
+    iconSize: isSubject ? [42,54] : [34,44],
+    iconAnchor: isSubject ? [21,50] : [17,40],
+    popupAnchor:[0,-38]
+  });
+}
+
+function renderInAreaCategory(key){
+  currentInAreaCategory = key;
+  const cat = inAreaCategories[key];
+  document.getElementById('inAreaTitle').textContent = 'In This Area | ' + cat.label;
+  document.getElementById('inAreaDropdownLabel').textContent = cat.label;
+
+  document.querySelectorAll('#inAreaDropdownMenu button').forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.key === key);
+  });
+
+  if(inAreaLayer) inAreaMap.removeLayer(inAreaLayer);
+  inAreaLayer = L.layerGroup().addTo(inAreaMap);
+  cat.points.forEach(p=>{
+    L.marker([p.lat,p.lng], {icon: makePinIcon(cat.color, cat.icon, false)})
+      .addTo(inAreaLayer)
+      .bindPopup(`<strong>${p.name}</strong>`);
+  });
+
+  closeInAreaMenu();
+}
+
+function toggleInAreaMenu(){
+  document.getElementById('inAreaDropdownMenu').classList.toggle('open');
+  document.getElementById('inAreaDropdownBtn').classList.toggle('open');
+}
+function closeInAreaMenu(){
+  document.getElementById('inAreaDropdownMenu').classList.remove('open');
+  document.getElementById('inAreaDropdownBtn').classList.remove('open');
+}
+document.addEventListener('click', function(e){
+  const wrap = document.querySelector('.inarea-dropdown');
+  if(wrap && !wrap.contains(e.target)) closeInAreaMenu();
+});
+
+function toggleInAreaFullscreen(){
+  const el = document.getElementById('inAreaMap');
+  if(!document.fullscreenElement){
+    el.requestFullscreen ? el.requestFullscreen() : null;
+  } else {
+    document.exitFullscreen();
+  }
+  setTimeout(()=>inAreaMap && inAreaMap.invalidateSize(), 250);
+}
+function recenterInAreaMap(){
+  if(inAreaMap) inAreaMap.flyTo([inAreaSubject.lat, inAreaSubject.lng], 12);
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  try{
+    const menu = document.getElementById('inAreaDropdownMenu');
+    menu.innerHTML = Object.keys(inAreaCategories).map(key=>{
+      const cat = inAreaCategories[key];
+      return `<button data-key="${key}" class="${key===currentInAreaCategory?'active':''}" onclick="renderInAreaCategory('${key}')"><span>${cat.label}</span><span class="check">\u2713</span></button>`;
+    }).join('');
+
+    inAreaMap = L.map('inAreaMap',{zoomControl:false,scrollWheelZoom:false}).setView([inAreaSubject.lat, inAreaSubject.lng], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap contributors'}).addTo(inAreaMap);
+    L.control.zoom({position:'bottomleft'}).addTo(inAreaMap);
+
+    L.marker([inAreaSubject.lat, inAreaSubject.lng], {icon: makePinIcon('var(--brass)'.includes('var')? '#b98a3f' : '#b98a3f','house', true)})
+      .addTo(inAreaMap)
+      .bindPopup(`<strong>${inAreaSubject.name}</strong><div style="color:#888;font-size:11.5px;margin-top:2px">This property</div>`);
+
+    renderInAreaCategory('attractions');
+    setTimeout(()=>inAreaMap.invalidateSize(), 300);
+    window.addEventListener('resize', ()=>setTimeout(()=>inAreaMap && inAreaMap.invalidateSize(),200));
+  }catch(err){ console.error('In-area map initialization error', err); }
 });
 </script>
 </body>
