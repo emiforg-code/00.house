@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>qinvestments.london — Map Icons &amp; Legend (property type + amenities)</title>
+<style>
+:root{
+  --gold:#c5a059;
+  --black:#0a0a0a;
+  --muted:#6b6b6b;
+  --line:rgba(0,0,0,0.10);
+}
+body{font-family:Montserrat,system-ui,sans-serif;background:#0a0a0a;color:#fff;margin:0;padding:40px 24px}
+h1{font-family:'Playfair Display',serif;font-style:italic;font-weight:500;font-size:26px;margin:0 0 6px}
+p.sub{color:#bbb;font-size:13px;margin:0 0 32px}
+h2{font-size:14px;letter-spacing:0.08em;text-transform:uppercase;color:var(--gold);margin:36px 0 14px}
+
+/* ============ PREVIEW GRID OF PIN ICONS ============ */
+.pin-grid{display:flex;flex-wrap:wrap;gap:22px}
+.pin-sample{display:flex;flex-direction:column;align-items:center;gap:8px}
+.pin-sample span{font-size:12px;color:#ddd}
+
+/* ============ MAP LEGEND (property type — replaces source names) ============ */
+.map-legend{display:flex;gap:22px;flex-wrap:wrap;background:#141414;border:1px solid #262626;border-radius:10px;padding:14px 18px;margin-top:10px}
+.map-legend-item{display:flex;align-items:center;gap:8px;font-size:13px;color:#eee}
+.legend-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center}
+.legend-icon svg{width:18px;height:18px}
+
+/* ============ EXPLORE THE AREA FILTER (amenities) ============ */
+#poi-filter-wrap{position:relative;display:inline-block;margin-top:10px}
+#poi-filter-toggle{display:flex;align-items:center;gap:8px;background:#141414;color:#fff;border:1px solid #333;border-radius:8px;padding:10px 16px;font-family:inherit;font-size:13.5px;cursor:pointer}
+#poi-filter-toggle:hover{border-color:var(--gold)}
+#poi-filter-toggle svg{transition:transform 0.2s}
+#poi-filter-toggle.open svg{transform:rotate(180deg)}
+#poi-filter-panel{display:none;position:absolute;top:calc(100% + 6px);left:0;min-width:220px;background:#141414;border:1px solid #262626;border-radius:10px;box-shadow:0 16px 40px rgba(0,0,0,0.5);overflow:hidden;z-index:50}
+#poi-filter-panel.open{display:block}
+#poi-filter-panel button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid #222;color:#eee;padding:12px 16px;font-family:inherit;font-size:13.5px;cursor:pointer}
+#poi-filter-panel button:last-child{border-bottom:0}
+#poi-filter-panel button:hover{background:#1c1c1c}
+#poi-filter-panel button .check{margin-left:auto;opacity:0;color:var(--gold);font-size:13px}
+#poi-filter-panel button.active .check{opacity:1}
+#poi-filter-panel button .icon{width:18px;height:18px;display:flex;align-items:center;justify-content:center;flex:0 0 18px}
+#poi-filter-panel button .icon svg{width:16px;height:16px}
+</style>
+</head>
+<body>
+
+<h1>Map icon set — property types &amp; area amenities</h1>
+<p class="sub">Icon-only categorisation. No source, brokerage, or competitor names anywhere in the legend or filter.</p>
+
+<h2>1. Pin previews (property types)</h2>
+<div class="pin-grid" id="propertyPinPreview"></div>
+
+<h2>2. Pin previews (area amenities)</h2>
+<div class="pin-grid" id="amenityPinPreview"></div>
+
+<h2>3. Map legend — drop this under the map (property type key)</h2>
+<div class="map-legend" id="mapLegend"></div>
+
+<h2>4. "Explore the Area" filter — drop this above/beside the map (amenities)</h2>
+<div id="poi-filter-wrap">
+  <button id="poi-filter-toggle" type="button" onclick="togglePoiFilter()">
+    Explore the Area
+    <svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1 1.5L6 6.5L11 1.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <div id="poi-filter-panel"></div>
+</div>
+
+<script>
+/* ============================================================
+   ICON GLYPHS — bare stroke paths, no <svg> wrapper.
+   Reused inside both the map pin generator and the flat previews below.
+   ============================================================ */
+const iconGlyphs = {
+  detachedHouse: '<path d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/>',
+  townhouse:  '<path d="M3 21V9l4-3 4 3v3l4-3 4 3v9"/><path d="M7 21v-5h3v5M14 21v-4h3v4"/>',
+  villa:      '<path d="M4 21h16M5 21V10a1 1 0 011-1h3l2-2.5L13 9h3a1 1 0 011 1v11"/><path d="M10 21v-4.5a2 2 0 014 0V21"/>',
+  park:       '<path d="M12 2L7 9h3l-4 6h4v5h4v-5h4l-4-6h3z"/>',
+  school:     '<path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/>',
+  restaurant: '<path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z" fill="#ffffff" stroke="none"/>',
+  shop:       '<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 002 1.6h9.7a2 2 0 002-1.6L23 6H6"/>',
+  transit:    '<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M3 12h18M7 20v-2M17 20v-2"/>'
+};
+
+/* ============================================================
+   PROPERTY TYPES — used for the map legend and for coloring
+   each listing's pin according to what kind of home it is.
+   ============================================================ */
+const propertyTypes = {
+  detachedHouse: { label:'Detached House', color:'#c5a059', icon:'detachedHouse' },
+  townhouse:     { label:'Townhouse',      color:'#8a6a34', icon:'townhouse' },
+  villa:         { label:'Villa',          color:'#e8c98a', icon:'villa' }
+};
+
+/* ============================================================
+   AREA AMENITIES — used for the "Explore the Area" filter,
+   matching the standard category set (park/school/dining/
+   shopping/transport) without naming any specific provider.
+   ============================================================ */
+const amenityTypes = {
+  parks:          { label:'Parks & Green Space', color:'#3d4451', icon:'park' },
+  schools:        { label:'Schools',             color:'#1f4632', icon:'school' },
+  dining:         { label:'Restaurants & Bars',  color:'#8c3f46', icon:'restaurant' },
+  shopping:       { label:'Shopping',            color:'#b98a3f', icon:'shop' },
+  transportation: { label:'Transportation',      color:'#5b6470', icon:'transit' }
+};
+
+/* ============================================================
+   PIN ICON GENERATOR — teardrop marker with a centered glyph.
+   Returns a data-URI SVG usable directly as a marker icon
+   (Google Maps: {url:...}, Leaflet: L.icon({iconUrl:...})).
+   ============================================================ */
+function pinIconUrl(color, iconKey, size = 34){
+  const h = Math.round(size * 1.29);
+  const glyphScale = size / 40;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${h}" viewBox="0 0 34 44">
+    <path d="M17 0C7.6 0 0 7.6 0 16.5 0 28 17 44 17 44s17-16 17-27.5C34 7.6 26.4 0 17 0z" fill="${color}" stroke="#ffffff" stroke-width="2"/>
+    <g transform="translate(${17-12*glyphScale},${13-12*glyphScale}) scale(${glyphScale})" fill="none" stroke="#ffffff" stroke-width="2">${iconGlyphs[iconKey]}</g>
+  </svg>`;
+  return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+}
+
+/* Flat (non-pin) icon, for legend rows / filter menu rows */
+function flatIconSvg(iconKey, color){
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${iconGlyphs[iconKey]}</svg>`;
+}
+
+/* ============================================================
+   RENDER: pin previews
+   ============================================================ */
+document.getElementById('propertyPinPreview').innerHTML = Object.entries(propertyTypes).map(([key, t]) => `
+  <div class="pin-sample">
+    <img src="${pinIconUrl(t.color, t.icon)}" width="34" height="44" alt="${t.label} pin">
+    <span>${t.label}</span>
+  </div>
+`).join('');
+
+document.getElementById('amenityPinPreview').innerHTML = Object.entries(amenityTypes).map(([key, t]) => `
+  <div class="pin-sample">
+    <img src="${pinIconUrl(t.color, t.icon)}" width="34" height="44" alt="${t.label} pin">
+    <span>${t.label}</span>
+  </div>
+`).join('');
+
+/* ============================================================
+   RENDER: map legend (property type key — replaces source names)
+   ============================================================ */
+document.getElementById('mapLegend').innerHTML = Object.entries(propertyTypes).map(([key, t]) => `
+  <span class="map-legend-item">
+    <span class="legend-icon" style="color:${t.color}">${flatIconSvg(t.icon, t.color)}</span>
+    ${t.label}
+  </span>
+`).join('');
+
+/* ============================================================
+   RENDER + BEHAVIOUR: "Explore the Area" amenity filter
+   (single-select, matches the reference pattern: pick one
+   category, its pins render, the previous category's pins clear)
+   ============================================================ */
+let activeAmenity = null;
+
+const poiPanel = document.getElementById('poi-filter-panel');
+poiPanel.innerHTML = Object.entries(amenityTypes).map(([key, t]) => `
+  <button data-key="${key}" onclick="selectAmenity('${key}')">
+    <span class="icon">${flatIconSvg(t.icon, '#eee')}</span>
+    <span>${t.label}</span>
+    <span class="check">\u2713</span>
+  </button>
+`).join('');
+
+function selectAmenity(key){
+  activeAmenity = key;
+  document.querySelectorAll('#poi-filter-panel button').forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.key === key);
+  });
+  document.getElementById('poi-filter-toggle').firstChild.textContent = amenityTypes[key].label + ' ';
+  togglePoiFilter(false);
+
+  // Hook point: call your map's marker-rendering function here, e.g.
+  // renderAmenityMarkers(key, amenityTypes[key]);
+}
+
+function togglePoiFilter(forceState){
+  const open = typeof forceState === 'boolean' ? forceState : !poiPanel.classList.contains('open');
+  poiPanel.classList.toggle('open', open);
+  document.getElementById('poi-filter-toggle').classList.toggle('open', open);
+}
+document.addEventListener('click', (e)=>{
+  if(!document.getElementById('poi-filter-wrap').contains(e.target)) togglePoiFilter(false);
+});
+</script>
+</body>
+</html>
