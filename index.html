@@ -7,7 +7,6 @@
 <title>Are you looking for a house?</title>
   <script type="application/ld+json"> { "@context": "https://schema.org", "@type": "WebSite", "url": "https://00.house", "name": "00.house", "description": "00.house is a property listings and open-house scheduling portal connecting tenants with agents and landlords. ", "publisher": { "@type": "Organization", "name": "00.house Ltd", "url": "https://00.house" }, "potentialAction": { "@type": "SearchAction", "target": "https://00.house/?s={search_term_string}", "query-input": "required name=search_term_string" } } </script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 
 <style>
 :root{
@@ -57,9 +56,6 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .explore-wrap{max-width:1200px;margin:0 auto;padding:60px 24px}
 .explore-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}
 .eyebrow{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--brass);font-weight:700;margin-bottom:6px;display:block}
-.map-wrapper .tag{position:absolute;top:16px;left:16px;background:rgba(255,255,255,0.94);padding:6px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;z-index:30;display:flex;align-items:center;gap:6px}
-.map-wrapper .tag .dot{width:7px;height:7px;border-radius:50%;background:#e0435a;animation:pulse 1.6s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
 .highlights{display:flex;gap:14px;margin-top:22px;overflow-x:auto;padding-bottom:6px}
 .highlight-card{flex:0 0 200px;height:140px;border-radius:12px;position:relative;overflow:hidden;border:1px solid var(--line)}
 .highlight-card .cap{position:absolute;left:0;right:0;bottom:0;padding:8px 10px;font-size:11.5px;color:#fff;background:linear-gradient(0deg,rgba(0,0,0,0.55),transparent)}
@@ -71,13 +67,6 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .explore-actions button{border:1px solid var(--black);background:#fff;padding:11px 18px;border-radius:3px;font-family:inherit;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;font-weight:600;cursor:pointer}
 .explore-actions button.filled{background:var(--black);color:#fff}
 .explore-actions button:hover{opacity:0.85}
-
-/* ============ MAP (lives inside Explore Properties as the live feed) ============ */
-.map-wrapper{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line)}
-#map{width:100%;height:460px;display:block}
-.map-badge{position:absolute;left:16px;top:60px;background:#fff;padding:8px 12px;border-radius:999px;border:1px solid var(--line);z-index:30;box-shadow:0 6px 18px rgba(0,0,0,0.06);font-size:13px}
-.map-note{position:absolute;right:16px;bottom:16px;background:rgba(255,255,255,0.92);padding:6px 10px;border-radius:8px;font-size:11px;color:var(--muted);z-index:30;max-width:220px;border:1px solid var(--line)}
-.wisteria{position:absolute;top:0;left:0;right:0;height:64px;z-index:25;pointer-events:none;opacity:0.92}
 
 /* ============ SERVICES ============ */
 .services-wrap{max-width:1200px;margin:0 auto;padding:10px 24px 0}
@@ -235,25 +224,6 @@ footer a:hover{color:var(--black)}
     </div>
   </div>
 
-  <div class="map-wrapper" id="liveFeedPreview">
-    <div class="tag"><span class="dot"></span><span data-i18n="live_feed">Live feed</span></div>
-    <svg class="wisteria" viewBox="0 0 1200 64" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0 0 Q60 40 120 10 T240 14 T360 8 T480 16 T600 6 T720 18 T840 10 T960 14 T1080 8 T1200 12" stroke="#5b7a52" stroke-width="3" fill="none" opacity="0.55"/>
-      <g fill="#b48fc0" opacity="0.85">
-        <circle cx="90" cy="22" r="4"/><circle cx="98" cy="30" r="3.5"/><circle cx="104" cy="20" r="3"/>
-        <circle cx="260" cy="26" r="4"/><circle cx="268" cy="34" r="3.5"/><circle cx="274" cy="22" r="3"/>
-        <circle cx="430" cy="20" r="4"/><circle cx="438" cy="28" r="3.5"/><circle cx="444" cy="18" r="3"/>
-        <circle cx="620" cy="24" r="4"/><circle cx="628" cy="32" r="3.5"/><circle cx="634" cy="20" r="3"/>
-        <circle cx="800" cy="22" r="4"/><circle cx="808" cy="30" r="3.5"/><circle cx="814" cy="18" r="3"/>
-        <circle cx="980" cy="26" r="4"/><circle cx="988" cy="34" r="3.5"/><circle cx="994" cy="22" r="3"/>
-        <circle cx="1120" cy="22" r="4"/><circle cx="1128" cy="30" r="3.5"/>
-      </g>
-    </svg>
-    <div class="map-badge" id="mapBadge">73 properties</div>
-    <div class="map-note" data-i18n="map_note">Listings are supplied and maintained by independent third-party agents and landlords.</div>
-    <div id="map"></div>
-  </div>
-
   <div class="highlights">
     <div class="highlight-card hl1"><div class="cap" data-i18n="hl_1">Marble &amp; brass kitchens</div></div>
     <div class="highlight-card hl2"><div class="cap" data-i18n="hl_2">Racing-green interiors</div></div>
@@ -262,7 +232,7 @@ footer a:hover{color:var(--black)}
   </div>
 
   <div class="explore-actions">
-    <button class="filled" onclick="document.getElementById('liveFeedPreview').scrollIntoView({behavior:'smooth'})" data-i18n="btn_explore_all">Explore all</button>
+    <button class="filled" onclick="document.getElementById('inAreaSection').scrollIntoView({behavior:'smooth'})" data-i18n="btn_explore_all">Explore all</button>
     <button onclick="openPanel('register-choice')" data-i18n="btn_find_home">Find your home</button>
     <button onclick="openPanel('account')" data-i18n="btn_my_account">My account</button>
   </div>
@@ -378,7 +348,6 @@ footer a:hover{color:var(--black)}
   <div class="panel-body" id="panelBody" style="clear:both;padding-top:6px"></div>
 </div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
 /* ============ LANGUAGE TOGGLE (EN/AR demo) ============ */
 const i18n = {
@@ -717,17 +686,7 @@ function legalContent(active){
   `;
 }
 
-/* ============ MAP + PROPERTY DATA ============ */
-const sampleProperties = [
-  {id:1,title:'Luxury Villa — Windsor',price:'£6,500 / month',agent:'Berkshire Prime Lettings',lat:51.4839,lng:-0.6044},
-  {id:2,title:'Penthouse — London',price:'£8,200 / month',agent:'Quintain Living',lat:51.5074,lng:-0.1278},
-  {id:3,title:'Villa — Palo Alto',price:'$12,500 / month',agent:'Bay Area Estates',lat:37.4419,lng:-122.1430}
-];
-let map, currentMarker=null, tileLayerPrimary=null, tileLayerFallback=null;
-function setMarker(latlng, title){ if(currentMarker) map.removeLayer(currentMarker); currentMarker = L.marker(latlng).addTo(map); if(title) currentMarker.bindPopup(title).openPopup(); }
-function trySwitchToFallback(){ try{ if(tileLayerPrimary) map.removeLayer(tileLayerPrimary); tileLayerFallback = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap contributors'}).addTo(map); }catch(e){ console.error('Fallback tile layer failed',e); } }
-
-/* ============ SEARCH: country → city / UK postcode ============ */
+/* ============ SEARCH: country → city / UK postcode (feeds the In This Area map) ============ */
 const countryCities = { uk:['London','Windsor','Bath','Manchester','Bristol','Edinburgh'], usa:['New York','Los Angeles','San Francisco','Palo Alto','Miami'], france:['Paris','Nice'], germany:['Munich','Berlin'], uae:['Dubai','Abu Dhabi'], canada:['Toronto','Vancouver'], other:[] };
 const cityCoords = { 'London':[51.5074,-0.1278], 'Windsor':[51.4839,-0.6044], 'Bath':[51.3811,-2.3590], 'Manchester':[53.4808,-2.2426], 'Bristol':[51.4545,-2.5879], 'Edinburgh':[55.9533,-3.1883], 'Palo Alto':[37.4419,-122.1430], 'San Francisco':[37.7749,-122.4194], 'New York':[40.7128,-74.0060], 'Los Angeles':[34.0522,-118.2437], 'Miami':[25.7617,-80.1918], 'Paris':[48.8566,2.3522], 'Nice':[43.7102,7.2620], 'Munich':[48.1351,11.582], 'Berlin':[52.5200,13.4050], 'Dubai':[25.2048,55.2708], 'Abu Dhabi':[24.4539,54.3773], 'Toronto':[43.6532,-79.3832], 'Vancouver':[49.2827,-123.1207] };
 const countryLabels = {uk:'United Kingdom',usa:'United States',france:'France',germany:'Germany',uae:'United Arab Emirates',canada:'Canada',other:'a country'};
@@ -738,80 +697,70 @@ function normaliseUkPostcode(raw){
   if(compact.length < 5 || compact.length > 7) return null;
   return compact.slice(0,-3)+' '+compact.slice(-3);
 }
-function focusProperty(id){ const p = sampleProperties.find(x=>x.id===id); if(!p) return; map.flyTo([p.lat,p.lng],13); setMarker([p.lat,p.lng],p.title); }
 
 document.addEventListener('DOMContentLoaded', ()=>{
-  try{
-    map = L.map('map',{zoomControl:true,scrollWheelZoom:false}).setView([51.5074,-0.1278],11);
-    tileLayerPrimary = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
-    tileLayerPrimary.on('tileerror', trySwitchToFallback);
-    sampleProperties.forEach(p=>{
-      L.circleMarker([p.lat,p.lng],{radius:6,fill:true,fillColor:'#c57b83',color:'#8c3f46',weight:1,fillOpacity:0.9})
-        .addTo(map).bindPopup(`<strong>${p.title}</strong><div style='font-size:13px;color:#555'>${p.price}</div><div style='font-size:11px;color:#888;margin-top:4px'>Listed by ${p.agent}</div>`);
-    });
-    map.whenReady(()=>setTimeout(()=>map.invalidateSize(),300));
-    window.addEventListener('resize', ()=>setTimeout(()=>map.invalidateSize(),200));
+  const cSelect = document.getElementById('hero-country');
+  const cInput = document.getElementById('heroSearchInput');
+  const cList = document.getElementById('hero-city-list');
+  const hint = document.getElementById('searchHint');
 
-    const cSelect = document.getElementById('hero-country');
-    const cInput = document.getElementById('heroSearchInput');
-    const cList = document.getElementById('hero-city-list');
-    const hint = document.getElementById('searchHint');
-
-    function populateCities(){
-      const code = cSelect.value || 'uk';
-      cList.innerHTML = (countryCities[code]||[]).map(v=>`<option value="${v}"></option>`).join('');
-      if(code==='uk'){
-        hint.textContent = 'Searching United Kingdom — pick a city or enter a postcode (e.g. SW1A 1AA, EC1A 1BB)';
-        cInput.placeholder = 'City, town, or UK postcode e.g. SW1A 1AA';
-      } else {
-        hint.textContent = 'Searching '+(countryLabels[code]||'')+' — pick or type a city';
-        cInput.placeholder = 'Search by city';
-      }
+  function populateCities(){
+    const code = cSelect.value || 'uk';
+    cList.innerHTML = (countryCities[code]||[]).map(v=>`<option value="${v}"></option>`).join('');
+    if(code==='uk'){
+      hint.textContent = 'Searching United Kingdom — pick a city or enter a postcode (e.g. SW1A 1AA, EC1A 1BB)';
+      cInput.placeholder = 'City, town, or UK postcode e.g. SW1A 1AA';
+    } else {
+      hint.textContent = 'Searching '+(countryLabels[code]||'')+' — pick or type a city';
+      cInput.placeholder = 'Search by city';
     }
-    cSelect.addEventListener('change', populateCities);
-    populateCities();
+  }
+  cSelect.addEventListener('change', populateCities);
+  populateCities();
 
-    function geocode(query, label){
-      const q = encodeURIComponent(query);
-      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${q}&limit=1${cSelect.value==='uk'?'&countrycodes=gb':''}`)
-        .then(r=>r.json())
-        .then(results=>{
-          if(!results || !results.length){ alert('Location not found. Try a suggestion, or check the postcode format (e.g. SW1A 1AA).'); return; }
-          const lat=parseFloat(results[0].lat), lon=parseFloat(results[0].lon);
-          map.flyTo([lat,lon],13); setMarker([lat,lon],label);
-          document.getElementById('mapBadge').textContent = 'Properties around '+label;
-          document.getElementById('liveFeedPreview').scrollIntoView({behavior:'smooth'});
-        })
-        .catch(()=>alert('Search failed — please try again.'));
+  function recenterInArea(lat, lng, label){
+    if(inAreaMap){
+      inAreaMap.panTo({lat,lng});
+      inAreaMap.setZoom(14);
     }
+    document.getElementById('inAreaSection').scrollIntoView({behavior:'smooth'});
+  }
 
-    function runSearch(raw){
-      if(!raw){ alert('Please enter a city or postcode'); return; }
-      const countryCode = cSelect.value || 'uk';
-      if(countryCode==='uk'){
-        const compact = raw.replace(/\s+/g,'');
-        if(UK_POSTCODE_RE.test(raw) || UK_POSTCODE_RE.test(compact)){
-          const formatted = normaliseUkPostcode(raw);
-          if(formatted){ geocode(formatted+', UK', formatted); return; }
-        }
-        if(UK_OUTCODE_RE.test(compact) && compact.length<=4){ geocode(compact.toUpperCase()+', UK', compact.toUpperCase()+' area'); return; }
+  function geocode(query, label){
+    const q = encodeURIComponent(query);
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${q}&limit=1${cSelect.value==='uk'?'&countrycodes=gb':''}`)
+      .then(r=>r.json())
+      .then(results=>{
+        if(!results || !results.length){ alert('Location not found. Try a suggestion, or check the postcode format (e.g. SW1A 1AA).'); return; }
+        const lat=parseFloat(results[0].lat), lon=parseFloat(results[0].lon);
+        recenterInArea(lat, lon, label);
+      })
+      .catch(()=>alert('Search failed — please try again.'));
+  }
+
+  function runSearch(raw){
+    if(!raw){ alert('Please enter a city or postcode'); return; }
+    const countryCode = cSelect.value || 'uk';
+    if(countryCode==='uk'){
+      const compact = raw.replace(/\s+/g,'');
+      if(UK_POSTCODE_RE.test(raw) || UK_POSTCODE_RE.test(compact)){
+        const formatted = normaliseUkPostcode(raw);
+        if(formatted){ geocode(formatted+', UK', formatted); return; }
       }
-      if(raw in cityCoords){
-        const coords = cityCoords[raw];
-        map.flyTo(coords,12); setMarker(coords,raw);
-        document.getElementById('mapBadge').textContent = 'Properties around '+raw;
-        document.getElementById('liveFeedPreview').scrollIntoView({behavior:'smooth'});
-        return;
-      }
-      geocode(raw + (countryLabels[countryCode] ? (', '+countryLabels[countryCode]) : ''), raw);
+      if(UK_OUTCODE_RE.test(compact) && compact.length<=4){ geocode(compact.toUpperCase()+', UK', compact.toUpperCase()+' area'); return; }
     }
+    if(raw in cityCoords){
+      const coords = cityCoords[raw];
+      recenterInArea(coords[0], coords[1], raw);
+      return;
+    }
+    geocode(raw + (countryLabels[countryCode] ? (', '+countryLabels[countryCode]) : ''), raw);
+  }
 
-    document.getElementById('heroSearchForm').addEventListener('submit', function(e){
-      e.preventDefault();
-      runSearch(cInput.value.trim());
-    });
-
-  }catch(err){ console.error('Map initialization error', err); }
+  document.getElementById('heroSearchForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    runSearch(cInput.value.trim());
+  });
 });
 
 /* ============ IN THIS AREA MAP (category pins, Google-style) ============ */
@@ -846,7 +795,7 @@ const inAreaCategories = {
       {name:'Cobham Free School',lat:51.3310,lng:-0.4090},
       {name:'Hersham Primary',lat:51.3650,lng:-0.4320}
     ]},
-  conveniences:{ label:'Conveniences', icon:'cart', color:'#b98a3f',
+  conveniences:{ label:'Conveniences', icon:'store', color:'#2d333d',
     points:[
       {name:'Weybridge High Street',lat:51.3730,lng:-0.4540},
       {name:'Cobham Waitrose',lat:51.3300,lng:-0.4060},
@@ -884,12 +833,13 @@ const IN_AREA_MAP_STYLE = [
   {featureType:'water', elementType:'labels.text.fill', stylers:[{color:'#9e9e9e'}]}
 ];
 
-/* Bare icon glyph paths (white stroke), reused inside the pin SVGs below */
+/* Bare icon glyph paths (white stroke/fill), reused inside the pin SVGs below.
+   "store" is a storefront glyph (awning + door) to match the reference screenshot. */
 const pinGlyphs = {
   camera:'<path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/>',
   fork:'<path d="M6 2v20M6 2a3 3 0 013 3v4a3 3 0 01-3 3M18 2v20M18 8a3 3 0 01-3 3"/>',
   cap:'<path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/>',
-  cart:'<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 002 1.6h9.7a2 2 0 002-1.6L23 6H6"/>',
+  store:'<path d="M3 9.5l1-6h16l1 6" stroke-linejoin="round"/><path d="M3 9.5a2.5 2.5 0 005 0 2.5 2.5 0 005 0 2.5 2.5 0 005 0 2.5 2.5 0 005 0" stroke-linejoin="round"/><path d="M5 9.8V21h14V9.8" /><rect x="10" y="14" width="4" height="7" />',
   bus:'<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M3 12h18M7 20v-2M17 20v-2"/>',
   house:'<path d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/>'
 };
