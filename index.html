@@ -6,29 +6,30 @@
 <meta name="yandex-verification" content="d89c4601e49a553e" />
 <title>Are you looking for a house?</title>
   <script type="application/ld+json"> { "@context": "https://schema.org", "@type": "WebSite", "url": "https://00.house", "name": "00.house", "description": "00.house is a property listings and open-house scheduling portal connecting tenants with agents and landlords. ", "publisher": { "@type": "Organization", "name": "00.house Ltd", "url": "https://00.house" }, "potentialAction": { "@type": "SearchAction", "target": "https://00.house/?s={search_term_string}", "query-input": "required name=search_term_string" } } </script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 
 <style>
 :root{
   --black:#0a0a0a; --muted:#6b6b6b; --white:#fff;
-  --accent:#c57b83;           /* dusty rose */
-  --racing:#1f4632;           /* British racing green */
-  --brass:#b98a3f;            /* brass gold */
+  --accent:#c57b83;
+  --racing:#1f4632;
+  --brass:#b98a3f;
   --cream:#f6f2ea;
   --line:rgba(0,0,0,0.08);
   --ok:#2f6b4f;
 }
 *{box-sizing:border-box}
-body{font-family:Inter,system-ui,-apple-system,Helvetica,Arial,sans-serif;margin:0;color:var(--black);background:var(--white)}
-h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:500;margin:0 0 8px}
-h4{font-weight:600;margin:0 0 8px;font-family:Inter,sans-serif}
+body{font-family:'Montserrat',-apple-system,system-ui,Helvetica,Arial,sans-serif;margin:0;color:var(--black);background:var(--white)}
+h1,h2,h3{font-family:'Playfair Display',Georgia,serif;font-weight:600;margin:0 0 8px}
+h4{font-weight:600;margin:0 0 8px;font-family:'Montserrat',sans-serif}
 p{line-height:1.55;color:var(--muted)}
 a{color:inherit}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 [dir="rtl"] body{font-family:'Segoe UI',Tahoma,Inter,sans-serif}
 
-/* ============ NAV ============ */
 nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:rgba(255,255,255,0.97);z-index:200;border-bottom:1px solid var(--line);backdrop-filter:blur(6px)}
 .logo{display:flex;align-items:center;gap:10px;font-weight:600;cursor:pointer;background:none;border:0;font-size:16px;font-family:inherit;letter-spacing:-0.01em}
 .nav-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -43,9 +44,8 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .lang-menu button{display:flex;align-items:center;gap:8px;width:100%;border:0;background:#fff;padding:10px 14px;font-size:13px;cursor:pointer;font-family:inherit;text-align:left}
 .lang-menu button:hover{background:#f6f2ea}
 
-/* ============ HERO ============ */
 .hero{position:relative;width:100%;height:640px;overflow:hidden;background:#e9e6dc url('./home-house-rent.jpeg') center/cover no-repeat;background-attachment:fixed}
-  .hero-veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0) 35%,rgba(255,255,255,0.6) 100%);z-index:20}
+.hero-veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0) 35%,rgba(255,255,255,0.6) 100%);z-index:20}
 .hero-content{position:relative;z-index:30;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 20px 46px;text-align:center}
 .hero-content h1{font-size:clamp(26px,4vw,42px);color:#1b1b1b;text-shadow:0 2px 20px rgba(255,255,255,0.6);max-width:720px}
 .hero-search{margin-top:18px;display:flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 8px 8px 8px;box-shadow:0 14px 40px rgba(0,0,0,0.14);min-width:min(560px,92vw)}
@@ -53,13 +53,9 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .hero-search input{border:0;background:transparent;flex:1;font-size:14px;font-family:inherit;outline:none;padding:0 6px}
 .hero-search button{background:var(--black);border:0;color:#fff;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 38px}
 .hero-search-hint{margin-top:10px;font-size:11.5px;color:#3a3a3a;text-shadow:0 1px 10px rgba(255,255,255,0.9)}
-/* ============ EXPLORE PANEL ============ */
 .explore-wrap{max-width:1200px;margin:0 auto;padding:60px 24px}
 .explore-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}
 .eyebrow{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--brass);font-weight:700;margin-bottom:6px;display:block}
-.map-wrapper .tag{position:absolute;top:16px;left:16px;background:rgba(255,255,255,0.94);padding:6px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;z-index:30;display:flex;align-items:center;gap:6px}
-.map-wrapper .tag .dot{width:7px;height:7px;border-radius:50%;background:#e0435a;animation:pulse 1.6s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
 .highlights{display:flex;gap:14px;margin-top:22px;overflow-x:auto;padding-bottom:6px}
 .highlight-card{flex:0 0 200px;height:140px;border-radius:12px;position:relative;overflow:hidden;border:1px solid var(--line)}
 .highlight-card .cap{position:absolute;left:0;right:0;bottom:0;padding:8px 10px;font-size:11.5px;color:#fff;background:linear-gradient(0deg,rgba(0,0,0,0.55),transparent)}
@@ -72,21 +68,12 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .explore-actions button.filled{background:var(--black);color:#fff}
 .explore-actions button:hover{opacity:0.85}
 
-/* ============ MAP (lives inside Explore Properties as the live feed) ============ */
-.map-wrapper{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line)}
-#map{width:100%;height:460px;display:block}
-.map-badge{position:absolute;left:16px;top:60px;background:#fff;padding:8px 12px;border-radius:999px;border:1px solid var(--line);z-index:30;box-shadow:0 6px 18px rgba(0,0,0,0.06);font-size:13px}
-.map-note{position:absolute;right:16px;bottom:16px;background:rgba(255,255,255,0.92);padding:6px 10px;border-radius:8px;font-size:11px;color:var(--muted);z-index:30;max-width:220px;border:1px solid var(--line)}
-.wisteria{position:absolute;top:0;left:0;right:0;height:64px;z-index:25;pointer-events:none;opacity:0.92}
-
-/* ============ SERVICES ============ */
 .services-wrap{max-width:1200px;margin:0 auto;padding:10px 24px 0}
 .services{display:flex;gap:12px;flex-wrap:wrap;padding:18px 0}
 .card{background:#fff;border:1px solid var(--line);padding:14px 16px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.05);display:flex;align-items:center;gap:12px;min-width:220px;flex:1;position:relative}
 .card .num{position:absolute;top:10px;right:12px;font-size:10px;color:#bbb;font-weight:700}
 .card button{border:0;background:var(--accent);color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;white-space:nowrap}
 
-/* ============ CTA ROW ============ */
 .cta-row{display:flex;gap:16px;margin:20px 0;flex-wrap:wrap}
 .cta-card{flex:1;min-width:260px;padding:22px;border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,0.10);color:#fff}
 .cta-card.tenant{background:linear-gradient(135deg,#c87b86,#b14b5c)}
@@ -94,7 +81,6 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .cta-card p{color:rgba(255,255,255,0.82)}
 .cta-card button{margin-top:10px;background:#fff;color:var(--black);border:0;padding:9px 14px;border-radius:8px;cursor:pointer;font-weight:600;font-size:13px}
 
-/* ============ TENANT APPLICATION CARD ============ */
 .app-card{background:linear-gradient(135deg,#c87b86,#a8434f);border-radius:16px;padding:24px;color:#fff;position:relative;overflow:hidden;margin:24px 0}
 .app-card .rose{position:absolute;right:-20px;bottom:-30px;width:150px;height:150px;opacity:0.18}
 .app-card h3{color:#fff}
@@ -106,12 +92,10 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .progress-fill{height:100%;width:40%;background:#fff;border-radius:999px}
 .progress-label{font-size:11px;margin-top:6px;color:rgba(255,255,255,0.85)}
 
-/* ============ LEGAL STRIP ============ */
 .legal-strip{display:flex;align-items:flex-start;gap:10px;background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:20px 0;font-size:12.5px;color:var(--muted)}
 .legal-strip strong{color:var(--black)}
 .legal-strip a{color:var(--black);text-decoration:underline;cursor:pointer;font-weight:600}
 
-/* ============ SIDE PANEL ============ */
 .panel-overlay{position:fixed;inset:0;background:rgba(0,0,0,0);pointer-events:none;z-index:230;transition:all 0.3s}
 .panel-overlay.open{background:rgba(0,0,0,0.35);pointer-events:all}
 .side-panel{position:fixed;right:-460px;top:0;width:440px;max-width:92vw;height:100vh;background:#fff;z-index:240;box-shadow:-18px 0 40px rgba(0,0,0,0.08);transition:right 0.35s;padding:22px 22px 40px;overflow:auto}
@@ -123,7 +107,6 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .sample-card{border:1px solid var(--line);padding:12px;border-radius:10px;margin-bottom:12px}
 .sample-card button{margin-top:6px;border:1px solid var(--line);background:#fff;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:12px}
 
-/* Forms */
 .form-field{margin-bottom:14px}
 .form-field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:5px}
 .form-row{display:flex;gap:10px}
@@ -139,7 +122,6 @@ textarea{resize:vertical;min-height:70px}
 .form-success{background:#eef6f0;border:1px solid #cfe6d6;color:var(--ok);padding:12px;border-radius:8px;font-size:13px;margin-top:14px}
 .panel-eyebrow{font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:4px}
 
-/* Legal panel */
 .legal-section{margin-bottom:18px}
 .legal-section h4{font-size:13.5px;margin-bottom:5px}
 .legal-section p,.legal-section li{font-size:12.5px;color:var(--muted);line-height:1.6}
@@ -149,7 +131,6 @@ textarea{resize:vertical;min-height:70px}
 .legal-tab.active{background:var(--black);color:#fff;border-color:var(--black)}
 .legal-callout{background:#fdf3f2;border:1px solid #f0d9d7;border-radius:10px;padding:12px 14px;font-size:12px;color:#7a3a37;margin-bottom:16px}
 
-/* ============ IN THIS AREA (Google-Maps-style amenity explorer) ============ */
 .inarea-wrap{max-width:1200px;margin:0 auto;padding:10px 24px 60px}
 .inarea-head{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px;position:relative}
 .inarea-head h3{font-size:20px}
@@ -203,7 +184,6 @@ footer a:hover{color:var(--black)}
   </div>
 </nav>
 
-<!-- ============ HERO ============ -->
 <section class="hero">
   <div class="hero-veil"></div>
   <div class="hero-content">
@@ -226,32 +206,12 @@ footer a:hover{color:var(--black)}
   </div>
 </section>
 
-<!-- ============ EXPLORE PROPERTIES PANEL ============ -->
 <section class="explore-wrap" id="exploreSection">
   <div class="explore-head">
     <div>
       <span class="eyebrow" data-i18n="explore_eyebrow">Explore</span>
       <h2 data-i18n="explore_title">Explore Properties</h2>
     </div>
-  </div>
-
-  <div class="map-wrapper" id="liveFeedPreview">
-    <div class="tag"><span class="dot"></span><span data-i18n="live_feed">Live feed</span></div>
-    <svg class="wisteria" viewBox="0 0 1200 64" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0 0 Q60 40 120 10 T240 14 T360 8 T480 16 T600 6 T720 18 T840 10 T960 14 T1080 8 T1200 12" stroke="#5b7a52" stroke-width="3" fill="none" opacity="0.55"/>
-      <g fill="#b48fc0" opacity="0.85">
-        <circle cx="90" cy="22" r="4"/><circle cx="98" cy="30" r="3.5"/><circle cx="104" cy="20" r="3"/>
-        <circle cx="260" cy="26" r="4"/><circle cx="268" cy="34" r="3.5"/><circle cx="274" cy="22" r="3"/>
-        <circle cx="430" cy="20" r="4"/><circle cx="438" cy="28" r="3.5"/><circle cx="444" cy="18" r="3"/>
-        <circle cx="620" cy="24" r="4"/><circle cx="628" cy="32" r="3.5"/><circle cx="634" cy="20" r="3"/>
-        <circle cx="800" cy="22" r="4"/><circle cx="808" cy="30" r="3.5"/><circle cx="814" cy="18" r="3"/>
-        <circle cx="980" cy="26" r="4"/><circle cx="988" cy="34" r="3.5"/><circle cx="994" cy="22" r="3"/>
-        <circle cx="1120" cy="22" r="4"/><circle cx="1128" cy="30" r="3.5"/>
-      </g>
-    </svg>
-    <div class="map-badge" id="mapBadge">73 properties</div>
-    <div class="map-note" data-i18n="map_note">Listings are supplied and maintained by independent third-party agents and landlords.</div>
-    <div id="map"></div>
   </div>
 
   <div class="highlights">
@@ -262,13 +222,12 @@ footer a:hover{color:var(--black)}
   </div>
 
   <div class="explore-actions">
-    <button class="filled" onclick="document.getElementById('liveFeedPreview').scrollIntoView({behavior:'smooth'})" data-i18n="btn_explore_all">Explore all</button>
+    <button class="filled" onclick="openPanel('register-choice')" data-i18n="btn_explore_all">Explore all</button>
     <button onclick="openPanel('register-choice')" data-i18n="btn_find_home">Find your home</button>
     <button onclick="openPanel('account')" data-i18n="btn_my_account">My account</button>
   </div>
 </section>
 
-<!-- ============ IN THIS AREA ============ -->
 <section class="inarea-wrap" id="inAreaSection">
   <div class="inarea-head">
     <h3 id="inAreaTitle">In This Area</h3>
@@ -378,17 +337,14 @@ footer a:hover{color:var(--black)}
   <div class="panel-body" id="panelBody" style="clear:both;padding-top:6px"></div>
 </div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
-/* ============ LANGUAGE TOGGLE (EN/AR demo) ============ */
 const i18n = {
   en:{
     brand:'00.house', nav_explore:'Explore', nav_find:'Find your home', nav_lang:'Languages ▾', nav_account:'Account',
     hero_title:'00.house — Are you looking for a house?', hero_search_ph:'Search by city or postcode',
-    explore_eyebrow:'Explore', explore_title:'Explore Properties', live_feed:'Live feed',
+    explore_eyebrow:'Explore', explore_title:'Explore Properties',
     hl_1:'Marble & brass kitchens', hl_2:'Racing-green interiors', hl_3:'Garden & terrace views', hl_4:'Open house gardens',
     btn_explore_all:'Explore all', btn_find_home:'Find your home', btn_my_account:'My account',
-    map_search_ph:'City, town, or UK postcode e.g. SW1A 1AA', map_note:'Listings are supplied and maintained by independent third-party agents and landlords.',
     svc1_title:'Interior Design', svc1_sub:'Independent design partners to help you settle in.',
     svc2_title:'Tenant Screening', svc2_sub:'Reference and right-to-rent checks via third parties.',
     svc3_title:'Landlord Insurance', svc3_sub:'Cover arranged through independent insurers.', open:'Open',
@@ -405,10 +361,9 @@ const i18n = {
   ar:{
     brand:'00.house', nav_explore:'استكشف', nav_find:'ابحث عن منزلك', nav_lang:'اللغة ▾', nav_account:'الحساب',
     hero_title:'00.house — هل تبحث عن منزل؟', hero_search_ph:'ابحث حسب المدينة أو الرمز البريدي',
-    explore_eyebrow:'استكشاف', explore_title:'استكشف العقارات', live_feed:'بث مباشر',
+    explore_eyebrow:'استكشاف', explore_title:'استكشف العقارات',
     hl_1:'مطابخ من الرخام والنحاس', hl_2:'تصاميم داخلية بأخضر داكن', hl_3:'إطلالات على الحدائق والشرفات', hl_4:'حدائق البيوت المفتوحة',
     btn_explore_all:'استكشف الكل', btn_find_home:'ابحث عن منزلك', btn_my_account:'حسابي',
-    map_search_ph:'المدينة أو الرمز البريدي البريطاني', map_note:'يتم توفير الإعلانات وصيانتها من قبل وكلاء وملاك عقارات مستقلين من طرف ثالث.',
     svc1_title:'التصميم الداخلي', svc1_sub:'شركاء تصميم مستقلون لمساعدتك على الاستقرار.',
     svc2_title:'فحص المستأجرين', svc2_sub:'التحقق من المراجع وحق الإيجار عبر أطراف ثالثة.',
     svc3_title:'تأمين الملاك', svc3_sub:'تغطية تُرتّب من خلال شركات تأمين مستقلة.', open:'فتح',
@@ -444,7 +399,6 @@ document.addEventListener('click', function(e){
   if(wrap && !wrap.contains(e.target)) document.getElementById('langMenu').classList.remove('open');
 });
 
-/* ============ PANEL SYSTEM ============ */
 function openPanel(mode, sub){
   document.getElementById('sidePanel').classList.add('open');
   document.getElementById('overlay').classList.add('open');
@@ -554,7 +508,6 @@ function renderPanel(mode, sub){
   }
 }
 
-/* ============ FORMS ============ */
 function tenantFormHTML(){
   return `
     <div class="panel-eyebrow">Register</div>
@@ -658,7 +611,6 @@ function stubSubmit(btn,msg){
 }
 function contactStub(name){ alert('Contact request sent (stub) to '+name+'. This would route to their own contact details, not to 00.house.'); }
 
-/* ============ LEGAL PANEL ============ */
 const legalTabs = [
   {id:'disclaimer', label:'Portal Disclaimer'},
   {id:'terms', label:'Terms of Use'},
@@ -717,103 +669,6 @@ function legalContent(active){
   `;
 }
 
-/* ============ MAP + PROPERTY DATA ============ */
-const sampleProperties = [
-  {id:1,title:'Luxury Villa — Windsor',price:'£6,500 / month',agent:'Berkshire Prime Lettings',lat:51.4839,lng:-0.6044},
-  {id:2,title:'Penthouse — London',price:'£8,200 / month',agent:'Quintain Living',lat:51.5074,lng:-0.1278},
-  {id:3,title:'Villa — Palo Alto',price:'$12,500 / month',agent:'Bay Area Estates',lat:37.4419,lng:-122.1430}
-];
-let map, currentMarker=null, tileLayerPrimary=null, tileLayerFallback=null;
-function setMarker(latlng, title){ if(currentMarker) map.removeLayer(currentMarker); currentMarker = L.marker(latlng).addTo(map); if(title) currentMarker.bindPopup(title).openPopup(); }
-function trySwitchToFallback(){ try{ if(tileLayerPrimary) map.removeLayer(tileLayerPrimary); tileLayerFallback = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap contributors'}).addTo(map); }catch(e){ console.error('Fallback tile layer failed',e); } }
-
-/* ============ SEARCH: country → city / UK postcode ============ */
-const countryCities = { uk:['London','Windsor','Bath','Manchester','Bristol','Edinburgh'], usa:['New York','Los Angeles','San Francisco','Palo Alto','Miami'], france:['Paris','Nice'], germany:['Munich','Berlin'], uae:['Dubai','Abu Dhabi'], canada:['Toronto','Vancouver'], other:[] };
-const cityCoords = { 'London':[51.5074,-0.1278], 'Windsor':[51.4839,-0.6044], 'Bath':[51.3811,-2.3590], 'Manchester':[53.4808,-2.2426], 'Bristol':[51.4545,-2.5879], 'Edinburgh':[55.9533,-3.1883], 'Palo Alto':[37.4419,-122.1430], 'San Francisco':[37.7749,-122.4194], 'New York':[40.7128,-74.0060], 'Los Angeles':[34.0522,-118.2437], 'Miami':[25.7617,-80.1918], 'Paris':[48.8566,2.3522], 'Nice':[43.7102,7.2620], 'Munich':[48.1351,11.582], 'Berlin':[52.5200,13.4050], 'Dubai':[25.2048,55.2708], 'Abu Dhabi':[24.4539,54.3773], 'Toronto':[43.6532,-79.3832], 'Vancouver':[49.2827,-123.1207] };
-const countryLabels = {uk:'United Kingdom',usa:'United States',france:'France',germany:'Germany',uae:'United Arab Emirates',canada:'Canada',other:'a country'};
-const UK_POSTCODE_RE = /^[A-Z]{1,2}[0-9][A-Z0-9]?\s*[0-9][A-Z]{2}$/i;
-const UK_OUTCODE_RE = /^[A-Z]{1,2}[0-9][A-Z0-9]?$/i;
-function normaliseUkPostcode(raw){
-  const compact = raw.replace(/\s+/g,'').toUpperCase();
-  if(compact.length < 5 || compact.length > 7) return null;
-  return compact.slice(0,-3)+' '+compact.slice(-3);
-}
-function focusProperty(id){ const p = sampleProperties.find(x=>x.id===id); if(!p) return; map.flyTo([p.lat,p.lng],13); setMarker([p.lat,p.lng],p.title); }
-
-document.addEventListener('DOMContentLoaded', ()=>{
-  try{
-    map = L.map('map',{zoomControl:true,scrollWheelZoom:false}).setView([51.5074,-0.1278],11);
-    tileLayerPrimary = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
-    tileLayerPrimary.on('tileerror', trySwitchToFallback);
-    sampleProperties.forEach(p=>{
-      L.circleMarker([p.lat,p.lng],{radius:6,fill:true,fillColor:'#c57b83',color:'#8c3f46',weight:1,fillOpacity:0.9})
-        .addTo(map).bindPopup(`<strong>${p.title}</strong><div style='font-size:13px;color:#555'>${p.price}</div><div style='font-size:11px;color:#888;margin-top:4px'>Listed by ${p.agent}</div>`);
-    });
-    map.whenReady(()=>setTimeout(()=>map.invalidateSize(),300));
-    window.addEventListener('resize', ()=>setTimeout(()=>map.invalidateSize(),200));
-
-    const cSelect = document.getElementById('hero-country');
-    const cInput = document.getElementById('heroSearchInput');
-    const cList = document.getElementById('hero-city-list');
-    const hint = document.getElementById('searchHint');
-
-    function populateCities(){
-      const code = cSelect.value || 'uk';
-      cList.innerHTML = (countryCities[code]||[]).map(v=>`<option value="${v}"></option>`).join('');
-      if(code==='uk'){
-        hint.textContent = 'Searching United Kingdom — pick a city or enter a postcode (e.g. SW1A 1AA, EC1A 1BB)';
-        cInput.placeholder = 'City, town, or UK postcode e.g. SW1A 1AA';
-      } else {
-        hint.textContent = 'Searching '+(countryLabels[code]||'')+' — pick or type a city';
-        cInput.placeholder = 'Search by city';
-      }
-    }
-    cSelect.addEventListener('change', populateCities);
-    populateCities();
-
-    function geocode(query, label){
-      const q = encodeURIComponent(query);
-      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${q}&limit=1${cSelect.value==='uk'?'&countrycodes=gb':''}`)
-        .then(r=>r.json())
-        .then(results=>{
-          if(!results || !results.length){ alert('Location not found. Try a suggestion, or check the postcode format (e.g. SW1A 1AA).'); return; }
-          const lat=parseFloat(results[0].lat), lon=parseFloat(results[0].lon);
-          map.flyTo([lat,lon],13); setMarker([lat,lon],label);
-          document.getElementById('mapBadge').textContent = 'Properties around '+label;
-          document.getElementById('liveFeedPreview').scrollIntoView({behavior:'smooth'});
-        })
-        .catch(()=>alert('Search failed — please try again.'));
-    }
-
-    function runSearch(raw){
-      if(!raw){ alert('Please enter a city or postcode'); return; }
-      const countryCode = cSelect.value || 'uk';
-      if(countryCode==='uk'){
-        const compact = raw.replace(/\s+/g,'');
-        if(UK_POSTCODE_RE.test(raw) || UK_POSTCODE_RE.test(compact)){
-          const formatted = normaliseUkPostcode(raw);
-          if(formatted){ geocode(formatted+', UK', formatted); return; }
-        }
-        if(UK_OUTCODE_RE.test(compact) && compact.length<=4){ geocode(compact.toUpperCase()+', UK', compact.toUpperCase()+' area'); return; }
-      }
-      if(raw in cityCoords){
-        const coords = cityCoords[raw];
-        map.flyTo(coords,12); setMarker(coords,raw);
-        document.getElementById('mapBadge').textContent = 'Properties around '+raw;
-        document.getElementById('liveFeedPreview').scrollIntoView({behavior:'smooth'});
-        return;
-      }
-      geocode(raw + (countryLabels[countryCode] ? (', '+countryLabels[countryCode]) : ''), raw);
-    }
-
-    document.getElementById('heroSearchForm').addEventListener('submit', function(e){
-      e.preventDefault();
-      runSearch(cInput.value.trim());
-    });
-
-  }catch(err){ console.error('Map initialization error', err); }
-});
-
 /* ============ IN THIS AREA MAP (category pins, Google-style) ============ */
 const inAreaSubject = { name:'Luxury Villa — Windsor', lat:51.4839, lng:-0.6044 };
 
@@ -864,7 +719,6 @@ const inAreaCategories = {
 
 let inAreaMap, inAreaMarkers = [], inAreaSubjectMarker, currentInAreaCategory = null, inAreaInfoWindow;
 
-/* Muted grayscale "Silver"-style theme, matching the reference screenshot */
 const IN_AREA_MAP_STYLE = [
   {elementType:'geometry', stylers:[{color:'#f5f5f5'}]},
   {elementType:'labels.icon', stylers:[{visibility:'off'}]},
@@ -884,7 +738,6 @@ const IN_AREA_MAP_STYLE = [
   {featureType:'water', elementType:'labels.text.fill', stylers:[{color:'#9e9e9e'}]}
 ];
 
-/* Bare icon glyph paths (white stroke), reused inside the pin SVGs below */
 const pinGlyphs = {
   camera:'<path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/>',
   fork:'<path d="M6 2v20M6 2a3 3 0 013 3v4a3 3 0 01-3 3M18 2v20M18 8a3 3 0 01-3 3"/>',
@@ -951,7 +804,6 @@ document.addEventListener('click', function(e){
   if(wrap && !wrap.contains(e.target)) closeInAreaMenu();
 });
 
-/* Called by the Google Maps JS API loader once it's ready (see script tag near the closing body tag) */
 function initInAreaMap(){
   try{
     const menu = document.getElementById('inAreaDropdownMenu');
@@ -987,17 +839,9 @@ function initInAreaMap(){
       inAreaInfoWindow.setContent(`<strong>${inAreaSubject.name}</strong><div style="color:#888;font-size:11.5px;margin-top:2px">This property</div>`);
       inAreaInfoWindow.open(inAreaMap, inAreaSubjectMarker);
     });
-
-    /* No category pre-selected — matches reference: plain "In This Area" heading
-       and only the subject pin shown until the user opens the filter and picks one. */
   }catch(err){ console.error('In-area map (Google Maps) initialization error', err); }
 }
 </script>
-<!--
-  Google Maps JS API — replace YOUR_GOOGLE_MAPS_API_KEY with a real key from
-  Google Cloud Console (Maps JavaScript API enabled, billing account attached).
-  Docs: https://developers.google.com/maps/documentation/javascript/get-api-key
--->
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-I8268eF9w7JYVrXEv7xi3WM0KnYRI0Q&callback=initInAreaMap"></script>
 </body>
 </html>
