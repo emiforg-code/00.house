@@ -56,13 +56,10 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .explore-wrap{max-width:1200px;margin:0 auto;padding:60px 24px}
 .explore-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}
 .eyebrow{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--brass);font-weight:700;margin-bottom:6px;display:block}
-.highlights{display:flex;gap:14px;margin-top:22px;overflow-x:auto;padding-bottom:6px}
-.highlight-card{flex:0 0 200px;height:140px;border-radius:12px;position:relative;overflow:hidden;border:1px solid var(--line)}
-.highlight-card .cap{position:absolute;left:0;right:0;bottom:0;padding:8px 10px;font-size:11.5px;color:#fff;background:linear-gradient(0deg,rgba(0,0,0,0.55),transparent)}
-.hl1{background:linear-gradient(150deg,#fbfaf7,#e9e6dc)}
-.hl2{background:linear-gradient(150deg,var(--racing),#0f271b)}
-.hl3{background:linear-gradient(150deg,#e7dcc8,var(--brass))}
-.hl4{background:linear-gradient(150deg,#cfd6c4,#8fa475)}
+.highlights{display:flex;gap:16px;margin-top:22px;flex-wrap:wrap}
+.highlight-card{flex:1 1 240px;height:200px;border-radius:12px;position:relative;overflow:hidden;border:1px solid var(--line);background-size:cover;background-position:center;transition:transform 0.25s}
+.highlight-card:hover{transform:translateY(-3px)}
+.highlight-card .cap{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;font-size:14px;font-weight:600;color:#fff;background:linear-gradient(0deg,rgba(0,0,0,0.62),rgba(0,0,0,0.05) 65%,transparent)}
 .explore-actions{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap}
 .explore-actions button{border:1px solid var(--black);background:#fff;padding:11px 18px;border-radius:3px;font-family:inherit;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;font-weight:600;cursor:pointer}
 .explore-actions button.filled{background:var(--black);color:#fff}
@@ -224,13 +221,6 @@ footer a:hover{color:var(--black)}
     </div>
   </div>
 
-  <div class="highlights">
-    <div class="highlight-card hl1"><div class="cap" data-i18n="hl_1">Marble &amp; brass kitchens</div></div>
-    <div class="highlight-card hl2"><div class="cap" data-i18n="hl_2">Racing-green interiors</div></div>
-    <div class="highlight-card hl3"><div class="cap" data-i18n="hl_3">Garden &amp; terrace views</div></div>
-    <div class="highlight-card hl4"><div class="cap" data-i18n="hl_4">Open house gardens</div></div>
-  </div>
-
   <div class="explore-actions">
     <button class="filled" onclick="document.getElementById('inAreaSection').scrollIntoView({behavior:'smooth'})" data-i18n="btn_explore_all">Explore all</button>
     <button onclick="openPanel('register-choice')" data-i18n="btn_find_home">Find your home</button>
@@ -254,6 +244,53 @@ footer a:hover{color:var(--black)}
     <div id="inAreaMap"></div>
   </div>
 </section>
+
+<!-- ============ BROWSE BY CATEGORY ============ -->
+<section class="explore-wrap" id="categoriesSection">
+  <div class="explore-head">
+    <div>
+      <span class="eyebrow" data-i18n="cat_eyebrow">Property Types</span>
+      <h2 data-i18n="cat_title">Browse by Category</h2>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <div class="highlight-card" style="background-image:url('./images/independent-villas.jpg')">
+      <div class="cap" data-i18n="hl_1">Independent villas</div>
+    </div>
+    <div class="highlight-card" style="background-image:url('./images/townhouses.jpg')">
+      <div class="cap" data-i18n="hl_2">Townhouses</div>
+    </div>
+    <div class="highlight-card" style="background-image:url('./images/with-garden-terrace.jpg')">
+      <div class="cap" data-i18n="hl_3">With garden or terrace</div>
+    </div>
+    <div class="highlight-card" style="background-image:url('./images/new-build.jpg')">
+      <div class="cap" data-i18n="hl_4">New build</div>
+    </div>
+  </div>
+</section>
+
+<section class="services-wrap">
+  <div class="services">
+    <div class="card">
+      <span class="num">[1]</span>
+      <div style="font-size:20px;">🎨</div>
+      <div><strong data-i18n="svc1_title">Interior Design</strong><div style="font-size:12.5px;color:var(--muted)" data-i18n="svc1_sub">Independent design partners to help you settle in.</div></div>
+      <div style="margin-left:auto"><button onclick="openPanel('interior')" data-i18n="open">Open</button></div>
+    </div>
+    <div class="card">
+      <span class="num">[2]</span>
+      <div style="font-size:20px;">🧾</div>
+      <div><strong data-i18n="svc2_title">Tenant Screening</strong><div style="font-size:12.5px;color:var(--muted)" data-i18n="svc2_sub">Reference and right-to-rent checks via third parties.</div></div>
+      <div style="margin-left:auto"><button onclick="openPanel('screening')" data-i18n="open">Open</button></div>
+    </div>
+    <div class="card">
+      <span class="num">[3]</span>
+      <div style="font-size:20px;">🛡️</div>
+      <div><strong data-i18n="svc3_title">Landlord Insurance</strong><div style="font-size:12.5px;color:var(--muted)" data-i18n="svc3_sub">Cover arranged through independent insurers.</div></div>
+      <div style="margin-left:auto"><button onclick="openPanel('insurance')" data-i18n="open">Open</button></div>
+    </div>
+  </div>
 
   <div class="app-card">
     <svg class="rose" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="#fff"/></svg>
@@ -333,7 +370,8 @@ const i18n = {
     brand:'00.house', nav_explore:'Explore', nav_find:'Find your home', nav_lang:'Languages ▾', nav_account:'Account',
     hero_title:'00.house — Are you looking for a house?', hero_search_ph:'Search by city or postcode',
     explore_eyebrow:'Explore', explore_title:'Explore Properties', live_feed:'Live feed',
-    hl_1:'Marble & brass kitchens', hl_2:'Racing-green interiors', hl_3:'Garden & terrace views', hl_4:'Open house gardens',
+    hl_1:'Independent villas', hl_2:'Townhouses', hl_3:'With garden or terrace', hl_4:'New build',
+    cat_eyebrow:'Property Types', cat_title:'Browse by Category',
     btn_explore_all:'Explore all', btn_find_home:'Find your home', btn_my_account:'My account',
     map_search_ph:'City, town, or UK postcode e.g. SW1A 1AA', map_note:'Listings are supplied and maintained by independent third-party agents and landlords.',
     svc1_title:'Interior Design', svc1_sub:'Independent design partners to help you settle in.',
@@ -353,7 +391,8 @@ const i18n = {
     brand:'00.house', nav_explore:'استكشف', nav_find:'ابحث عن منزلك', nav_lang:'اللغة ▾', nav_account:'الحساب',
     hero_title:'00.house — هل تبحث عن منزل؟', hero_search_ph:'ابحث حسب المدينة أو الرمز البريدي',
     explore_eyebrow:'استكشاف', explore_title:'استكشف العقارات', live_feed:'بث مباشر',
-    hl_1:'مطابخ من الرخام والنحاس', hl_2:'تصاميم داخلية بأخضر داكن', hl_3:'إطلالات على الحدائق والشرفات', hl_4:'حدائق البيوت المفتوحة',
+    hl_1:'فلل مستقلة', hl_2:'منازل تاون هاوس', hl_3:'مع حديقة أو شرفة', hl_4:'بناء جديد',
+    cat_eyebrow:'أنواع العقارات', cat_title:'تصفح حسب الفئة',
     btn_explore_all:'استكشف الكل', btn_find_home:'ابحث عن منزلك', btn_my_account:'حسابي',
     map_search_ph:'المدينة أو الرمز البريدي البريطاني', map_note:'يتم توفير الإعلانات وصيانتها من قبل وكلاء وملاك عقارات مستقلين من طرف ثالث.',
     svc1_title:'التصميم الداخلي', svc1_sub:'شركاء تصميم مستقلون لمساعدتك على الاستقرار.',
