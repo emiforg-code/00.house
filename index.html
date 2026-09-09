@@ -72,25 +72,38 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .card .num{position:absolute;top:10px;right:12px;font-size:10px;color:#bbb;font-weight:700}
 .card button{border:0;background:var(--accent);color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;white-space:nowrap}
 
-/* ============ CTA ROW ============ */
-.cta-row{display:flex;gap:16px;margin:20px 0;flex-wrap:wrap}
-.cta-card{flex:1;min-width:260px;padding:22px;border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,0.10);color:#fff}
-.cta-card.tenant{background:linear-gradient(135deg,#c87b86,#b14b5c)}
-.cta-card.agent{background:linear-gradient(135deg,var(--racing),#0d2317)}
-.cta-card p{color:rgba(255,255,255,0.82)}
-.cta-card button{margin-top:10px;background:#fff;color:var(--black);border:0;padding:9px 14px;border-radius:8px;cursor:pointer;font-weight:600;font-size:13px}
-
-/* ============ TENANT PASS ============ */
-.app-card{background:linear-gradient(135deg,#c87b86,#a8434f);border-radius:16px;padding:24px;color:#fff;position:relative;overflow:hidden;margin:24px 0}
-.app-card .rose{position:absolute;right:-20px;bottom:-30px;width:150px;height:150px;opacity:0.18}
-.app-card h3{color:#fff}
-.app-check{display:flex;flex-direction:column;gap:6px;margin:14px 0}
-.app-check .item{display:flex;align-items:center;gap:8px;font-size:13px}
-.app-check .box{width:16px;height:16px;border:1.5px solid rgba(255,255,255,0.8);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;flex:0 0 16px}
-.app-check .box.done{background:#fff;color:var(--accent)}
-.progress-track{height:8px;background:rgba(255,255,255,0.3);border-radius:999px;overflow:hidden;margin-top:8px}
-.progress-fill{height:100%;width:40%;background:#fff;border-radius:999px}
-.progress-label{font-size:11px;margin-top:6px;color:rgba(255,255,255,0.85)}
+/* ============ TENANT / AGENT PANELS ============ */
+.panels-row{display:flex;gap:16px;margin:20px 0;flex-wrap:wrap}
+.tf-panel{flex:1;min-width:320px;border-radius:20px;padding:40px 36px 0;overflow:hidden;position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;min-height:560px}
+.tf-panel.rose{background:linear-gradient(155deg,#f0dfe3,#e7cbd2)}
+.tf-panel.green{background:linear-gradient(155deg,#dce7e0,#c9d8cd)}
+.tf-panel h3{font-size:1.7rem;max-width:420px;margin:0 0 14px}
+.tf-panel p{font-size:.98rem;max-width:400px;margin:0 0 22px;line-height:1.55}
+.tf-panel .tf-cta{border:0;border-radius:10px;padding:14px 28px;font-family:Inter,sans-serif;font-size:.92rem;font-weight:600;letter-spacing:.02em;cursor:pointer;margin-bottom:30px;color:#fff}
+.tf-panel.rose .tf-cta{background:var(--accent)}
+.tf-panel.green .tf-cta{background:var(--racing)}
+.tf-art{position:relative;width:100%;flex:1;display:flex;align-items:flex-end;justify-content:center}
+.tf-shadow{position:absolute;bottom:6px;width:60%;height:28px;left:50%;transform:translateX(-50%);background:radial-gradient(ellipse at center, rgba(10,10,10,0.18) 0%, rgba(10,10,10,0) 72%);filter:blur(2px);z-index:0}
+.tf-photo{position:relative;z-index:1;width:240px;height:290px;object-fit:cover;object-position:top center;border-radius:120px 120px 0 0;display:block}
+.tf-card{position:absolute;background:#fff;border-radius:14px;box-shadow:0 12px 28px rgba(0,0,0,0.12);padding:12px 14px;text-align:left;font-size:.78rem;color:var(--black);z-index:2}
+.tf-badge{width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.68rem;flex-shrink:0;color:#fff}
+.tf-panel.rose .tf-badge{background:var(--accent)}
+.tf-panel.green .tf-badge{background:var(--racing)}
+.tf-panel.rose .tf-card.tf-progress{top:-30px;left:0;width:200px}
+.tf-bar-track{height:6px;border-radius:99px;background:#eee;overflow:hidden;margin:6px 0}
+.tf-bar-fill{height:100%;width:50%;background:var(--accent);border-radius:99px}
+.tf-caption{color:#9a9a9a;font-size:.68rem}
+.tf-panel.rose .tf-card.tf-checklist{top:0;right:-6px;width:196px}
+.tf-checklist .tf-row{display:flex;align-items:center;gap:7px;margin-bottom:7px;font-size:.74rem}
+.tf-checklist .tf-row:last-child{margin-bottom:0}
+.tf-dot{width:15px;height:15px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.58rem;font-weight:700;flex-shrink:0}
+.tf-dot.done{background:var(--ok);color:#fff}
+.tf-dot.pending{border:1.4px solid #cfd3da;color:#9aa0ac}
+.tf-panel.rose .tf-card.tf-notif{bottom:56px;left:-14px;width:210px;display:flex;gap:9px;align-items:flex-start}
+.tf-notif-stack{display:flex;flex-direction:column;align-items:flex-start;margin-bottom:16px;position:relative;z-index:2}
+.tf-panel.green .tf-card.tf-notif{position:static;display:flex;gap:9px;align-items:flex-start;width:280px;margin:0 auto 10px}
+.tf-time{float:right;color:#9aa5b1;font-size:.66rem}
+@media(max-width:760px){ .panels-row{flex-direction:column} }
 
 /* ============ LEGAL STRIP ============ */
 .legal-strip{display:flex;align-items:flex-start;gap:10px;background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:20px 0;font-size:12.5px;color:var(--muted)}
@@ -271,25 +284,60 @@ footer a:hover{color:var(--black)}
 </section>
 
 <section class="services-wrap">
-  <div class="cta-row">
-    <div class="cta-card tenant" style="position:relative;overflow:hidden">
-      <svg class="rose" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="#fff"/></svg>
-      <h3 data-i18n="app_title" style="color:#fff">Tenant Pass</h3>
-      <p data-i18n="app_sub" style="color:rgba(255,255,255,0.85)">Required to apply. Secure your properties with our tenant card.</p>
-      <div class="app-check">
-        <div class="item"><span class="box done">✓</span><span data-i18n="app_step1">Profile registered</span></div>
-        <div class="item"><span class="box done">✓</span><span data-i18n="app_step2">Preferences saved</span></div>
-        <div class="item"><span class="box">3</span><span data-i18n="app_step3">Screening &amp; references (via agent)</span></div>
-        <div class="item"><span class="box">4</span><span data-i18n="app_step4">Viewing booked</span></div>
+  <div class="panels-row">
+    <div class="tf-panel rose">
+      <h3 data-i18n="app_title">Tenant Pass</h3>
+      <p data-i18n="app_sub">Required to secure your chosen house viewing.</p>
+      <button class="tf-cta" onclick="openPanel('tenant-form')" data-i18n="app_cta">Continue application</button>
+
+      <div class="tf-art">
+        <div class="tf-card tf-progress">
+          <div>Application progress</div>
+          <div class="tf-bar-track"><div class="tf-bar-fill"></div></div>
+          <div class="tf-caption" data-i18n="app_progress">2 of 4 steps complete</div>
+        </div>
+
+        <div class="tf-card tf-checklist">
+          <div class="tf-row"><span class="tf-dot done">✓</span><span data-i18n="app_step1">Profile registered</span></div>
+          <div class="tf-row"><span class="tf-dot done">✓</span><span data-i18n="app_step2">Preferences saved</span></div>
+          <div class="tf-row"><span class="tf-dot pending">3</span><span data-i18n="app_step3">Screening &amp; references</span></div>
+          <div class="tf-row"><span class="tf-dot pending">4</span><span data-i18n="app_step4">Viewing booked</span></div>
+        </div>
+
+        <div class="tf-card tf-notif">
+          <div class="tf-badge">t</div>
+          <div><strong>00.house</strong><br>The rest happens with your chosen agent.</div>
+        </div>
+
+        <div class="tf-shadow"></div>
+        <img class="tf-photo" src="he.jpeg" alt="Tenant with a verified Tenant Pass">
       </div>
-      <div class="progress-track"><div class="progress-fill"></div></div>
-      <div class="progress-label" data-i18n="app_progress">2 of 4 steps complete — the rest happens with your chosen agent</div>
-      <button style="margin-top:14px;background:#fff;color:var(--accent);border:0;padding:9px 14px;border-radius:8px;cursor:pointer;font-weight:600;font-size:13px" onclick="openPanel('tenant-form')" data-i18n="app_cta">Continue application</button>
     </div>
-    <div class="cta-card agent">
-      <h3 data-i18n="cta_agent_title" style="color:#fff">Register as an agent or landlord</h3>
+
+    <div class="tf-panel green">
+      <h3 data-i18n="cta_agent_title">Register as an agent or landlord</h3>
       <p data-i18n="cta_agent_sub">List your open houses on 00.house and reach verified, ready-to-view tenants across your area.</p>
-      <button onclick="openPanel('agent-form')" data-i18n="cta_agent_btn">Register as an agent</button>
+      <button class="tf-cta" onclick="openPanel('agent-form')" data-i18n="cta_agent_btn">Register as an agent</button>
+
+      <div class="tf-art" style="flex-direction:column">
+        <div class="tf-notif-stack">
+          <div class="tf-card tf-notif">
+            <div class="tf-badge">t</div>
+            <div><strong>00.house</strong> <span class="tf-time">1m ago</span><br>New tenant application from Michael K.</div>
+          </div>
+          <div class="tf-card tf-notif">
+            <div class="tf-badge">t</div>
+            <div><strong>00.house</strong> <span class="tf-time">1h ago</span><br>Stephanie R. completed her Tenant Pass!</div>
+          </div>
+          <div class="tf-card tf-notif">
+            <div class="tf-badge">t</div>
+            <div><strong>00.house</strong> <span class="tf-time">1h ago</span><br>Your listing was viewed 12 times today.</div>
+          </div>
+        </div>
+
+        <div class="tf-shadow" style="width:52%"></div>
+        <img class="tf-photo" src="mum.jpeg" style="border-radius:24px 24px 0 0;width:100%;max-width:360px;height:250px" alt="Agent managing listings from her laptop">
+      </div>
     </div>
   </div>
 
@@ -350,9 +398,9 @@ const i18n = {
     svc1_title:'Interior Design', svc1_sub:'Independent design partners to help you settle in.',
     svc2_title:'Tenant Screening', svc2_sub:'Reference and right-to-rent checks via third parties.',
     svc3_title:'Landlord Insurance', svc3_sub:'Cover arranged through independent insurers.', open:'Open',
-    app_title:'Tenant Application Card', app_sub:'Required to apply. Secure your properties with our tenant card.',
+    app_title:'Tenant Pass', app_sub:'Required to secure your chosen house viewing.',
     app_step1:'Profile registered', app_step2:'Preferences saved', app_step3:'Screening & references (via agent)', app_step4:'Viewing booked',
-    app_progress:'2 of 4 steps complete — the rest happens with your chosen agent', app_cta:'Continue application',
+    app_progress:'2 of 4 steps complete', app_cta:'Continue application',
     cta_tenant_title:'Register as a tenant', cta_tenant_sub:"Tell us what you're looking for and get matched with agents and landlords who have relevant open houses.", cta_tenant_btn:'Register as a tenant',
     cta_agent_title:'Register as an agent or landlord', cta_agent_sub:'List your open houses on 00.house and reach verified, ready-to-view tenants across your area.', cta_agent_btn:'Register as an agent',
     legal_strip_link:'Read the full disclaimer',
@@ -371,9 +419,9 @@ const i18n = {
     svc1_title:'التصميم الداخلي', svc1_sub:'شركاء تصميم مستقلون لمساعدتك على الاستقرار.',
     svc2_title:'فحص المستأجرين', svc2_sub:'التحقق من المراجع وحق الإيجار عبر أطراف ثالثة.',
     svc3_title:'تأمين الملاك', svc3_sub:'تغطية تُرتّب من خلال شركات تأمين مستقلة.', open:'فتح',
-    app_title:'بطاقة طلب المستأجر', app_sub:'مطلوبة للتقديم. أمّن عقارك ببطاقة المستأجر الخاصة بنا.',
+    app_title:'بطاقة المستأجر', app_sub:'مطلوبة لتأمين معاينة المنزل الذي اخترته.',
     app_step1:'تم تسجيل الملف الشخصي', app_step2:'تم حفظ التفضيلات', app_step3:'الفحص والمراجع (عبر الوكيل)', app_step4:'تم حجز المعاينة',
-    app_progress:'اكتملت خطوتان من أصل 4 — البقية تتم مع الوكيل الذي تختاره', app_cta:'متابعة الطلب',
+    app_progress:'اكتملت خطوتان من أصل 4', app_cta:'متابعة الطلب',
     cta_tenant_title:'سجّل كمستأجر', cta_tenant_sub:'أخبرنا بما تبحث عنه وسنطابقك مع وكلاء وملاك لديهم بيوت مفتوحة مناسبة.', cta_tenant_btn:'سجّل كمستأجر',
     cta_agent_title:'سجّل كوكيل أو مالك عقار', cta_agent_sub:'أدرج بيوتك المفتوحة على 00.house وتواصل مع مستأجرين موثوقين وجاهزين للمعاينة.', cta_agent_btn:'سجّل كوكيل',
     legal_strip_link:'اقرأ إخلاء المسؤولية الكامل',
