@@ -271,47 +271,20 @@ footer a:hover{color:var(--black)}
 </section>
 
 <section class="services-wrap">
-  <div class="services">
-    <div class="card">
-      <span class="num">[1]</span>
-      <div style="font-size:20px;">🎨</div>
-      <div><strong data-i18n="svc1_title">Interior Design</strong><div style="font-size:12.5px;color:var(--muted)" data-i18n="svc1_sub">Independent design partners to help you settle in.</div></div>
-      <div style="margin-left:auto"><button onclick="openPanel('interior')" data-i18n="open">Open</button></div>
-    </div>
-    <div class="card">
-      <span class="num">[2]</span>
-      <div style="font-size:20px;">🧾</div>
-      <div><strong data-i18n="svc2_title">Tenant Screening</strong><div style="font-size:12.5px;color:var(--muted)" data-i18n="svc2_sub">Reference and right-to-rent checks via third parties.</div></div>
-      <div style="margin-left:auto"><button onclick="openPanel('screening')" data-i18n="open">Open</button></div>
-    </div>
-    <div class="card">
-      <span class="num">[3]</span>
-      <div style="font-size:20px;">🛡️</div>
-      <div><strong data-i18n="svc3_title">Landlord Insurance</strong><div style="font-size:12.5px;color:var(--muted)" data-i18n="svc3_sub">Cover arranged through independent insurers.</div></div>
-      <div style="margin-left:auto"><button onclick="openPanel('insurance')" data-i18n="open">Open</button></div>
-    </div>
-  </div>
-
-  <div class="app-card">
-    <svg class="rose" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="#fff"/></svg>
-    <h3 data-i18n="app_title">Tenant Pass</h3>
-    <p data-i18n="app_sub" style="color:rgba(255,255,255,0.85)">Required to apply. Secure your properties with our tenant card.</p>
-    <div class="app-check">
-      <div class="item"><span class="box done">✓</span><span data-i18n="app_step1">Profile registered</span></div>
-      <div class="item"><span class="box done">✓</span><span data-i18n="app_step2">Preferences saved</span></div>
-      <div class="item"><span class="box">3</span><span data-i18n="app_step3">Screening &amp; references (via agent)</span></div>
-      <div class="item"><span class="box">4</span><span data-i18n="app_step4">Viewing booked</span></div>
-    </div>
-    <div class="progress-track"><div class="progress-fill"></div></div>
-    <div class="progress-label" data-i18n="app_progress">2 of 4 steps complete — the rest happens with your chosen agent</div>
-    <button style="margin-top:14px;background:#fff;color:var(--accent);border:0;padding:9px 14px;border-radius:8px;cursor:pointer;font-weight:600;font-size:13px" onclick="openPanel('tenant-form')" data-i18n="app_cta">Continue application</button>
-  </div>
-
   <div class="cta-row">
-    <div class="cta-card tenant">
-      <h3 data-i18n="cta_tenant_title" style="color:#fff">Register as a tenant</h3>
-      <p data-i18n="cta_tenant_sub">Tell us what you're looking for and get matched with agents and landlords who have relevant open houses.</p>
-      <button onclick="openPanel('tenant-form')" data-i18n="cta_tenant_btn">Register as a tenant</button>
+    <div class="cta-card tenant" style="position:relative;overflow:hidden">
+      <svg class="rose" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="#fff"/></svg>
+      <h3 data-i18n="app_title" style="color:#fff">Tenant Pass</h3>
+      <p data-i18n="app_sub" style="color:rgba(255,255,255,0.85)">Required to apply. Secure your properties with our tenant card.</p>
+      <div class="app-check">
+        <div class="item"><span class="box done">✓</span><span data-i18n="app_step1">Profile registered</span></div>
+        <div class="item"><span class="box done">✓</span><span data-i18n="app_step2">Preferences saved</span></div>
+        <div class="item"><span class="box">3</span><span data-i18n="app_step3">Screening &amp; references (via agent)</span></div>
+        <div class="item"><span class="box">4</span><span data-i18n="app_step4">Viewing booked</span></div>
+      </div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+      <div class="progress-label" data-i18n="app_progress">2 of 4 steps complete — the rest happens with your chosen agent</div>
+      <button style="margin-top:14px;background:#fff;color:var(--accent);border:0;padding:9px 14px;border-radius:8px;cursor:pointer;font-weight:600;font-size:13px" onclick="openPanel('tenant-form')" data-i18n="app_cta">Continue application</button>
     </div>
     <div class="cta-card agent">
       <h3 data-i18n="cta_agent_title" style="color:#fff">Register as an agent or landlord</h3>
