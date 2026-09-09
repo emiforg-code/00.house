@@ -210,11 +210,6 @@ footer a:hover{color:var(--black)}
     <form class="hero-search" id="heroSearchForm">
       <select id="hero-country" aria-label="Country">
         <option value="uk" selected>United Kingdom</option>
-        <option value="usa">United States</option>
-        <option value="france">France</option>
-        <option value="germany">Germany</option>
-        <option value="uae">United Arab Emirates</option>
-        <option value="canada">Canada</option>
         <option value="other">Other</option>
       </select>
       <input type="text" id="heroSearchInput" list="hero-city-list" autocomplete="off" data-i18n-placeholder="hero_search_ph" placeholder="Search by city or postcode">
@@ -225,26 +220,10 @@ footer a:hover{color:var(--black)}
   </div>
 </section>
 
-<!-- ============ EXPLORE PROPERTIES PANEL ============ -->
-<section class="explore-wrap" id="exploreSection">
-  <div class="explore-head">
-    <div>
-      <span class="eyebrow" data-i18n="explore_eyebrow">Explore</span>
-      <h2 data-i18n="explore_title">Explore Properties</h2>
-    </div>
-  </div>
-
-  <div class="explore-actions">
-    <button class="filled" onclick="document.getElementById('inAreaSection').scrollIntoView({behavior:'smooth'})" data-i18n="btn_explore_all">Explore all</button>
-    <button onclick="openPanel('register-choice')" data-i18n="btn_find_home">Find your home</button>
-    <button onclick="openPanel('account')" data-i18n="btn_my_account">My account</button>
-  </div>
-</section>
-
 <!-- ============ IN THIS AREA ============ -->
 <section class="inarea-wrap" id="inAreaSection">
   <div class="inarea-head">
-    <h3 id="inAreaTitle">In This Area</h3>
+    <h3 id="inAreaTitle">Explore Properties</h3>
     <div class="inarea-dropdown">
       <button class="inarea-filter-btn" id="inAreaDropdownBtn" onclick="toggleInAreaMenu()" aria-label="Toggle Markers Filter" title="Toggle Markers Filter">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="1.8" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><circle cx="9" cy="6" r="2" fill="#0a0a0a" stroke="none"/><line x1="4" y1="12" x2="20" y2="12"/><circle cx="15" cy="12" r="2" fill="#0a0a0a" stroke="none"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="11" cy="18" r="2" fill="#0a0a0a" stroke="none"/></svg>
