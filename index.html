@@ -6,26 +6,35 @@
 <meta name="yandex-verification" content="d89c4601e49a553e" />
 <title>Are you looking for a house?</title>
   <script type="application/ld+json"> { "@context": "https://schema.org", "@type": "WebSite", "url": "https://00.house", "name": "00.house", "description": "00.house is a property listings and open-house scheduling portal connecting tenants with agents and landlords. ", "publisher": { "@type": "Organization", "name": "00.house Ltd", "url": "https://00.house" }, "potentialAction": { "@type": "SearchAction", "target": "https://00.house/?s={search_term_string}", "query-input": "required name=search_term_string" } } </script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
   --black:#0a0a0a; --muted:#6b6b6b; --white:#fff;
-  --accent:#c57b83;           /* dusty rose */
-  --racing:#1f4632;           /* British racing green */
-  --brass:#b98a3f;            /* brass gold */
+  --accent:#c57b83;           /* dusty rose (kept for legal/form accents) */
+  --racing:#1f4632;           /* British racing green — agent panel deep */
+  --brass:#b98a3f;            /* brass gold — single bright accent */
   --cream:#f6f2ea;
   --line:rgba(0,0,0,0.08);
   --ok:#2f6b4f;
+  --trust-blue-deep:#0F3D5C;  /* tenant panel deep */
+  --trust-blue-tint:#DCEBF3;  /* tenant panel bg */
+  --racing-green-tint:#E1EFE6;/* agent panel bg */
 }
 *{box-sizing:border-box}
-body{font-family:Inter,system-ui,-apple-system,Helvetica,Arial,sans-serif;margin:0;color:var(--black);background:var(--white)}
-h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:500;margin:0 0 8px}
-h4{font-weight:600;margin:0 0 8px;font-family:Inter,sans-serif}
+body{font-family:'Jost',system-ui,-apple-system,Helvetica,Arial,sans-serif;margin:0;color:var(--black);background:var(--white)}
+h1,h2,h3{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;margin:0 0 8px}
+h4{font-weight:600;margin:0 0 8px;font-family:'Jost',sans-serif}
 p{line-height:1.55;color:var(--muted)}
 a{color:inherit}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-[dir="rtl"] body{font-family:'Segoe UI',Tahoma,Inter,sans-serif}
+[dir="rtl"] body{font-family:'Segoe UI',Tahoma,'Jost',sans-serif}
+[dir="rtl"] h1,[dir="rtl"] h2,[dir="rtl"] h3{font-style:normal;font-family:'Segoe UI',Tahoma,'Jost',serif}
+
+/* Generic label / stat-number utilities (Jost, geometric, wide tracking) */
+.label{letter-spacing:0.15em;text-transform:uppercase;font-size:0.75rem;font-weight:500;font-family:'Jost',sans-serif}
+.stat-number{font-weight:300;font-size:3rem;font-family:'Jost',sans-serif}
 
 /* ============ NAV ============ */
 nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:rgba(255,255,255,0.97);z-index:200;border-bottom:1px solid var(--line);backdrop-filter:blur(6px)}
@@ -55,11 +64,11 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 /* ============ EXPLORE PANEL ============ */
 .explore-wrap{max-width:1200px;margin:0 auto;padding:60px 24px}
 .explore-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}
-.eyebrow{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--brass);font-weight:700;margin-bottom:6px;display:block}
+.eyebrow{font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--brass);font-weight:500;margin-bottom:6px;display:block;font-family:'Jost',sans-serif}
 .highlights{display:flex;gap:16px;margin-top:22px;flex-wrap:wrap}
 .highlight-card{flex:1 1 240px;height:200px;border-radius:12px;position:relative;overflow:hidden;border:1px solid var(--line);background-size:cover;background-position:center;transition:transform 0.25s}
 .highlight-card:hover{transform:translateY(-3px)}
-.highlight-card .cap{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;font-size:14px;font-weight:600;color:#fff;background:linear-gradient(0deg,rgba(0,0,0,0.62),rgba(0,0,0,0.05) 65%,transparent)}
+.highlight-card .cap{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;font-size:14px;font-weight:600;color:#fff;background:linear-gradient(0deg,rgba(0,0,0,0.62),rgba(0,0,0,0.05) 65%,transparent);font-family:'Jost',sans-serif}
 .explore-actions{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap}
 .explore-actions button{border:1px solid var(--black);background:#fff;padding:11px 18px;border-radius:3px;font-family:inherit;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;font-weight:600;cursor:pointer}
 .explore-actions button.filled{background:var(--black);color:#fff}
@@ -72,45 +81,64 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .card .num{position:absolute;top:10px;right:12px;font-size:10px;color:#bbb;font-weight:700}
 .card button{border:0;background:var(--accent);color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;white-space:nowrap}
 
-/* ============ CTA ROW ============ */
-.split-wrap{max-width:1200px;margin:8px auto 0;padding:10px 24px 0}
-.split-panels{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+/* ============ CTA ROW / SPLIT PANEL — trust-blue tenant / racing-green agent ============ */
+.split-wrap{max-width:1200px;margin:8px auto 0;padding:40px 24px 0}
+.split-panels{display:grid;grid-template-columns:1fr 1fr;gap:24px}
 @media(max-width:860px){.split-panels{grid-template-columns:1fr}}
-.panel{border-radius:26px;padding:44px 40px 40px;position:relative;overflow:hidden;display:flex;flex-direction:column}
-.panel.tenant-panel{background:linear-gradient(165deg,#fbedef,#f3dade)}
-.panel.agent-panel{background:linear-gradient(165deg,#e9f0ea,#dbe6de)}
-.panel-copy{max-width:440px}
-.panel-copy h2{font-size:clamp(24px,3vw,32px);line-height:1.15;margin-bottom:14px;color:var(--black)}
-.panel-copy p{font-size:15px;color:#3f3f3f;margin-bottom:24px}
+
+.panel{border-radius:28px;padding:52px 44px 0;position:relative;overflow:hidden;display:flex;flex-direction:column;min-height:600px}
+.panel.tenant-panel{background:var(--trust-blue-tint)}
+.panel.agent-panel{background:var(--racing-green-tint)}
+
+.panel-copy{max-width:440px;position:relative;z-index:2}
+.panel-copy h2{font-size:clamp(24px,3vw,32px);line-height:1.15;margin-bottom:14px}
+.tenant-panel .panel-copy h2{color:var(--trust-blue-deep)}
+.agent-panel .panel-copy h2{color:var(--racing)}
+.panel-copy p{font-size:15px;color:#3f3f3f;margin-bottom:24px;font-family:'Jost',sans-serif}
 .panel-copy p strong{color:var(--black)}
-.panel-btn{border:0;padding:14px 28px;border-radius:999px;font-weight:700;font-size:13.5px;letter-spacing:0.01em;cursor:pointer;box-shadow:0 12px 26px rgba(0,0,0,0.14)}
-.tenant-btn{background:var(--accent);color:#fff}
-.tenant-btn:hover{background:#b1616c}
-.agent-btn{background:var(--racing);color:#fff}
+
+.panel-btn{border:0;padding:14px 28px;border-radius:999px;font-weight:600;font-size:13.5px;letter-spacing:0.03em;cursor:pointer;box-shadow:0 12px 26px rgba(0,0,0,0.14);color:#fff;font-family:'Jost',sans-serif;transition:transform .15s ease}
+.panel-btn:hover{transform:translateY(-1px)}
+.tenant-btn{background:var(--trust-blue-deep)}
+.tenant-btn:hover{background:#0b3049}
+.agent-btn{background:var(--racing)}
 .agent-btn:hover{background:#153322}
-.panel-visual{position:relative;margin-top:30px;flex:1;min-height:260px}
-.panel-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:20px;display:block}
-.panel-visual .mock-card{position:absolute;left:-8px;bottom:-16px;z-index:2;width:260px}
-.mock-card{background:#fff;border-radius:16px;box-shadow:0 22px 50px rgba(0,0,0,0.18);padding:18px;max-width:320px}
-.mock-card-head{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:14px;margin-bottom:12px;color:var(--black);font-family:Fraunces,Georgia,serif}
-.mock-badge{background:var(--cream);color:var(--brass);font-size:11px;padding:3px 9px;border-radius:999px;font-weight:700}
+
+.panel-visual{position:relative;margin-top:30px;flex:1;min-height:300px}
+.panel-photo{position:absolute;bottom:0;right:-12px;height:92%;width:auto;max-width:78%;object-fit:cover;object-position:top;border-radius:20px 20px 0 0;display:block}
+
+/* Tenant: floating checklist card bottom-left, verified chip top-right */
+.mock-card{background:#fff;border-radius:16px;box-shadow:0 22px 50px rgba(15,61,92,0.22);padding:20px;max-width:320px}
+.panel-visual .mock-card{position:absolute;left:0;bottom:36px;z-index:3;width:280px}
+.mock-card-head{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:14px;margin-bottom:12px;color:var(--trust-blue-deep);font-family:'Jost',sans-serif}
+.mock-badge{background:var(--trust-blue-tint);color:var(--trust-blue-deep);font-size:11px;padding:3px 9px;border-radius:999px;font-weight:700}
 .mock-card .app-check .item{color:var(--black);font-size:12px}
-.mock-card .app-check .box{border-color:rgba(0,0,0,0.22);color:var(--black)}
-.mock-card .app-check .box.done{background:var(--accent);color:#fff;border-color:var(--accent)}
-.mock-card .progress-track.light{background:rgba(0,0,0,0.08)}
-.mock-card .progress-track.light .progress-fill{background:var(--accent)}
+.mock-card .app-check .box{border-color:rgba(0,0,0,0.18);color:#8CA0AA;background:#E7EEF2}
+.mock-card .app-check .box.done{background:var(--brass);color:#fff;border-color:var(--brass)}
+.mock-card .progress-track.light{background:rgba(15,61,92,0.10)}
+.mock-card .progress-track.light .progress-fill{background:var(--brass)}
 .mock-card .progress-label{color:var(--muted);font-size:10.5px}
-.mock-chip{background:#fff;border-radius:14px;box-shadow:0 16px 34px rgba(0,0,0,0.18);padding:11px 13px;display:flex;gap:9px;align-items:flex-start;font-size:11.5px;width:230px}
-.panel-visual .mock-chip.float{position:absolute;top:-14px;right:-10px;z-index:2}
-.chip-ico{width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:0 0 24px}
+
+.mock-chip{background:#fff;border-radius:14px;box-shadow:0 16px 34px rgba(15,61,92,0.22);padding:11px 13px;display:flex;gap:9px;align-items:flex-start;font-size:11.5px;width:230px}
+.panel-visual .mock-chip.float{position:absolute;top:18px;right:-6px;z-index:3}
+.chip-ico{width:24px;height:24px;border-radius:50%;background:var(--brass);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:0 0 24px}
+
+/* Agent: stacked notification chips top-right */
 .chip-logo{width:24px;height:24px;border-radius:8px;background:var(--racing);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex:0 0 24px}
 .chip-time{color:var(--muted);font-weight:400;font-size:10.5px;float:right}
-.panel-visual .notif-float{position:absolute;z-index:2;width:230px}
-.panel-visual .notif-float.n1{top:-14px;left:-10px}
-.panel-visual .notif-float.n2{top:78px;right:-16px}
-.panel-visual .notif-float.n3{bottom:-14px;left:20px}
+.panel-visual .notif-float{position:absolute;z-index:3;width:230px;box-shadow:0 14px 30px rgba(11,61,46,0.22)}
+.panel-visual .notif-float.n1{top:10px;right:-6px}
+.panel-visual .notif-float.n2{top:100px;right:-6px}
+.panel-visual .notif-float.n3{top:190px;right:-6px}
 
-/* ============ TENANT PASS ============ */
+@media(max-width:860px){
+  .panel{min-height:auto;padding:40px 28px 0}
+  .panel-photo{position:static;width:100%;max-width:100%;height:220px;border-radius:16px;margin-top:16px}
+  .panel-visual .mock-card,.panel-visual .mock-chip.float,.panel-visual .notif-float{position:static;width:100%;margin-top:12px}
+  .panel-visual{min-height:0}
+}
+
+/* ============ TENANT PASS (side-panel form widget, unrelated to split panel) ============ */
 .app-check{display:flex;flex-direction:column;gap:6px;margin:14px 0}
 .app-check .item{display:flex;align-items:center;gap:8px;font-size:13px}
 .app-check .box{width:16px;height:16px;border:1.5px solid rgba(255,255,255,0.8);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;flex:0 0 16px}
@@ -178,7 +206,7 @@ textarea{resize:vertical;min-height:70px}
 .inarea-map-wrapper{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,0.06)}
 #inAreaMap{width:100%;height:520px;display:block;background:#f5f5f5}
 .gm-style .gm-style-iw-c{border-radius:10px}
-.gm-style .gm-style-iw-d{font-family:Inter,sans-serif;font-size:13px}
+.gm-style .gm-style-iw-d{font-family:'Jost',sans-serif;font-size:13px}
 
 footer{padding:40px 20px;color:var(--muted);border-top:1px solid var(--line);margin-top:20px}
 footer .foot-grid{display:flex;gap:56px;flex-wrap:wrap;max-width:1200px;margin:0 auto}
