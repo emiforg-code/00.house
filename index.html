@@ -88,25 +88,27 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .tenant-btn:hover{background:#b1616c}
 .agent-btn{background:var(--racing);color:#fff}
 .agent-btn:hover{background:#153322}
-.panel-mock{margin-top:34px;position:relative;flex:1}
-.mock-card{background:#fff;border-radius:16px;box-shadow:0 22px 50px rgba(0,0,0,0.14);padding:20px;max-width:320px}
+.panel-visual{position:relative;margin-top:30px;flex:1;min-height:260px}
+.panel-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:20px;display:block}
+.panel-visual .mock-card{position:absolute;left:-8px;bottom:-16px;z-index:2;width:260px}
+.mock-card{background:#fff;border-radius:16px;box-shadow:0 22px 50px rgba(0,0,0,0.18);padding:18px;max-width:320px}
 .mock-card-head{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:14px;margin-bottom:12px;color:var(--black);font-family:Fraunces,Georgia,serif}
 .mock-badge{background:var(--cream);color:var(--brass);font-size:11px;padding:3px 9px;border-radius:999px;font-weight:700}
-.mock-card .app-check .item{color:var(--black);font-size:12.5px}
+.mock-card .app-check .item{color:var(--black);font-size:12px}
 .mock-card .app-check .box{border-color:rgba(0,0,0,0.22);color:var(--black)}
 .mock-card .app-check .box.done{background:var(--accent);color:#fff;border-color:var(--accent)}
 .mock-card .progress-track.light{background:rgba(0,0,0,0.08)}
 .mock-card .progress-track.light .progress-fill{background:var(--accent)}
-.mock-card .progress-label{color:var(--muted);font-size:11px}
-.mock-chip{background:#fff;border-radius:14px;box-shadow:0 16px 34px rgba(0,0,0,0.14);padding:12px 14px;display:flex;gap:10px;align-items:flex-start;font-size:12px;max-width:270px}
-.mock-chip.float{position:absolute;top:-18px;right:0}
-.chip-ico{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;flex:0 0 26px}
-.chip-logo{width:26px;height:26px;border-radius:8px;background:var(--racing);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;flex:0 0 26px}
+.mock-card .progress-label{color:var(--muted);font-size:10.5px}
+.mock-chip{background:#fff;border-radius:14px;box-shadow:0 16px 34px rgba(0,0,0,0.18);padding:11px 13px;display:flex;gap:9px;align-items:flex-start;font-size:11.5px;width:230px}
+.panel-visual .mock-chip.float{position:absolute;top:-14px;right:-10px;z-index:2}
+.chip-ico{width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:0 0 24px}
+.chip-logo{width:24px;height:24px;border-radius:8px;background:var(--racing);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex:0 0 24px}
 .chip-time{color:var(--muted);font-weight:400;font-size:10.5px;float:right}
-.notif-stack{display:flex;flex-direction:column;gap:14px}
-.notif-stack .mock-chip:nth-child(1){margin-left:0}
-.notif-stack .mock-chip:nth-child(2){margin-left:34px}
-.notif-stack .mock-chip:nth-child(3){margin-left:0}
+.panel-visual .notif-float{position:absolute;z-index:2;width:230px}
+.panel-visual .notif-float.n1{top:-14px;left:-10px}
+.panel-visual .notif-float.n2{top:78px;right:-16px}
+.panel-visual .notif-float.n3{bottom:-14px;left:20px}
 
 /* ============ TENANT PASS ============ */
 .app-check{display:flex;flex-direction:column;gap:6px;margin:14px 0}
@@ -280,16 +282,16 @@ footer a:hover{color:var(--black)}
   </div>
 
   <div class="highlights">
-    <div class="highlight-card" style="background-image:url('./images/independent-villas.jpg')">
+    <div class="highlight-card" style="background-image:url('.independent-villas.jpg')">
       <div class="cap" data-i18n="hl_1">Independent villas</div>
     </div>
-    <div class="highlight-card" style="background-image:url('./images/townhouses.jpg')">
+    <div class="highlight-card" style="background-image:url('.townhouses.jpg')">
       <div class="cap" data-i18n="hl_2">Townhouses</div>
     </div>
-    <div class="highlight-card" style="background-image:url('./images/with-garden-terrace.jpg')">
+    <div class="highlight-card" style="background-image:url('.with-garden-terrace.jpg')">
       <div class="cap" data-i18n="hl_3">With garden or terrace</div>
     </div>
-    <div class="highlight-card" style="background-image:url('./images/new-build.jpg')">
+    <div class="highlight-card" style="background-image:url('.new-build.jpg')">
       <div class="cap" data-i18n="hl_4">New build</div>
     </div>
   </div>
@@ -304,7 +306,8 @@ footer a:hover{color:var(--black)}
         <p data-i18n="panel_tenant_p">Tell us what you're looking for and get matched with agents and landlords who have relevant open houses. <strong data-i18n="panel_tenant_bold">Get your Tenant Pass in minutes.</strong></p>
         <button class="panel-btn tenant-btn" onclick="openPanel('tenant-form')" data-i18n="cta_tenant_btn">Register as a tenant</button>
       </div>
-      <div class="panel-mock">
+      <div class="panel-visual">
+        <img class="panel-photo" src="./images/she.jpg" alt="">
         <div class="mock-card">
           <div class="mock-card-head"><span data-i18n="app_title">Tenant Pass</span><span class="mock-badge" data-i18n="mock_badge">2 of 4</span></div>
           <div class="app-check">
@@ -327,22 +330,21 @@ footer a:hover{color:var(--black)}
       <div class="panel-copy">
         <h2 data-i18n="panel_agent_h">List once, reach ready-to-view tenants</h2>
         <p data-i18n="panel_agent_p">List your open houses on 00.house and reach verified, ready-to-view tenants across your area. <strong data-i18n="panel_agent_bold">No commission on enquiries.</strong></p>
-        <button class="panel-btn agent-btn" onclick="openPanel('agent-form')" data-i18n="cta_agent_btn">Register as an agent</button>
+        <button class="panel-btn agent-btn" onclick="openPanel('agent-form')" data-i18n="cta_agent_btn">Quick Sign-Up</button>
       </div>
-      <div class="panel-mock">
-        <div class="notif-stack">
-          <div class="mock-chip">
-            <div class="chip-logo">00</div>
-            <div><strong>00.house</strong><span class="chip-time" data-i18n="notif1_time">1m ago</span><br><span data-i18n="notif1_text">New enquiry from Sarah M.</span></div>
-          </div>
-          <div class="mock-chip">
-            <div class="chip-logo">00</div>
-            <div><strong>00.house</strong><span class="chip-time" data-i18n="notif2_time">1h ago</span><br><span data-i18n="notif2_text">Viewing booked — 24 Ashford Rd</span></div>
-          </div>
-          <div class="mock-chip">
-            <div class="chip-logo">00</div>
-            <div><strong>00.house</strong><span class="chip-time" data-i18n="notif3_time">1h ago</span><br><span data-i18n="notif3_text">Your listing just went live</span></div>
-          </div>
+      <div class="panel-visual">
+        <img class="panel-photo" src="./images/he.jpg" alt="">
+        <div class="mock-chip notif-float n1">
+          <div class="chip-logo"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V10"/><path d="M9.5 20.5V14h5v6.5"/></svg></div>
+          <div><strong>00.house</strong><span class="chip-time" data-i18n="notif1_time">1m ago</span><br><span data-i18n="notif1_text">New enquiry from Sarah M.</span></div>
+        </div>
+        <div class="mock-chip notif-float n2">
+          <div class="chip-logo"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V10"/><path d="M9.5 20.5V14h5v6.5"/></svg></div>
+          <div><strong>00.house</strong><span class="chip-time" data-i18n="notif2_time">1h ago</span><br><span data-i18n="notif2_text">Viewing booked — 24 Ashford Rd</span></div>
+        </div>
+        <div class="mock-chip notif-float n3">
+          <div class="chip-logo"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V10"/><path d="M9.5 20.5V14h5v6.5"/></svg></div>
+          <div><strong>00.house</strong><span class="chip-time" data-i18n="notif3_time">1h ago</span><br><span data-i18n="notif3_text">Your listing just went live</span></div>
         </div>
       </div>
     </div>
@@ -412,7 +414,7 @@ const i18n = {
     panel_tenant_h:'Find your next home, matched to you', panel_tenant_p:'Tell us what you\u2019re looking for and get matched with agents and landlords who have relevant open houses.', panel_tenant_bold:'Get your Tenant Pass in minutes.',
     cta_tenant_btn:'Register as a tenant',
     panel_agent_h:'List once, reach ready-to-view tenants', panel_agent_p:'List your open houses on 00.house and reach verified, ready-to-view tenants across your area.', panel_agent_bold:'No commission on enquiries.',
-    cta_agent_btn:'Register as an agent',
+    cta_agent_btn:'Quick Sign-Up',
     notif1_time:'1m ago', notif1_text:'New enquiry from Sarah M.',
     notif2_time:'1h ago', notif2_text:'Viewing booked — 24 Ashford Rd',
     notif3_time:'1h ago', notif3_text:'Your listing just went live',
@@ -436,7 +438,7 @@ const i18n = {
     panel_tenant_h:'اعثر على منزلك القادم، مطابقًا لك', panel_tenant_p:'أخبرنا بما تبحث عنه وسنطابقك مع وكلاء وملاك لديهم بيوت مفتوحة مناسبة.', panel_tenant_bold:'احصل على بطاقة المستأجر خلال دقائق.',
     cta_tenant_btn:'سجّل كمستأجر',
     panel_agent_h:'أدرج مرة واحدة وتواصل مع مستأجرين جاهزين للمعاينة', panel_agent_p:'أدرج بيوتك المفتوحة على 00.house وتواصل مع مستأجرين موثوقين وجاهزين للمعاينة.', panel_agent_bold:'بدون عمولة على الاستفسارات.',
-    cta_agent_btn:'سجّل كوكيل',
+    cta_agent_btn:'تسجيل سريع',
     notif1_time:'قبل دقيقة', notif1_text:'استفسار جديد من سارة م.',
     notif2_time:'قبل ساعة', notif2_text:'تم حجز معاينة — 24 أشفورد رود',
     notif3_time:'قبل ساعة', notif3_text:'تم نشر إعلانك للتو',
