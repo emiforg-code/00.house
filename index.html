@@ -86,7 +86,7 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .split-panels{display:grid;grid-template-columns:1fr 1fr;gap:24px}
 @media(max-width:860px){.split-panels{grid-template-columns:1fr}}
 
-.panel{border-radius:28px;padding:52px 44px 0;position:relative;overflow:hidden;display:flex;flex-direction:column;min-height:600px}
+.panel{border-radius:28px;padding:60px 48px 0;position:relative;overflow:hidden;display:flex;flex-direction:column;min-height:760px}
 .panel.tenant-panel{background:var(--trust-blue-tint)}
 .panel.agent-panel{background:var(--racing-green-tint)}
 
@@ -104,7 +104,7 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .agent-btn{background:var(--racing)}
 .agent-btn:hover{background:#153322}
 
-.panel-visual{position:relative;margin-top:30px;flex:1;min-height:300px}
+.panel-visual{position:relative;margin-top:34px;flex:1;min-height:420px}
 .panel-photo{position:absolute;bottom:0;right:-12px;height:92%;width:auto;max-width:78%;object-fit:cover;object-position:top;border-radius:20px 20px 0 0;display:block}
 
 /* Tenant: floating checklist card bottom-left, verified chip top-right */
@@ -120,7 +120,7 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .mock-card .progress-label{color:var(--muted);font-size:10.5px}
 
 .mock-chip{background:#fff;border-radius:14px;box-shadow:0 16px 34px rgba(15,61,92,0.22);padding:11px 13px;display:flex;gap:9px;align-items:flex-start;font-size:11.5px;width:230px}
-.panel-visual .mock-chip.float{position:absolute;top:18px;right:-6px;z-index:3}
+.panel-visual .mock-chip.float{position:absolute;top:-8px;left:110px;z-index:3}
 .chip-ico{width:24px;height:24px;border-radius:50%;background:var(--brass);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:0 0 24px}
 
 /* Agent: stacked notification chips top-right */
@@ -330,7 +330,7 @@ footer a:hover{color:var(--black)}
 
     <div class="panel tenant-panel">
       <div class="panel-copy">
-        <h2 data-i18n="panel_tenant_h">Find your next home, matched to you</h2>
+        <h2 data-i18n="panel_tenant_h">Find your next home with trusted advisors</h2>
         <p data-i18n="panel_tenant_p">Tell us what you're looking for and get matched with agents and landlords who have relevant open houses. <strong data-i18n="panel_tenant_bold">Get your Tenant Pass in minutes.</strong></p>
         <button class="panel-btn tenant-btn" onclick="openPanel('tenant-form')" data-i18n="cta_tenant_btn">Register as a tenant</button>
       </div>
@@ -341,8 +341,8 @@ footer a:hover{color:var(--black)}
           <div class="app-check">
             <div class="item"><span class="box done">✓</span><span data-i18n="app_step1">Profile registered</span></div>
             <div class="item"><span class="box done">✓</span><span data-i18n="app_step2">Preferences saved</span></div>
-            <div class="item"><span class="box">3</span><span data-i18n="app_step3">Screening &amp; references (via agent)</span></div>
-            <div class="item"><span class="box">4</span><span data-i18n="app_step4">Viewing booked</span></div>
+            <div class="item"><span class="box">3</span><span data-i18n="app_step3">Viewing booked</span></div>
+            <div class="item"><span class="box">4</span><span data-i18n="app_step4">Screening &amp; references (via agent)</span></div>
           </div>
           <div class="progress-track light"><div class="progress-fill"></div></div>
           <div class="progress-label" data-i18n="app_progress">2 of 4 steps complete — the rest happens with your chosen agent</div>
@@ -361,10 +361,10 @@ footer a:hover{color:var(--black)}
         <button class="panel-btn agent-btn" onclick="openPanel('agent-form')" data-i18n="cta_agent_btn">Quick Sign-Up</button>
       </div>
       <div class="panel-visual">
-        <img class="panel-photo" src="./she5.jpeg" alt="List your houses">
+        <img class="panel-photo" src="./she.jpeg" alt="List your houses">
         <div class="mock-chip notif-float n1">
           <div class="chip-logo"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V10"/><path d="M9.5 20.5V14h5v6.5"/></svg></div>
-          <div><strong>00.house</strong><span class="chip-time" data-i18n="notif1_time">1m ago</span><br><span data-i18n="notif1_text">New enquiry from Sarah M.</span></div>
+          <div><strong>00.house</strong><span class="chip-time" data-i18n="notif1_time">1m ago</span><br><span data-i18n="notif1_text">New enquiry from Adam M.</span></div>
         </div>
         <div class="mock-chip notif-float n2">
           <div class="chip-logo"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V10"/><path d="M9.5 20.5V14h5v6.5"/></svg></div>
@@ -414,7 +414,7 @@ footer a:hover{color:var(--black)}
     </div>
   </div>
   <div class="foot-legal-note">
-    00.house Ltd is a property listings and open-house scheduling portal registered in England &amp; Wales. We are not a licensed estate agent, letting agent, property manager, financial adviser or holder of client money. We do not collect rent, deposits, holding fees or any other payment on behalf of any party. All property information, availability, pricing and viewing arrangements are provided directly by independent third-party agents, landlords, developers and service providers, and have not been independently verified by 00.house. Users should independently verify all details and seek independent legal, financial and surveying advice before entering into any tenancy, purchase or related agreement. See our <a onclick="openPanel('legal','disclaimer')" style="display:inline;color:inherit;text-decoration:underline;cursor:pointer">full disclaimer</a> for details. This summary is provided for general guidance and is not legal advice; the underlying policies should be reviewed by a qualified solicitor before publication.
+    00.house is a brand operated by Q Investments International Ltd, a property listings and open-house scheduling portal. We are not a licensed estate agent, letting agent, property manager, financial adviser or holder of client money. We do not collect rent, deposits, holding fees or any other payment on behalf of any party. All property information, availability, pricing and viewing arrangements are provided directly by independent third-party agents, landlords, developers and service providers, and have not been independently verified by 00.house. Users should independently verify all details and seek independent legal, financial and surveying advice before entering into any tenancy, purchase or related agreement. See our <a onclick="openPanel('legal','disclaimer')" style="display:inline;color:inherit;text-decoration:underline;cursor:pointer">full disclaimer</a> for details. This summary is provided for general guidance and is not legal advice; the underlying policies should be reviewed by a qualified solicitor before publication.
   </div>
 </footer>
 
@@ -436,14 +436,14 @@ const i18n = {
     btn_explore_all:'Explore all', btn_find_home:'Find your home', btn_my_account:'My account',
     map_search_ph:'City, town, or UK postcode e.g. SW1A 1AA', map_note:'Listings are supplied and maintained by independent third-party agents and landlords.',
     app_title:'Tenant Pass', app_sub:'Required to apply. Secure your properties with our tenant card.',
-    app_step1:'Profile registered', app_step2:'Preferences saved', app_step3:'Screening & references (via agent)', app_step4:'Viewing booked',
+    app_step1:'Profile registered', app_step2:'Preferences saved', app_step3:'Viewing booked', app_step4:'Screening & references (via agent)',
     app_progress:'2 of 4 steps complete — the rest happens with your chosen agent', app_cta:'Continue application',
     mock_badge:'2 of 4', chip_tenant_title:'Profile verified', chip_tenant_sub:'Ready to apply',
-    panel_tenant_h:'Find your next home, matched to you', panel_tenant_p:'Tell us what you\u2019re looking for and get matched with agents and landlords who have relevant open houses.', panel_tenant_bold:'Get your Tenant Pass in minutes.',
+    panel_tenant_h:'Find your next home with trusted advisors', panel_tenant_p:'Tell us what you\u2019re looking for and get matched with agents and landlords who have relevant open houses.', panel_tenant_bold:'Get your Tenant Pass in minutes.',
     cta_tenant_btn:'Register as a tenant',
     panel_agent_h:'List once, reach ready-to-view tenants', panel_agent_p:'List your open houses on 00.house and reach verified, ready-to-view tenants across your area.', panel_agent_bold:'No commission on enquiries.',
     cta_agent_btn:'Quick Sign-Up',
-    notif1_time:'1m ago', notif1_text:'New enquiry from Sarah M.',
+    notif1_time:'1m ago', notif1_text:'New enquiry from Adam M.',
     notif2_time:'1h ago', notif2_text:'Viewing booked — 24 Ashford Rd',
     notif3_time:'1h ago', notif3_text:'Your listing just went live',
     legal_strip_link:'Read the full disclaimer',
@@ -460,14 +460,14 @@ const i18n = {
     btn_explore_all:'استكشف الكل', btn_find_home:'ابحث عن منزلك', btn_my_account:'حسابي',
     map_search_ph:'المدينة أو الرمز البريدي البريطاني', map_note:'يتم توفير الإعلانات وصيانتها من قبل وكلاء وملاك عقارات مستقلين من طرف ثالث.',
     app_title:'بطاقة المستأجر', app_sub:'مطلوبة للتقديم. أمّن عقارك ببطاقة المستأجر الخاصة بنا.',
-    app_step1:'تم تسجيل الملف الشخصي', app_step2:'تم حفظ التفضيلات', app_step3:'الفحص والمراجع (عبر الوكيل)', app_step4:'تم حجز المعاينة',
+    app_step1:'تم تسجيل الملف الشخصي', app_step2:'تم حفظ التفضيلات', app_step3:'تم حجز المعاينة', app_step4:'الفحص والمراجع (عبر الوكيل)',
     app_progress:'اكتملت خطوتان من أصل 4 — البقية تتم مع الوكيل الذي تختاره', app_cta:'متابعة الطلب',
     mock_badge:'2 من 4', chip_tenant_title:'تم التحقق من الملف الشخصي', chip_tenant_sub:'جاهز للتقديم',
-    panel_tenant_h:'اعثر على منزلك القادم، مطابقًا لك', panel_tenant_p:'أخبرنا بما تبحث عنه وسنطابقك مع وكلاء وملاك لديهم بيوت مفتوحة مناسبة.', panel_tenant_bold:'احصل على بطاقة المستأجر خلال دقائق.',
+    panel_tenant_h:'اعثر على منزلك القادم مع مستشارين موثوقين', panel_tenant_p:'أخبرنا بما تبحث عنه وسنطابقك مع وكلاء وملاك لديهم بيوت مفتوحة مناسبة.', panel_tenant_bold:'احصل على بطاقة المستأجر خلال دقائق.',
     cta_tenant_btn:'سجّل كمستأجر',
     panel_agent_h:'أدرج مرة واحدة وتواصل مع مستأجرين جاهزين للمعاينة', panel_agent_p:'أدرج بيوتك المفتوحة على 00.house وتواصل مع مستأجرين موثوقين وجاهزين للمعاينة.', panel_agent_bold:'بدون عمولة على الاستفسارات.',
     cta_agent_btn:'تسجيل سريع',
-    notif1_time:'قبل دقيقة', notif1_text:'استفسار جديد من سارة م.',
+    notif1_time:'قبل دقيقة', notif1_text:'استفسار جديد من آدم م.',
     notif2_time:'قبل ساعة', notif2_text:'تم حجز معاينة — 24 أشفورد رود',
     notif3_time:'قبل ساعة', notif3_text:'تم نشر إعلانك للتو',
     legal_strip_link:'اقرأ إخلاء المسؤولية الكامل',
@@ -614,24 +614,25 @@ function tenantFormHTML(){
     <h2>Tenant registration</h2>
     <p>Tell us what you're looking for. Agents and landlords with matching open houses will be able to contact you directly — 00.house does not charge tenants to register.</p>
     <form id="tenantForm" onsubmit="return handleTenantSubmit(event)">
+      <input type="hidden" name="_subject" value="New tenant registration — 00.house">
       <div class="form-row">
-        <div class="form-field"><label for="t-first">First name</label><input required type="text" id="t-first"></div>
-        <div class="form-field"><label for="t-last">Last name</label><input required type="text" id="t-last"></div>
+        <div class="form-field"><label for="t-first">First name</label><input required type="text" id="t-first" name="first_name"></div>
+        <div class="form-field"><label for="t-last">Last name</label><input required type="text" id="t-last" name="last_name"></div>
       </div>
-      <div class="form-field"><label for="t-email">Email</label><input required type="email" id="t-email"></div>
-      <div class="form-field"><label for="t-phone">Phone</label><input required type="tel" id="t-phone" placeholder="+44"></div>
-      <div class="form-field"><label for="t-areas">Preferred areas or postcodes</label><input type="text" id="t-areas" placeholder="e.g. Marylebone, NW1, SW1A"></div>
+      <div class="form-field"><label for="t-email">Email</label><input required type="email" id="t-email" name="email"></div>
+      <div class="form-field"><label for="t-phone">Phone</label><input required type="tel" id="t-phone" name="phone" placeholder="+44"></div>
+      <div class="form-field"><label for="t-areas">Preferred areas or postcodes</label><input type="text" id="t-areas" name="preferred_areas" placeholder="e.g. Marylebone, NW1, SW1A"></div>
       <div class="form-row">
-        <div class="form-field"><label for="t-budget-min">Min budget (pcm)</label><input type="number" id="t-budget-min" placeholder="£"></div>
-        <div class="form-field"><label for="t-budget-max">Max budget (pcm)</label><input type="number" id="t-budget-max" placeholder="£"></div>
+        <div class="form-field"><label for="t-budget-min">Min budget (pcm)</label><input type="number" id="t-budget-min" name="budget_min" placeholder="£"></div>
+        <div class="form-field"><label for="t-budget-max">Max budget (pcm)</label><input type="number" id="t-budget-max" name="budget_max" placeholder="£"></div>
       </div>
       <div class="form-row">
-        <div class="form-field"><label for="t-movein">Earliest move-in date</label><input type="date" id="t-movein"></div>
-        <div class="form-field"><label for="t-occupants">Occupants</label><input type="number" id="t-occupants" min="1" value="1"></div>
+        <div class="form-field"><label for="t-movein">Earliest move-in date</label><input type="date" id="t-movein" name="move_in_date"></div>
+        <div class="form-field"><label for="t-occupants">Occupants</label><input type="number" id="t-occupants" name="occupants" min="1" value="1"></div>
       </div>
       <div class="form-field">
         <label for="t-employment">Employment status</label>
-        <select id="t-employment">
+        <select id="t-employment" name="employment_status">
           <option>Employed (full-time)</option>
           <option>Employed (part-time)</option>
           <option>Self-employed</option>
@@ -640,10 +641,10 @@ function tenantFormHTML(){
           <option>Other</option>
         </select>
       </div>
-      <div class="form-field"><label for="t-notes">Anything else agents should know?</label><textarea id="t-notes" placeholder="Pets, guarantor, sharers, accessibility needs, etc."></textarea></div>
+      <div class="form-field"><label for="t-notes">Anything else agents should know?</label><textarea id="t-notes" name="notes" placeholder="Pets, guarantor, sharers, accessibility needs, etc."></textarea></div>
 
-      <div class="checkbox-row"><input type="checkbox" id="t-consent-share" required><label for="t-consent-share">I consent to my details being shared with agents and landlords whose open houses I book or enquire about, so they can contact me directly. 00.house does not sell my data to third parties for marketing.</label></div>
-      <div class="checkbox-row"><input type="checkbox" id="t-consent-terms" required><label for="t-consent-terms">I have read and agree to the <a onclick="event.preventDefault();openPanel('legal','terms')" style="text-decoration:underline;cursor:pointer;color:var(--black)">Terms of Use</a> and <a onclick="event.preventDefault();openPanel('legal','privacy')" style="text-decoration:underline;cursor:pointer;color:var(--black)">Privacy Policy</a>, and understand that 00.house is a listings portal only and is not party to any tenancy I enter into.</label></div>
+      <div class="checkbox-row"><input type="checkbox" id="t-consent-share" name="consent_share" required><label for="t-consent-share">I consent to my details being shared with agents and landlords whose open houses I book or enquire about, so they can contact me directly. 00.house does not sell my data to third parties for marketing.</label></div>
+      <div class="checkbox-row"><input type="checkbox" id="t-consent-terms" name="consent_terms" required><label for="t-consent-terms">I have read and agree to the <a onclick="event.preventDefault();openPanel('legal','terms')" style="text-decoration:underline;cursor:pointer;color:var(--black)">Terms of Use</a> and <a onclick="event.preventDefault();openPanel('legal','privacy')" style="text-decoration:underline;cursor:pointer;color:var(--black)">Privacy Policy</a>, and understand that 00.house is a listings portal only and is not party to any tenancy I enter into.</label></div>
 
       <button type="submit" class="submit-btn">Submit registration</button>
       <div id="tenantSuccess"></div>
@@ -657,10 +658,11 @@ function agentFormHTML(){
     <h2>Agent &amp; landlord registration</h2>
     <p>List your open houses on 00.house. You remain fully responsible for your listings, viewings, referencing and any money handled with tenants.</p>
     <form id="agentForm" onsubmit="return handleAgentSubmit(event)">
-      <div class="form-field"><label for="a-company">Agency / company name</label><input required type="text" id="a-company"></div>
+      <input type="hidden" name="_subject" value="New agent/landlord registration — 00.house">
+      <div class="form-field"><label for="a-company">Agency / company name</label><input required type="text" id="a-company" name="company_name"></div>
       <div class="form-row">
         <div class="form-field"><label for="a-type">Account type</label>
-          <select id="a-type">
+          <select id="a-type" name="account_type">
             <option>Letting agent</option>
             <option>Estate agent</option>
             <option>Private landlord</option>
@@ -668,24 +670,24 @@ function agentFormHTML(){
             <option>Property manager</option>
           </select>
         </div>
-        <div class="form-field"><label for="a-chnum">Companies House / registration no.</label><input type="text" id="a-chnum" placeholder="e.g. 09876543"></div>
+        <div class="form-field"><label for="a-chnum">Companies House / registration no.</label><input type="text" id="a-chnum" name="registration_number" placeholder="e.g. 09876543"></div>
       </div>
       <div class="form-row">
-        <div class="form-field"><label for="a-contact">Contact name</label><input required type="text" id="a-contact"></div>
-        <div class="form-field"><label for="a-role">Role</label><input type="text" id="a-role" placeholder="e.g. Lettings Manager"></div>
+        <div class="form-field"><label for="a-contact">Contact name</label><input required type="text" id="a-contact" name="contact_name"></div>
+        <div class="form-field"><label for="a-role">Role</label><input type="text" id="a-role" name="role" placeholder="e.g. Lettings Manager"></div>
       </div>
       <div class="form-row">
-        <div class="form-field"><label for="a-email">Work email</label><input required type="email" id="a-email"></div>
-        <div class="form-field"><label for="a-phone">Phone</label><input required type="tel" id="a-phone" placeholder="+44"></div>
+        <div class="form-field"><label for="a-email">Work email</label><input required type="email" id="a-email" name="email"></div>
+        <div class="form-field"><label for="a-phone">Phone</label><input required type="tel" id="a-phone" name="phone" placeholder="+44"></div>
       </div>
-      <div class="form-field"><label for="a-address">Registered / branch address</label><input type="text" id="a-address" placeholder="Street, city, postcode"></div>
-      <div class="form-field"><label for="a-areas">Areas you cover</label><input type="text" id="a-areas" placeholder="e.g. Central London, Windsor"></div>
-      <div class="form-field"><label for="a-cmp">Client Money Protection (CMP) scheme</label><input type="text" id="a-cmp" placeholder="e.g. Propertymark, RICS, SAFEagent — required for UK letting agents handling client money"></div>
-      <div class="form-field"><label for="a-redress">Redress scheme membership</label><input type="text" id="a-redress" placeholder="e.g. The Property Ombudsman / PRS"></div>
+      <div class="form-field"><label for="a-address">Registered / branch address</label><input type="text" id="a-address" name="address" placeholder="Street, city, postcode"></div>
+      <div class="form-field"><label for="a-areas">Areas you cover</label><input type="text" id="a-areas" name="areas_covered" placeholder="e.g. Central London, Windsor"></div>
+      <div class="form-field"><label for="a-cmp">Client Money Protection (CMP) scheme</label><input type="text" id="a-cmp" name="cmp_scheme" placeholder="e.g. Propertymark, RICS, SAFEagent — required for UK letting agents handling client money"></div>
+      <div class="form-field"><label for="a-redress">Redress scheme membership</label><input type="text" id="a-redress" name="redress_scheme" placeholder="e.g. The Property Ombudsman / PRS"></div>
 
-      <div class="checkbox-row"><input type="checkbox" id="a-consent-responsibility" required><label for="a-consent-responsibility">I confirm my organisation is solely responsible for the accuracy of our listings, for conducting compliant viewings and referencing, and for any rent, deposits or fees handled with tenants — none of which are collected, held or processed by 00.house.</label></div>
-      <div class="checkbox-row"><input type="checkbox" id="a-consent-compliance" required><label for="a-consent-compliance">I confirm my organisation complies with applicable UK letting legislation (including the Tenant Fees Act 2019, Deposit Protection requirements, and Client Money Protection where applicable) or the equivalent legislation in the relevant jurisdiction.</label></div>
-      <div class="checkbox-row"><input type="checkbox" id="a-consent-terms" required><label for="a-consent-terms">I have read and agree to the <a onclick="event.preventDefault();openPanel('legal','terms')" style="text-decoration:underline;cursor:pointer;color:var(--black)">Terms of Use</a> for Agents &amp; Landlords and the <a onclick="event.preventDefault();openPanel('legal','disclaimer')" style="text-decoration:underline;cursor:pointer;color:var(--black)">Portal Disclaimer</a>.</label></div>
+      <div class="checkbox-row"><input type="checkbox" id="a-consent-responsibility" name="consent_responsibility" required><label for="a-consent-responsibility">I confirm my organisation is solely responsible for the accuracy of our listings, for conducting compliant viewings and referencing, and for any rent, deposits or fees handled with tenants — none of which are collected, held or processed by 00.house.</label></div>
+      <div class="checkbox-row"><input type="checkbox" id="a-consent-compliance" name="consent_compliance" required><label for="a-consent-compliance">I confirm my organisation complies with applicable UK letting legislation (including the Tenant Fees Act 2019, Deposit Protection requirements, and Client Money Protection where applicable) or the equivalent legislation in the relevant jurisdiction.</label></div>
+      <div class="checkbox-row"><input type="checkbox" id="a-consent-terms" name="consent_terms" required><label for="a-consent-terms">I have read and agree to the <a onclick="event.preventDefault();openPanel('legal','terms')" style="text-decoration:underline;cursor:pointer;color:var(--black)">Terms of Use</a> for Agents &amp; Landlords and the <a onclick="event.preventDefault();openPanel('legal','disclaimer')" style="text-decoration:underline;cursor:pointer;color:var(--black)">Portal Disclaimer</a>.</label></div>
 
       <button type="submit" class="submit-btn">Submit registration</button>
       <div id="agentSuccess"></div>
@@ -693,14 +695,71 @@ function agentFormHTML(){
   `;
 }
 
+/*
+  EMAIL DELIVERY — one-time setup required
+  ------------------------------------------------------------------
+  This is a static prototype with no server, so it can't send email on
+  its own. The two form handlers below POST to Formspree (a hosted
+  form-backend service) which forwards submissions straight to an inbox.
+
+  To receive tenant + agent registrations at emilia@qinvestments.london:
+    1. Go to https://formspree.io and create a free account using
+       emilia@qinvestments.london.
+    2. Create a new form and set its notification email to
+       emilia@qinvestments.london (or leave it — Formspree defaults to
+       the account's own email).
+    3. Copy the form's endpoint, which looks like
+       https://formspree.io/f/xyzabcde
+    4. Replace TENANT_FORM_ENDPOINT and AGENT_FORM_ENDPOINT below with
+       that URL (you can use the same endpoint for both, or create two
+       separate Formspree forms to keep tenant and agent leads apart).
+  Until you do this, submissions will show the success message in the
+  UI but will not actually be delivered anywhere.
+*/
+const TENANT_FORM_ENDPOINT = 'https://formspree.io/f/REPLACE_WITH_TENANT_FORM_ID';
+const AGENT_FORM_ENDPOINT  = 'https://formspree.io/f/REPLACE_WITH_AGENT_FORM_ID';
+
+function submitFormToEmail(endpoint, formEl){
+  const data = new FormData(formEl);
+  return fetch(endpoint, {
+    method:'POST',
+    body:data,
+    headers:{ 'Accept':'application/json' }
+  });
+}
+
 function handleTenantSubmit(e){
   e.preventDefault();
-  document.getElementById('tenantSuccess').innerHTML = `<div class="form-success">Thanks — your tenant profile has been received (prototype stub, not yet stored). Matching agents can now reach out to you directly for viewings.</div>`;
+  const successBox = document.getElementById('tenantSuccess');
+  submitFormToEmail(TENANT_FORM_ENDPOINT, e.target)
+    .then(res=>{
+      if(res.ok){
+        successBox.innerHTML = `<div class="form-success">Thanks — your tenant profile has been sent. Matching agents can now reach out to you directly for viewings.</div>`;
+        e.target.reset();
+      } else {
+        successBox.innerHTML = `<div class="legal-callout">Something went wrong sending this — the form endpoint may not be set up yet. Please try again shortly.</div>`;
+      }
+    })
+    .catch(()=>{
+      successBox.innerHTML = `<div class="form-success">Thanks — your tenant profile has been received (prototype stub, not yet emailed — connect the Formspree endpoint to enable delivery). Matching agents can now reach out to you directly for viewings.</div>`;
+    });
   return false;
 }
 function handleAgentSubmit(e){
   e.preventDefault();
-  document.getElementById('agentSuccess').innerHTML = `<div class="form-success">Thanks — your agent/landlord application has been received (prototype stub, not yet stored). Our team reviews new listers before activating a listing account.</div>`;
+  const successBox = document.getElementById('agentSuccess');
+  submitFormToEmail(AGENT_FORM_ENDPOINT, e.target)
+    .then(res=>{
+      if(res.ok){
+        successBox.innerHTML = `<div class="form-success">Thanks — your agent/landlord application has been sent. Our team reviews new listers before activating a listing account.</div>`;
+        e.target.reset();
+      } else {
+        successBox.innerHTML = `<div class="legal-callout">Something went wrong sending this — the form endpoint may not be set up yet. Please try again shortly.</div>`;
+      }
+    })
+    .catch(()=>{
+      successBox.innerHTML = `<div class="form-success">Thanks — your agent/landlord application has been received (prototype stub, not yet emailed — connect the Formspree endpoint to enable delivery). Our team reviews new listers before activating a listing account.</div>`;
+    });
   return false;
 }
 function stubSubmit(btn,msg){
@@ -731,7 +790,7 @@ function legalHTML(active){
 function legalContent(active){
   if(active==='terms'){
     return `
-      <div class="legal-section"><h4>1. What 00.house is</h4><p>00.house ("the Platform", "we", "us") is an online property listings and open-house scheduling portal. We are a technology provider that connects prospective tenants and buyers ("Users") with independent third-party letting agents, estate agents, landlords, developers and property managers ("Listers"). We are not a letting agent, estate agent, landlord, property manager, financial adviser, or provider of legal advice, and we do not hold a Client Money Protection licence.</p></div>
+      <div class="legal-section"><h4>1. What 00.house is</h4><p>00.house ("the Platform", "we", "us") is a brand operated by Q Investments International Ltd, an online property listings and open-house scheduling portal. Q Investments International Ltd is registered with the UK Information Commissioner's Office (ICO) under registration reference ZB264662, and is committed to protecting your personal data in accordance with the UK GDPR. We are a technology provider that connects prospective tenants and buyers ("Users") with independent third-party letting agents, estate agents, landlords, developers and property managers ("Listers"). We are not a letting agent, estate agent, landlord, property manager, financial adviser, or provider of legal advice, and we do not hold a Client Money Protection licence.</p></div>
       <div class="legal-section"><h4>2. No agency relationship</h4><p>Using the Platform does not create any agency, partnership, employment, joint venture or fiduciary relationship between 00.house and any User or Lister. Listers act entirely on their own behalf.</p></div>
       <div class="legal-section"><h4>3. Listings and content</h4><p>All property listings, descriptions, photographs, floorplans, prices, availability and open house times are supplied directly by Listers. We do not independently verify, inspect or guarantee any listing and accept no responsibility for errors, omissions or changes made by a Lister.</p></div>
       <div class="legal-section"><h4>4. Bookings and viewings</h4><p>Open house bookings made through the Platform are scheduling requests only. The viewing itself, and any resulting tenancy, sale or other agreement, is arranged and conducted entirely between the User and the Lister. 00.house is not present at, and is not a party to, any viewing or transaction.</p></div>
@@ -740,11 +799,13 @@ function legalContent(active){
       <div class="legal-section"><h4>7. Third-party services</h4><p>Interior design, tenant screening, insurance and similar services signposted on the Platform are provided by independent businesses. 00.house does not supervise, employ or guarantee these providers and is not a party to any contract a User enters into with them.</p></div>
       <div class="legal-section"><h4>8. No advice</h4><p>Nothing on the Platform constitutes legal, financial, tax, surveying or property investment advice. Users should obtain independent professional advice before entering into any tenancy, purchase, or related financial commitment.</p></div>
       <div class="legal-section"><h4>9. Limitation of liability</h4><p>To the maximum extent permitted by law, 00.house excludes all liability for any loss, damage, cost or expense arising from: reliance on any listing or content; dealings, disputes, or transactions with any Lister or third-party provider; or use or inability to use the Platform. Nothing in these Terms excludes liability that cannot be excluded by law (for example, liability for death or personal injury caused by negligence, or fraud).</p></div>
-      <div class="legal-section"><h4>10. Governing law</h4><p>These Terms are governed by the laws of England &amp; Wales, without prejudice to any mandatory consumer protections in a User's country of residence.</p></div>
+      <div class="legal-section"><h4>10. Third-party intellectual property</h4><p>All architectural renderings, photographs, and marketing brochures displayed on this site are provided exclusively by third-party developers. Q Investments International Ltd acts solely as an introducing agent and accepts no liability for third-party copyright or licensing disputes. Please refer to our <a href="https://qinvestments.london/terms-conditions/" target="_blank" rel="noopener" style="text-decoration:underline;cursor:pointer;color:var(--black)">Terms of Service</a> for our complete Notice and Takedown procedure.</p></div>
+      <div class="legal-section"><h4>11. Governing law</h4><p>These Terms are governed by the laws of England &amp; Wales, without prejudice to any mandatory consumer protections in a User's country of residence.</p></div>
     `;
   }
   if(active==='privacy'){
     return `
+      <div class="legal-section"><h4>Data controller</h4><p>Q Investments International Ltd, the operator of the 00.house brand, is the data controller for personal data collected through this site. We are registered with the UK Information Commissioner's Office (ICO) under registration reference ZB264662, and handle personal data in accordance with the UK GDPR.</p></div>
       <div class="legal-section"><h4>What we collect</h4><p>Contact details you provide when registering (name, email, phone), search and budget preferences, booking activity, and technical data such as device and approximate location used to show relevant listings on the map.</p></div>
       <div class="legal-section"><h4>How we use it</h4><ul><li>To operate your account and show relevant listings</li><li>To pass your enquiry or booking details to the specific Lister you contact, so they can respond to you directly</li><li>To send service messages (booking confirmations, account notices)</li><li>With your separate marketing consent, to tell you about relevant new listings</li></ul></div>
       <div class="legal-section"><h4>Who we share it with</h4><p>We share your enquiry/booking details only with the Lister(s) you choose to contact or book with, and with service providers who process data on our behalf (e.g. hosting, email delivery). We do not sell personal data to third parties.</p></div>
@@ -760,10 +821,11 @@ function legalContent(active){
     `;
   }
   return `
-    <div class="legal-callout"><strong>In short:</strong> 00.house is a listings portal. We never touch your rent, deposit or any payment, and every listing, viewing and tenancy is provided and managed entirely by an independent third-party agent, landlord or developer.</div>
-    <div class="legal-section"><h4>Portal status</h4><p>00.house Ltd operates a property listings and open-house scheduling website. We are not a letting agent, estate agent, landlord, property manager, or financial adviser, and are not regulated as such.</p></div>
+    <div class="legal-callout"><strong>In short:</strong> 00.house is a listings portal operated by Q Investments International Ltd. We never touch your rent, deposit or any payment, and every listing, viewing and tenancy is provided and managed entirely by an independent third-party agent, landlord or developer.</div>
+    <div class="legal-section"><h4>Portal status</h4><p>00.house is a brand operated by Q Investments International Ltd, which runs this property listings and open-house scheduling website. We are not a letting agent, estate agent, landlord, property manager, or financial adviser, and are not regulated as such. Q Investments International Ltd is registered with the ICO under reference ZB264662.</p></div>
     <div class="legal-section"><h4>No rent or money handling</h4><p>We do not collect, hold, process or have any access to rent, deposits, holding fees, admin fees or any other payment made between a User and a Lister. All such payments are made and handled entirely by the parties themselves, outside of the Platform.</p></div>
     <div class="legal-section"><h4>Third-party content</h4><p>Every property listing, price, photo, description, availability window and open house time is supplied directly by the relevant Lister. 00.house does not create, verify, inspect or endorse this content and cannot guarantee its accuracy or that a property remains available.</p></div>
+    <div class="legal-section"><h4>Third-party intellectual property</h4><p>All architectural renderings, photographs, and marketing brochures displayed on this site are provided exclusively by third-party developers. Q Investments International Ltd acts solely as an introducing agent and accepts no liability for third-party copyright or licensing disputes. See our <a href="https://qinvestments.london/terms-conditions/" target="_blank" rel="noopener" style="text-decoration:underline;cursor:pointer;color:var(--black)">Terms of Service</a> for our complete Notice and Takedown procedure.</p></div>
     <div class="legal-section"><h4>No agency, no advice</h4><p>Nothing on the Platform creates an agency or fiduciary relationship with 00.house, and nothing on it is legal, financial or property advice. Always verify details independently and take your own professional advice before committing to a tenancy or purchase.</p></div>
     <div class="legal-section"><h4>Third-party services</h4><p>Interior design, screening, insurance and similar services shown on the Platform are delivered by independent providers under their own terms. 00.house is not a party to, and accepts no liability for, any contract you enter into with them.</p></div>
     <div class="legal-section"><h4>Maximum extent of liability</h4><p>To the fullest extent permitted by law, 00.house disclaims all warranties about listings and third-party services, and excludes liability for any loss arising from reliance on the Platform's content or from your dealings with any Lister or third party — except where liability cannot lawfully be excluded.</p></div>
@@ -895,7 +957,9 @@ const inAreaCategories = {
     ]}
 };
 
-let inAreaMap, inAreaMarkers = [], inAreaSubjectMarker, currentInAreaCategory = null, inAreaInfoWindow;
+let inAreaMap, inAreaSubjectMarker, inAreaInfoWindow;
+const inAreaMarkersByCategory = {};      // key -> array of google.maps.Marker
+const activeInAreaCategories = new Set(); // keys currently toggled on
 
 /* Muted grayscale "Silver"-style theme, matching the reference screenshot */
 const IN_AREA_MAP_STYLE = [
@@ -938,24 +1002,21 @@ function pinIconUrl(color, key, isSubject){
   return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
 }
 
-function clearInAreaMarkers(){
-  inAreaMarkers.forEach(m=>m.setMap(null));
-  inAreaMarkers = [];
+function updateInAreaTitle(){
+  const titleEl = document.getElementById('inAreaTitle');
+  if(activeInAreaCategories.size === 0){
+    titleEl.textContent = 'In This Area';
+  } else {
+    const labels = Object.keys(inAreaCategories)
+      .filter(k=>activeInAreaCategories.has(k))
+      .map(k=>inAreaCategories[k].label);
+    titleEl.textContent = 'In This Area | ' + labels.join(', ');
+  }
 }
 
-function renderInAreaCategory(key){
-  currentInAreaCategory = key;
+function showCategoryMarkers(key){
   const cat = inAreaCategories[key];
-  document.getElementById('inAreaTitle').textContent = 'In This Area | ' + cat.label;
-
-  document.querySelectorAll('#inAreaDropdownMenu button').forEach(btn=>{
-    btn.classList.toggle('active', btn.dataset.key === key);
-  });
-
-  if(!inAreaMap) { closeInAreaMenu(); return; }
-  clearInAreaMarkers();
-
-  cat.points.forEach(p=>{
+  const markers = cat.points.map(p=>{
     const marker = new google.maps.Marker({
       position:{lat:p.lat, lng:p.lng},
       map:inAreaMap,
@@ -966,10 +1027,30 @@ function renderInAreaCategory(key){
       inAreaInfoWindow.setContent(`<strong>${p.name}</strong>`);
       inAreaInfoWindow.open(inAreaMap, marker);
     });
-    inAreaMarkers.push(marker);
+    return marker;
   });
+  inAreaMarkersByCategory[key] = markers;
+}
 
-  closeInAreaMenu();
+function hideCategoryMarkers(key){
+  (inAreaMarkersByCategory[key]||[]).forEach(m=>m.setMap(null));
+  delete inAreaMarkersByCategory[key];
+}
+
+/* Toggles one category on/off, layering its pins alongside any other
+   already-active categories — the dropdown stays open so several can be
+   picked in one go, each with its own tick mark. */
+function renderInAreaCategory(key){
+  const nowActive = !activeInAreaCategories.has(key);
+  if(nowActive) activeInAreaCategories.add(key); else activeInAreaCategories.delete(key);
+
+  const btn = document.querySelector(`#inAreaDropdownMenu button[data-key="${key}"]`);
+  if(btn) btn.classList.toggle('active', nowActive);
+
+  updateInAreaTitle();
+
+  if(!inAreaMap) return;
+  if(nowActive) showCategoryMarkers(key); else hideCategoryMarkers(key);
 }
 
 function toggleInAreaMenu(){
@@ -991,7 +1072,7 @@ function initInAreaMap(){
     const menu = document.getElementById('inAreaDropdownMenu');
     menu.innerHTML = Object.keys(inAreaCategories).map(key=>{
       const cat = inAreaCategories[key];
-      return `<button data-key="${key}" class="${key===currentInAreaCategory?'active':''}" onclick="renderInAreaCategory('${key}')"><span>${cat.label}</span><span class="check">\u2713</span></button>`;
+      return `<button data-key="${key}" class="${activeInAreaCategories.has(key)?'active':''}" onclick="renderInAreaCategory('${key}')"><span>${cat.label}</span><span class="check">\u2713</span></button>`;
     }).join('');
 
     inAreaMap = new google.maps.Map(document.getElementById('inAreaMap'), {
@@ -1023,7 +1104,7 @@ function initInAreaMap(){
     });
 
     /* No category pre-selected — matches reference: plain "In This Area" heading
-       and only the subject pin shown until the user opens the filter and picks one. */
+       and only the subject pin shown until the user opens the filter and picks one or more. */
   }catch(err){ console.error('In-area map (Google Maps) initialization error', err); }
 }
 </script>
