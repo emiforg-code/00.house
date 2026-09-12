@@ -7,7 +7,7 @@
 <title>Are you looking for a house?</title>
   <script type="application/ld+json"> { "@context": "https://schema.org", "@type": "WebSite", "url": "https://00.house", "name": "00.house", "description": "00.house is a property listings and open-house scheduling portal connecting tenants with agents and landlords. ", "publisher": { "@type": "Organization", "name": "00.house Ltd", "url": "https://00.house" }, "potentialAction": { "@type": "SearchAction", "target": "https://00.house/?s={search_term_string}", "query-input": "required name=search_term_string" } } </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
@@ -23,18 +23,18 @@
   --racing-green-tint:#E1EFE6;/* agent panel bg */
 }
 *{box-sizing:border-box}
-body{font-family:'Jost',system-ui,-apple-system,Helvetica,Arial,sans-serif;margin:0;color:var(--black);background:var(--white)}
+body{font-family:'Inter',system-ui,-apple-system,Helvetica,Arial,sans-serif;margin:0;color:var(--black);background:var(--white)}
 h1,h2,h3{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;margin:0 0 8px}
-h4{font-weight:600;margin:0 0 8px;font-family:'Jost',sans-serif}
+h4{font-weight:600;margin:0 0 8px;font-family:'Inter',sans-serif}
 p{line-height:1.55;color:var(--muted)}
 a{color:inherit}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-[dir="rtl"] body{font-family:'Segoe UI',Tahoma,'Jost',sans-serif}
-[dir="rtl"] h1,[dir="rtl"] h2,[dir="rtl"] h3{font-style:normal;font-family:'Segoe UI',Tahoma,'Jost',serif}
+[dir="rtl"] body{font-family:'Segoe UI',Tahoma,'Inter',sans-serif}
+[dir="rtl"] h1,[dir="rtl"] h2,[dir="rtl"] h3{font-style:normal;font-family:'Segoe UI',Tahoma,'Inter',serif}
 
-/* Generic label / stat-number utilities (Jost, geometric, wide tracking) */
-.label{letter-spacing:0.15em;text-transform:uppercase;font-size:0.75rem;font-weight:500;font-family:'Jost',sans-serif}
-.stat-number{font-weight:300;font-size:3rem;font-family:'Jost',sans-serif}
+/* Generic label / stat-number utilities (Inter, geometric, wide tracking) */
+.label{letter-spacing:0.15em;text-transform:uppercase;font-size:0.75rem;font-weight:500;font-family:'Inter',sans-serif}
+.stat-number{font-weight:300;font-size:3rem;font-family:'Inter',sans-serif}
 
 /* ============ NAV ============ */
 nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:rgba(255,255,255,0.97);z-index:200;border-bottom:1px solid var(--line);backdrop-filter:blur(6px)}
@@ -64,11 +64,11 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 /* ============ EXPLORE PANEL ============ */
 .explore-wrap{max-width:1200px;margin:0 auto;padding:60px 24px}
 .explore-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}
-.eyebrow{font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--brass);font-weight:500;margin-bottom:6px;display:block;font-family:'Jost',sans-serif}
+.eyebrow{font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--brass);font-weight:500;margin-bottom:6px;display:block;font-family:'Inter',sans-serif}
 .highlights{display:flex;gap:16px;margin-top:22px;flex-wrap:wrap}
 .highlight-card{flex:1 1 240px;height:200px;border-radius:12px;position:relative;overflow:hidden;border:1px solid var(--line);background-size:cover;background-position:center;transition:transform 0.25s}
 .highlight-card:hover{transform:translateY(-3px)}
-.highlight-card .cap{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;font-size:14px;font-weight:600;color:#fff;background:linear-gradient(0deg,rgba(0,0,0,0.62),rgba(0,0,0,0.05) 65%,transparent);font-family:'Jost',sans-serif}
+.highlight-card .cap{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;font-size:14px;font-weight:600;color:#fff;background:linear-gradient(0deg,rgba(0,0,0,0.62),rgba(0,0,0,0.05) 65%,transparent);font-family:'Inter',sans-serif}
 .explore-actions{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap}
 .explore-actions button{border:1px solid var(--black);background:#fff;padding:11px 18px;border-radius:3px;font-family:inherit;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;font-weight:600;cursor:pointer}
 .explore-actions button.filled{background:var(--black);color:#fff}
@@ -94,10 +94,10 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .panel-copy h2{font-size:clamp(24px,3vw,32px);line-height:1.15;margin-bottom:14px}
 .tenant-panel .panel-copy h2{color:var(--trust-blue-deep)}
 .agent-panel .panel-copy h2{color:var(--racing)}
-.panel-copy p{font-size:15px;color:#3f3f3f;margin-bottom:24px;font-family:'Jost',sans-serif}
+.panel-copy p{font-size:15px;color:#3f3f3f;margin-bottom:24px;font-family:'Inter',sans-serif}
 .panel-copy p strong{color:var(--black)}
 
-.panel-btn{border:0;padding:14px 28px;border-radius:999px;font-weight:600;font-size:13.5px;letter-spacing:0.03em;cursor:pointer;box-shadow:0 12px 26px rgba(0,0,0,0.14);color:#fff;font-family:'Jost',sans-serif;transition:transform .15s ease}
+.panel-btn{border:0;padding:14px 28px;border-radius:999px;font-weight:600;font-size:13.5px;letter-spacing:0.03em;cursor:pointer;box-shadow:0 12px 26px rgba(0,0,0,0.14);color:#fff;font-family:'Inter',sans-serif;transition:transform .15s ease}
 .panel-btn:hover{transform:translateY(-1px)}
 .tenant-btn{background:var(--trust-blue-deep)}
 .tenant-btn:hover{background:#0b3049}
@@ -110,7 +110,7 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 /* Tenant: floating checklist card bottom-left, verified chip top-right */
 .mock-card{background:#fff;border-radius:16px;box-shadow:0 22px 50px rgba(15,61,92,0.22);padding:20px;max-width:320px}
 .panel-visual .mock-card{position:absolute;left:0;bottom:36px;z-index:3;width:280px}
-.mock-card-head{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:14px;margin-bottom:12px;color:var(--trust-blue-deep);font-family:'Jost',sans-serif}
+.mock-card-head{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:14px;margin-bottom:12px;color:var(--trust-blue-deep);font-family:'Inter',sans-serif}
 .mock-badge{background:var(--trust-blue-tint);color:var(--trust-blue-deep);font-size:11px;padding:3px 9px;border-radius:999px;font-weight:700}
 .mock-card .app-check .item{color:var(--black);font-size:12px}
 .mock-card .app-check .box{border-color:rgba(0,0,0,0.18);color:#8CA0AA;background:#E7EEF2}
@@ -127,9 +127,9 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .chip-logo{width:24px;height:24px;border-radius:8px;background:var(--racing);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex:0 0 24px}
 .chip-time{color:var(--muted);font-weight:400;font-size:10.5px;float:right}
 .panel-visual .notif-float{position:absolute;z-index:3;width:230px;box-shadow:0 14px 30px rgba(11,61,46,0.22)}
-.panel-visual .notif-float.n1{top:10px;right:-6px}
-.panel-visual .notif-float.n2{top:100px;right:-6px}
-.panel-visual .notif-float.n3{top:190px;right:-6px}
+.panel-visual .notif-float.n1{top:10px;left:0}
+.panel-visual .notif-float.n2{top:100px;left:0}
+.panel-visual .notif-float.n3{top:190px;left:0}
 
 @media(max-width:860px){
   .panel{min-height:auto;padding:40px 28px 0}
@@ -206,7 +206,7 @@ textarea{resize:vertical;min-height:70px}
 .inarea-map-wrapper{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,0.06)}
 #inAreaMap{width:100%;height:520px;display:block;background:#f5f5f5}
 .gm-style .gm-style-iw-c{border-radius:10px}
-.gm-style .gm-style-iw-d{font-family:'Jost',sans-serif;font-size:13px}
+.gm-style .gm-style-iw-d{font-family:'Inter',sans-serif;font-size:13px}
 
 footer{padding:40px 20px;color:var(--muted);border-top:1px solid var(--line);margin-top:20px}
 footer .foot-grid{display:flex;gap:56px;flex-wrap:wrap;max-width:1200px;margin:0 auto}
