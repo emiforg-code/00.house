@@ -11,17 +11,16 @@
 
 <style>
 :root{
-  --black:#1a1a18; --muted:#6f6b62;
-  --white:#fff;
-  --accent:#7a2e26;           /* dark red — matches the panelled walls */
-  --brass:#1c828c;            /* teal accent */
-  --brass-text:#0e4247;       /* darkened teal for accessible small text */
-  --cream:#f7f5f1;
-  --panel-1:#f7f5f1;          /* tenant panel bg — neutral step 1 */
-  --panel-2:#ece8e1;          /* agent panel bg — neutral step 2 */
-  --panel-3:#ddd7cc;          /* deepest neutral, small fills inside panels */
+  --black:#0a0a0a; --muted:#6b6b6b; --white:#fff;
+  --accent:#c57b83;           /* dusty rose (kept for legal/form accents) */
+  --racing:#1f4632;           /* British racing green — agent panel deep */
+  --brass:#b98a3f;            /* brass gold — single bright accent */
+  --cream:#f6f2ea;
   --line:rgba(0,0,0,0.08);
   --ok:#2f6b4f;
+  --trust-blue-deep:#0F3D5C;  /* tenant panel deep */
+  --trust-blue-tint:#DCEBF3;  /* tenant panel bg */
+  --racing-green-tint:#E1EFE6;/* agent panel bg */
 }
 *{box-sizing:border-box}
 body{font-family:'Inter',system-ui,-apple-system,Helvetica,Arial,sans-serif;margin:0;color:var(--black);background:var(--white)}
@@ -50,22 +49,22 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 [dir="rtl"] .lang-menu{right:auto;left:0}
 .lang-menu.open{display:block}
 .lang-menu button{display:flex;align-items:center;gap:8px;width:100%;border:0;background:#fff;padding:10px 14px;font-size:13px;cursor:pointer;font-family:inherit;text-align:left}
-.lang-menu button:hover{background:var(--cream)}
+.lang-menu button:hover{background:#f6f2ea}
 
 /* ============ HERO ============ */
-.hero{background:#e9e6dc url('./header dark red.jpeg') center/cover no-repeat;} 
-.hero-veil{position:absolute;inset:0;background:linear-gradient(to top,rgba(16,15,13,0.82) 0%,rgba(16,15,13,0.45) 45%,rgba(16,15,13,0) 100%);z-index:20}
+.hero{position:relative;width:100%;height:640px;overflow:hidden;background:#e9e6dc url('./home-house-rent.jpeg') center/cover no-repeat;background-attachment:fixed}
+  .hero-veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0) 35%,rgba(255,255,255,0.6) 100%);z-index:20}
 .hero-content{position:relative;z-index:30;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 20px 46px;text-align:center}
-.hero-content h1{font-size:clamp(26px,4vw,42px);color:#fff;text-shadow:none;max-width:720px}
+.hero-content h1{font-size:clamp(26px,4vw,42px);color:#1b1b1b;text-shadow:0 2px 20px rgba(255,255,255,0.6);max-width:720px}
 .hero-search{margin-top:18px;display:flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 8px 8px 8px;box-shadow:0 14px 40px rgba(0,0,0,0.14);min-width:min(560px,92vw)}
 .hero-search select{border:0;border-right:1px solid var(--line);background:transparent;padding:0 12px 0 14px;font-size:13px;font-family:inherit;color:var(--black);cursor:pointer;max-width:150px;outline:none}
 .hero-search input{border:0;background:transparent;flex:1;font-size:14px;font-family:inherit;outline:none;padding:0 6px}
 .hero-search button{background:var(--black);border:0;color:#fff;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 38px}
-.hero-search-hint{margin-top:10px;font-size:11.5px;color:rgba(255,255,255,0.82)}
+.hero-search-hint{margin-top:10px;font-size:11.5px;color:#3a3a3a;text-shadow:0 1px 10px rgba(255,255,255,0.9)}
 /* ============ EXPLORE PANEL ============ */
 .explore-wrap{max-width:1200px;margin:0 auto;padding:60px 24px}
 .explore-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}
-.eyebrow{font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--brass-text);font-weight:600;margin-bottom:6px;display:block;font-family:'Inter',sans-serif}
+.eyebrow{font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--brass);font-weight:500;margin-bottom:6px;display:block;font-family:'Inter',sans-serif}
 .highlights{display:flex;gap:16px;margin-top:22px;flex-wrap:wrap}
 .highlight-card{flex:1 1 240px;height:200px;border-radius:12px;position:relative;overflow:hidden;border:1px solid var(--line);background-size:cover;background-position:center;transition:transform 0.25s}
 .highlight-card:hover{transform:translateY(-3px)}
@@ -75,17 +74,6 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .explore-actions button.filled{background:var(--black);color:#fff}
 .explore-actions button:hover{opacity:0.85}
 
-/* ============ EMPTY-STATE LISTINGS GRID ============ */
-.listings-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:30px}
-.listing-card{border:1px dashed var(--line);border-radius:12px;overflow:hidden;background:var(--cream)}
-.listing-card .thumb{height:150px;background:var(--panel-2);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px}
-.listing-card .body{padding:14px 16px}
-.listing-card .body .line1{font-size:13.5px;font-weight:600;color:var(--black);margin-bottom:4px}
-.listing-card .body .line2{font-size:12px;color:var(--muted)}
-.listings-cta{grid-column:1/-1;border:1px dashed var(--line);border-radius:12px;padding:22px;text-align:center;background:var(--cream)}
-.listings-cta p{margin:0 0 12px;font-size:13.5px}
-.listings-cta button{border:0;background:var(--black);color:#fff;padding:10px 18px;border-radius:6px;font-family:inherit;font-size:12.5px;cursor:pointer;font-weight:600}
-
 /* ============ SERVICES ============ */
 .services-wrap{max-width:1200px;margin:0 auto;padding:10px 24px 0}
 .services{display:flex;gap:12px;flex-wrap:wrap;padding:18px 0}
@@ -93,48 +81,64 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .card .num{position:absolute;top:10px;right:12px;font-size:10px;color:#bbb;font-weight:700}
 .card button{border:0;background:var(--accent);color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;white-space:nowrap}
 
-/* ============ CTA ROW / SPLIT PANEL — one neutral ramp, brass is the only accent ============ */
+/* ============ CTA ROW / SPLIT PANEL — trust-blue tenant / racing-green agent ============ */
 .split-wrap{max-width:1200px;margin:8px auto 0;padding:40px 24px 0}
 .split-panels{display:grid;grid-template-columns:1fr 1fr;gap:24px}
 @media(max-width:860px){.split-panels{grid-template-columns:1fr}}
 
-.panel{border-radius:24px;padding:40px 36px;position:relative;overflow:hidden;display:flex;flex-direction:column;min-height:500px}
-.panel.tenant-panel{background:var(--panel-1)}
-.panel.agent-panel{background:var(--panel-2)}
+.panel{border-radius:28px;padding:60px 48px 0;position:relative;overflow:hidden;display:flex;flex-direction:column;min-height:760px}
+.panel.tenant-panel{background:var(--trust-blue-tint)}
+.panel.agent-panel{background:var(--racing-green-tint)}
 
 .panel-copy{max-width:440px;position:relative;z-index:2}
-.panel-copy h2{font-size:clamp(21px,2.4vw,26px);line-height:1.2;margin-bottom:10px;color:var(--black)}
-.panel-copy p{font-size:14px;color:var(--muted);margin-bottom:20px;font-family:'Inter',sans-serif}
+.panel-copy h2{font-size:clamp(24px,3vw,32px);line-height:1.15;margin-bottom:14px}
+.tenant-panel .panel-copy h2{color:var(--trust-blue-deep)}
+.agent-panel .panel-copy h2{color:var(--racing)}
+.panel-copy p{font-size:15px;color:#3f3f3f;margin-bottom:24px;font-family:'Inter',sans-serif}
 .panel-copy p strong{color:var(--black)}
 
-.panel-btn{border:0;padding:12px 24px;border-radius:8px;font-weight:600;font-size:13px;letter-spacing:0.02em;cursor:pointer;color:#fff;font-family:'Inter',sans-serif;transition:opacity .15s ease}
-.panel-btn:hover{opacity:.88}
-.tenant-btn{background:var(--black)}
-.agent-btn{background:var(--brass)}
+.panel-btn{border:0;padding:14px 28px;border-radius:999px;font-weight:600;font-size:13.5px;letter-spacing:0.03em;cursor:pointer;box-shadow:0 12px 26px rgba(0,0,0,0.14);color:#fff;font-family:'Inter',sans-serif;transition:transform .15s ease}
+.panel-btn:hover{transform:translateY(-1px)}
+.tenant-btn{background:var(--trust-blue-deep)}
+.tenant-btn:hover{background:#0b3049}
+.agent-btn{background:var(--racing)}
+.agent-btn:hover{background:#153322}
 
-.panel-visual{position:relative;margin-top:24px;flex:1;min-height:220px;display:flex;align-items:flex-end}
-.panel-photo{border-radius:14px;width:100%;height:200px;object-fit:cover;display:block}
+.panel-visual{position:relative;margin-top:34px;flex:1;min-height:460px}
+.panel-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;border-radius:20px 20px 0 0;display:block}
 
-/* One floating element per panel */
-.mock-card{background:#fff;border-radius:14px;box-shadow:0 14px 30px rgba(0,0,0,0.12);padding:16px;width:240px;position:absolute;left:16px;bottom:-18px;z-index:3}
-.mock-card-head{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:13px;margin-bottom:10px;color:var(--black);font-family:'Inter',sans-serif}
-.mock-badge{background:var(--panel-1);color:var(--brass-text);font-size:10.5px;padding:3px 8px;border-radius:999px;font-weight:700}
-.mock-card .app-check .item{color:var(--black);font-size:11.5px}
-.mock-card .app-check .box{border-color:rgba(0,0,0,0.18);color:#a09a8e;background:var(--panel-1)}
+/* Tenant: floating checklist card bottom-left, verified chip top-right */
+.mock-card{background:#fff;border-radius:14px;box-shadow:0 18px 40px rgba(15,61,92,0.22);padding:14px;max-width:320px}
+.panel-visual .mock-card{position:absolute;left:-8px;bottom:64px;z-index:3;width:230px}
+.mock-card-head{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:12.5px;margin-bottom:9px;color:var(--trust-blue-deep);font-family:'Inter',sans-serif}
+.mock-badge{background:var(--trust-blue-tint);color:var(--trust-blue-deep);font-size:10px;padding:2px 8px;border-radius:999px;font-weight:700}
+.mock-card .app-check{margin:10px 0;gap:4px}
+.mock-card .app-check .item{color:var(--black);font-size:11px}
+.mock-card .app-check .box{border-color:rgba(0,0,0,0.18);color:#8CA0AA;background:#E7EEF2}
 .mock-card .app-check .box.done{background:var(--brass);color:#fff;border-color:var(--brass)}
-.mock-card .progress-track.light{background:var(--panel-2)}
+.mock-card .progress-track.light{background:rgba(15,61,92,0.10);margin-top:6px}
 .mock-card .progress-track.light .progress-fill{background:var(--brass)}
-.mock-card .progress-label{color:var(--muted);font-size:10px}
+.mock-card .progress-label{color:var(--muted);font-size:9.5px;margin-top:5px}
 
-.mock-chip{background:#fff;border-radius:12px;box-shadow:0 14px 30px rgba(0,0,0,0.12);padding:11px 13px;display:flex;gap:9px;align-items:flex-start;font-size:11.5px;width:220px;position:absolute;right:16px;top:-18px;z-index:3}
+.mock-chip{background:#fff;border-radius:14px;box-shadow:0 16px 34px rgba(15,61,92,0.22);padding:11px 13px;display:flex;gap:9px;align-items:flex-start;font-size:11.5px;width:230px}
+.panel-visual .mock-chip.float{position:absolute;top:-8px;left:110px;z-index:3}
 .chip-ico{width:24px;height:24px;border-radius:50%;background:var(--brass);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:0 0 24px}
-.chip-logo{width:24px;height:24px;border-radius:8px;background:var(--black);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex:0 0 24px}
+
+/* Agent: stacked notification chips top-right */
+.chip-logo{width:24px;height:24px;border-radius:8px;background:var(--racing);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex:0 0 24px}
 .chip-time{color:var(--muted);font-weight:400;font-size:10.5px;float:right}
+.mock-chip.notif-float{padding:8px 10px;font-size:10.5px}
+.mock-chip.notif-float .chip-logo{width:20px;height:20px;font-size:9px;flex:0 0 20px}
+.panel-visual .notif-float{position:absolute;z-index:3;width:190px;box-shadow:0 14px 30px rgba(11,61,46,0.22)}
+.panel-visual .notif-float.n1{top:-10px;left:0}
+.panel-visual .notif-float.n2{top:64px;left:0}
+.panel-visual .notif-float.n3{top:138px;left:0}
 
 @media(max-width:860px){
-  .panel{min-height:auto;padding:32px 24px}
-  .panel-visual{min-height:0;margin-top:20px}
-  .mock-card,.mock-chip{position:static;width:100%;margin-top:12px}
+  .panel{min-height:auto;padding:40px 28px 0}
+  .panel-photo{position:static;width:100%;max-width:100%;height:220px;border-radius:16px;margin-top:16px}
+  .panel-visual .mock-card,.panel-visual .mock-chip.float,.panel-visual .notif-float{position:static;width:100%;margin-top:12px}
+  .panel-visual{min-height:0}
 }
 
 /* ============ TENANT PASS (side-panel form widget, unrelated to split panel) ============ */
@@ -177,14 +181,6 @@ textarea{resize:vertical;min-height:70px}
 .submit-btn{width:100%;background:var(--black);color:#fff;border:0;padding:12px;border-radius:8px;cursor:pointer;font-weight:600;font-size:14px;margin-top:6px}
 .submit-btn:hover{background:#222}
 .form-success{background:#eef6f0;border:1px solid #cfe6d6;color:var(--ok);padding:12px;border-radius:8px;font-size:13px;margin-top:14px}
-.send-choice{display:none;flex-direction:column;gap:10px;margin-top:6px}
-.send-btn{width:100%;border:0;padding:12px;border-radius:8px;font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
-.send-btn svg{flex-shrink:0}
-.send-btn.whatsapp{background:#25D366;color:#fff}
-.send-btn.whatsapp:hover{background:#1fb955}
-.send-btn.email{background:var(--brass);color:#fff}
-.send-btn.email:hover{opacity:.88}
-.send-note{font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5}
 .panel-eyebrow{font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:4px}
 
 /* Legal panel */
@@ -208,7 +204,7 @@ textarea{resize:vertical;min-height:70px}
 .inarea-dropdown-menu.open{display:block}
 .inarea-dropdown-menu button{display:flex;align-items:center;justify-content:space-between;width:100%;text-align:left;border:0;background:#fff;padding:13px 18px;font-family:inherit;font-size:14.5px;cursor:pointer;color:var(--black)}
 .inarea-dropdown-menu button:hover{background:var(--cream)}
-.inarea-dropdown-menu button .check{opacity:0;font-size:13px;color:var(--brass-text)}
+.inarea-dropdown-menu button .check{opacity:0;font-size:13px;color:var(--racing)}
 .inarea-dropdown-menu button.active .check{opacity:1}
 .inarea-map-wrapper{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,0.06)}
 #inAreaMap{width:100%;height:520px;display:block;background:#f5f5f5}
@@ -288,13 +284,6 @@ footer a:hover{color:var(--black)}
     <button onclick="openPanel('register-choice')" data-i18n="btn_find_home">Find your home</button>
     <button onclick="openPanel('account')" data-i18n="btn_my_account">My account</button>
   </div>
-
-  <div class="listings-grid" id="listingsGrid">
-    <div class="listings-cta">
-      <p><strong>New open houses are added daily.</strong> Agents and landlords are onboarding now — be one of the first to list in your area, or register as a tenant to be notified the moment a matching listing goes live.</p>
-      <button onclick="openPanel('register-choice')">Get started</button>
-    </div>
-  </div>
 </section>
 
 <!-- ============ IN THIS AREA ============ -->
@@ -349,16 +338,21 @@ footer a:hover{color:var(--black)}
         <button class="panel-btn tenant-btn" onclick="openPanel('tenant-form')" data-i18n="cta_tenant_btn">Register as a tenant</button>
       </div>
       <div class="panel-visual">
-        <img class="panel-photo" src="./he.png" alt="Get your Tenant Pass in minutes.">
+     <img class="panel-photo" src="./he.jpeg" alt="Get your Tenant Pass in minutes.">
         <div class="mock-card">
           <div class="mock-card-head"><span data-i18n="app_title">Tenant Pass</span><span class="mock-badge" data-i18n="mock_badge">2 of 4</span></div>
           <div class="app-check">
             <div class="item"><span class="box done">✓</span><span data-i18n="app_step1">Profile registered</span></div>
             <div class="item"><span class="box done">✓</span><span data-i18n="app_step2">Preferences saved</span></div>
             <div class="item"><span class="box">3</span><span data-i18n="app_step3">Viewing booked</span></div>
+            <div class="item"><span class="box">4</span><span data-i18n="app_step4">Screening &amp; references (via agent)</span></div>
           </div>
           <div class="progress-track light"><div class="progress-fill"></div></div>
-          <div class="progress-label" data-i18n="app_progress">2 of 4 steps complete</div>
+          <div class="progress-label" data-i18n="app_progress">2 of 4 steps complete — the rest happens with your chosen agent</div>
+        </div>
+        <div class="mock-chip float">
+          <div class="chip-ico">✓</div>
+          <div><strong data-i18n="chip_tenant_title">Profile verified</strong><br><span data-i18n="chip_tenant_sub">Ready to apply</span></div>
         </div>
       </div>
     </div>
@@ -371,9 +365,17 @@ footer a:hover{color:var(--black)}
       </div>
       <div class="panel-visual">
         <img class="panel-photo" src="./she.jpeg" alt="List your houses">
-        <div class="mock-chip">
+        <div class="mock-chip notif-float n1">
           <div class="chip-logo"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V10"/><path d="M9.5 20.5V14h5v6.5"/></svg></div>
           <div><strong>00.house</strong><span class="chip-time" data-i18n="notif1_time">1m ago</span><br><span data-i18n="notif1_text">New enquiry from Adam M.</span></div>
+        </div>
+        <div class="mock-chip notif-float n2">
+          <div class="chip-logo"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V10"/><path d="M9.5 20.5V14h5v6.5"/></svg></div>
+          <div><strong>00.house</strong><span class="chip-time" data-i18n="notif2_time">1h ago</span><br><span data-i18n="notif2_text">Viewing booked — 24 Ashford Rd</span></div>
+        </div>
+        <div class="mock-chip notif-float n3">
+          <div class="chip-logo"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V10"/><path d="M9.5 20.5V14h5v6.5"/></svg></div>
+          <div><strong>00.house</strong><span class="chip-time" data-i18n="notif3_time">1h ago</span><br><span data-i18n="notif3_text">Your listing just went live</span></div>
         </div>
       </div>
     </div>
@@ -477,12 +479,6 @@ const i18n = {
     foot_legal:'قانوني', foot_terms:'شروط الخدمة', foot_privacy:'سياسة الخصوصية', foot_disclosures:'إفصاحات', foot_licenses:'تراخيص'
   }
 };
-/* ============ SHARED CONTACT CHANNELS (used by every form on the page) ============ */
-const ADMIN_WHATSAPP = '447956716677';
-const ADMIN_EMAIL = 'admin@qinvestments.london';
-const waIconSvg = '<svg width="15" height="15" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1s-.5-.1-.7.1-.7 1-.9 1.1-.3.2-.6.1a7.6 7.6 0 0 1-2.2-1.4A8.4 8.4 0 0 1 9.5 11c-.2-.3 0-.5.1-.6l.4-.5.2-.4a.5.5 0 0 0 0-.4c-.1-.1-.7-1.6-.9-2.2s-.5-.5-.7-.5h-.6a1.1 1.1 0 0 0-.8.4A3.4 3.4 0 0 0 6 9.5c0 1.8 1.3 3.6 1.5 3.9s2.5 3.9 6.1 5.2 3.6.9 4.3.8a3.6 3.6 0 0 0 2.4-1.7 3 3 0 0 0 .2-1.7c-.1-.1-.3-.2-.6-.4z"/><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z" fill="none" stroke="#fff" stroke-width="1.6"/></svg>';
-const mailIconSvg = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg>';
-
 let currentLang = 'en';
 function toggleLangMenu(){ document.getElementById('langMenu').classList.toggle('open'); }
 function setLanguage(lang){
@@ -608,13 +604,7 @@ function renderPanel(mode, sub){
       <div class="form-field"><label for="ct-name">Name</label><input type="text" id="ct-name"></div>
       <div class="form-field"><label for="ct-email">Email</label><input type="email" id="ct-email"></div>
       <div class="form-field"><label for="ct-msg">Message</label><textarea id="ct-msg"></textarea></div>
-      <div class="form-error" id="ct-error">Please fill in your name, email and message.</div>
-      <button class="submit-btn" id="ct-continue" onclick="continueContact()">Continue</button>
-      <div class="send-choice" id="ct-send-choice">
-        <a class="send-btn whatsapp" id="ct-wa-link" href="#" target="_blank" rel="noopener" onclick="markContactSent()">${waIconSvg} Message us on WhatsApp</a>
-        <a class="send-btn email" id="ct-email-link" href="#" onclick="markContactSent()">${mailIconSvg} Email admin@qinvestments.london</a>
-      </div>
-      <div id="ctSuccess"></div>
+      <button class="submit-btn" onclick="stubSubmit(this,'Thanks — we\\'ll get back to you within one working day.')">Send message</button>
     `;
     return;
   }
@@ -659,12 +649,7 @@ function tenantFormHTML(){
       <div class="checkbox-row"><input type="checkbox" id="t-consent-share" name="consent_share" required><label for="t-consent-share">I consent to my details being shared with agents and landlords whose open houses I book or enquire about, so they can contact me directly. 00.house does not sell my data to third parties for marketing.</label></div>
       <div class="checkbox-row"><input type="checkbox" id="t-consent-terms" name="consent_terms" required><label for="t-consent-terms">I have read and agree to the <a onclick="event.preventDefault();openPanel('legal','terms')" style="text-decoration:underline;cursor:pointer;color:var(--black)">Terms of Use</a> and <a onclick="event.preventDefault();openPanel('legal','privacy')" style="text-decoration:underline;cursor:pointer;color:var(--black)">Privacy Policy</a>, and understand that 00.house is a listings portal only and is not party to any tenancy I enter into.</label></div>
 
-      <button type="submit" class="submit-btn" id="tenant-continue">Continue</button>
-      <div class="send-choice" id="tenant-send-choice">
-        <a class="send-btn whatsapp" id="tenant-wa-link" href="#" target="_blank" rel="noopener" onclick="markFormSent('tenant')">${waIconSvg} Send on WhatsApp</a>
-        <a class="send-btn email" id="tenant-email-link" href="#" onclick="markFormSent('tenant')">${mailIconSvg} Email admin@qinvestments.london</a>
-      </div>
-      <div class="send-note">Registering opens WhatsApp or your email app with your details pre-filled, so our team can set up your account. 00.house does not charge tenants to register.</div>
+      <button type="submit" class="submit-btn">Submit registration</button>
       <div id="tenantSuccess"></div>
     </form>
   `;
@@ -707,114 +692,84 @@ function agentFormHTML(){
       <div class="checkbox-row"><input type="checkbox" id="a-consent-compliance" name="consent_compliance" required><label for="a-consent-compliance">I confirm my organisation complies with applicable UK letting legislation (including the Tenant Fees Act 2019, Deposit Protection requirements, and Client Money Protection where applicable) or the equivalent legislation in the relevant jurisdiction.</label></div>
       <div class="checkbox-row"><input type="checkbox" id="a-consent-terms" name="consent_terms" required><label for="a-consent-terms">I have read and agree to the <a onclick="event.preventDefault();openPanel('legal','terms')" style="text-decoration:underline;cursor:pointer;color:var(--black)">Terms of Use</a> for Agents &amp; Landlords and the <a onclick="event.preventDefault();openPanel('legal','disclaimer')" style="text-decoration:underline;cursor:pointer;color:var(--black)">Portal Disclaimer</a>.</label></div>
 
-      <button type="submit" class="submit-btn" id="agent-continue">Continue</button>
-      <div class="send-choice" id="agent-send-choice">
-        <a class="send-btn whatsapp" id="agent-wa-link" href="#" target="_blank" rel="noopener" onclick="markFormSent('agent')">${waIconSvg} Send on WhatsApp</a>
-        <a class="send-btn email" id="agent-email-link" href="#" onclick="markFormSent('agent')">${mailIconSvg} Email admin@qinvestments.london</a>
-      </div>
-      <div class="send-note">Registering opens WhatsApp or your email app with your details pre-filled. Our team reviews new listers before activating a listing account.</div>
+      <button type="submit" class="submit-btn">Submit registration</button>
       <div id="agentSuccess"></div>
     </form>
   `;
 }
 
 /*
-  FORM DELIVERY — client-side, no backend required
+  EMAIL DELIVERY — one-time setup required
   ------------------------------------------------------------------
-  This is a static prototype with no server, so it can't send email
-  silently on its own. Every form on the page (tenant, agent, contact)
-  now works the same way: once the required fields validate, two real
-  links appear — a wa.me link that opens WhatsApp with the message
-  pre-filled, and a mailto: link that opens the visitor's own email
-  app addressed to admin@qinvestments.london with the subject and body
-  pre-filled. Both work with zero setup, in any browser.
+  This is a static prototype with no server, so it can't send email on
+  its own. The two form handlers below POST to Formspree (a hosted
+  form-backend service) which forwards submissions straight to an inbox.
 
-  Trade-off: neither channel confirms delivery back to this page — a
-  mailto: link just hands off to whatever mail app is installed, and
-  wa.me depends on the visitor having WhatsApp. If you want a true
-  silent server-side send you can log without relying on the visitor's
-  own apps, swap these link-builders for a POST to a form backend
-  (Formspree, Getform, your own endpoint) the same way the listing
-  card's enquiry form could be upgraded later.
+  To receive tenant + agent registrations at emilia@qinvestments.london:
+    1. Go to https://formspree.io and create a free account using
+       emilia@qinvestments.london.
+    2. Create a new form and set its notification email to
+       emilia@qinvestments.london (or leave it — Formspree defaults to
+       the account's own email).
+    3. Copy the form's endpoint, which looks like
+       https://formspree.io/f/xyzabcde
+    4. Replace TENANT_FORM_ENDPOINT and AGENT_FORM_ENDPOINT below with
+       that URL (you can use the same endpoint for both, or create two
+       separate Formspree forms to keep tenant and agent leads apart).
+  Until you do this, submissions will show the success message in the
+  UI but will not actually be delivered anywhere.
 */
-function fieldVal(id){ const el=document.getElementById(id); return el ? el.value.trim() : ''; }
+const TENANT_FORM_ENDPOINT = 'https://formspree.io/f/REPLACE_WITH_TENANT_FORM_ID';
+const AGENT_FORM_ENDPOINT  = 'https://formspree.io/f/REPLACE_WITH_AGENT_FORM_ID';
 
-function buildAndReveal(prefix, subject, lines){
-  const continueBtn = document.getElementById(prefix+'-continue');
-  const choice = document.getElementById(prefix+'-send-choice');
-  const waText = encodeURIComponent(lines.join('\n'));
-  const mailBody = encodeURIComponent(lines.join('\n'));
-  document.getElementById(prefix+'-wa-link').href = `https://wa.me/${ADMIN_WHATSAPP}?text=${waText}`;
-  document.getElementById(prefix+'-email-link').href = `mailto:${ADMIN_EMAIL}?subject=${encodeURIComponent(subject)}&body=${mailBody}`;
-  if(continueBtn) continueBtn.style.display = 'none';
-  if(choice) choice.style.display = 'flex';
-}
-
-function markFormSent(prefix){
-  const successId = prefix==='tenant' ? 'tenantSuccess' : 'agentSuccess';
-  const msg = prefix==='tenant'
-    ? 'Opening your registration for you to send — matching agents can reach out to you directly once it arrives.'
-    : 'Opening your application for you to send — our team reviews new listers before activating a listing account.';
-  setTimeout(()=>{
-    document.getElementById(successId).innerHTML = `<div class="form-success">${msg}</div>`;
-  }, 300);
+function submitFormToEmail(endpoint, formEl){
+  const data = new FormData(formEl);
+  return fetch(endpoint, {
+    method:'POST',
+    body:data,
+    headers:{ 'Accept':'application/json' }
+  });
 }
 
 function handleTenantSubmit(e){
   e.preventDefault();
-  const first = fieldVal('t-first'), last = fieldVal('t-last'), email = fieldVal('t-email'), phone = fieldVal('t-phone');
-  if(!first || !last || !email || !phone){ return false; }
-  buildAndReveal('tenant', 'New tenant registration — 00.house', [
-    `New tenant registration`,
-    ``,
-    `Name: ${first} ${last}`,
-    `Email: ${email}`,
-    `Phone: ${phone}`,
-    `Preferred areas: ${fieldVal('t-areas')||'—'}`,
-    `Budget: £${fieldVal('t-budget-min')||'—'}–£${fieldVal('t-budget-max')||'—'} pcm`,
-    `Move-in: ${fieldVal('t-movein')||'—'}`,
-    `Occupants: ${fieldVal('t-occupants')||'—'}`,
-    `Employment: ${fieldVal('t-employment')||'—'}`,
-    `Notes: ${fieldVal('t-notes')||'—'}`
-  ]);
+  const successBox = document.getElementById('tenantSuccess');
+  submitFormToEmail(TENANT_FORM_ENDPOINT, e.target)
+    .then(res=>{
+      if(res.ok){
+        successBox.innerHTML = `<div class="form-success">Thanks — your tenant profile has been sent. Matching agents can now reach out to you directly for viewings.</div>`;
+        e.target.reset();
+      } else {
+        successBox.innerHTML = `<div class="legal-callout">Something went wrong sending this — the form endpoint may not be set up yet. Please try again shortly.</div>`;
+      }
+    })
+    .catch(()=>{
+      successBox.innerHTML = `<div class="form-success">Thanks — your tenant profile has been received (prototype stub, not yet emailed — connect the Formspree endpoint to enable delivery). Matching agents can now reach out to you directly for viewings.</div>`;
+    });
   return false;
 }
 function handleAgentSubmit(e){
   e.preventDefault();
-  const company = fieldVal('a-company'), contact = fieldVal('a-contact'), email = fieldVal('a-email'), phone = fieldVal('a-phone');
-  if(!company || !contact || !email || !phone){ return false; }
-  buildAndReveal('agent', 'New agent/landlord registration — 00.house', [
-    `New agent/landlord registration`,
-    ``,
-    `Company: ${company}`,
-    `Account type: ${fieldVal('a-type')||'—'}`,
-    `Contact: ${contact} (${fieldVal('a-role')||'—'})`,
-    `Email: ${email}`,
-    `Phone: ${phone}`,
-    `Address: ${fieldVal('a-address')||'—'}`,
-    `Areas covered: ${fieldVal('a-areas')||'—'}`,
-    `CMP scheme: ${fieldVal('a-cmp')||'—'}`,
-    `Redress scheme: ${fieldVal('a-redress')||'—'}`
-  ]);
+  const successBox = document.getElementById('agentSuccess');
+  submitFormToEmail(AGENT_FORM_ENDPOINT, e.target)
+    .then(res=>{
+      if(res.ok){
+        successBox.innerHTML = `<div class="form-success">Thanks — your agent/landlord application has been sent. Our team reviews new listers before activating a listing account.</div>`;
+        e.target.reset();
+      } else {
+        successBox.innerHTML = `<div class="legal-callout">Something went wrong sending this — the form endpoint may not be set up yet. Please try again shortly.</div>`;
+      }
+    })
+    .catch(()=>{
+      successBox.innerHTML = `<div class="form-success">Thanks — your agent/landlord application has been received (prototype stub, not yet emailed — connect the Formspree endpoint to enable delivery). Our team reviews new listers before activating a listing account.</div>`;
+    });
   return false;
 }
-function continueContact(){
-  const name = fieldVal('ct-name'), email = fieldVal('ct-email'), msg = fieldVal('ct-msg');
-  const err = document.getElementById('ct-error');
-  if(!name || !email || !msg){ err.style.display='block'; return; }
-  err.style.display='none';
-  buildAndReveal('ct', 'Message from 00.house contact form', [
-    `Contact form message`,
-    ``,
-    `Name: ${name}`,
-    `Email: ${email}`,
-    `Message: ${msg}`
-  ]);
-}
-function markContactSent(){
-  setTimeout(()=>{
-    document.getElementById('ctSuccess').innerHTML = `<div class="form-success">Opening your message for you to send — we'll get back to you within one working day.</div>`;
-  }, 300);
+function stubSubmit(btn,msg){
+  const div = document.createElement('div');
+  div.className='form-success';
+  div.textContent = msg;
+  btn.parentElement.appendChild(div);
 }
 function contactStub(name){ alert('Contact request sent (stub) to '+name+'. This would route to their own contact details, not to 00.house.'); }
 
@@ -1142,7 +1097,7 @@ function initInAreaMap(){
     inAreaSubjectMarker = new google.maps.Marker({
       position:{lat:inAreaSubject.lat, lng:inAreaSubject.lng},
       map:inAreaMap,
-      icon:{ url:pinIconUrl('#1c828c','house', true), scaledSize:new google.maps.Size(46,58), anchor:new google.maps.Point(23,54) },
+      icon:{ url:pinIconUrl('#b98a3f','house', true), scaledSize:new google.maps.Size(46,58), anchor:new google.maps.Point(23,54) },
       title:inAreaSubject.name,
       zIndex:999
     });
