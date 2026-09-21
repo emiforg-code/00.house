@@ -1198,169 +1198,327 @@ function initInAreaMap(){
   </div>
 </div>
 
+<!--
+  00.house — Agent / Landlord quick-registration popup
+  ------------------------------------------------------
+  Styled to match your existing register page: italic serif headline,
+  "REGISTER" eyebrow, Inter for labels/body, rounded bordered inputs,
+  and it reuses your --brass CSS variable for the button — if --brass is
+  already defined in your site's stylesheet, this will automatically pick
+  up your real brand color. If it isn't defined globally, it falls back
+  to the estimated gold tone below.
+
+  HOW TO USE:
+  1. Paste this whole block right before the closing </body> tag.
+  2. Wire up the real endpoint in the JS at the bottom (marked "REPLACE ME") —
+     right now it just simulates a submit and shows a success state.
+  3. If your headline font isn't a Playfair-style serif italic, tell me the
+     actual font name/file and I'll swap it in for a pixel-perfect match.
+  4. Swap /terms and /privacy for your real legal page URLs.
+-->
+
+<div id="reg-popup-overlay" aria-hidden="true">
+  <div class="reg-popup-card" role="dialog" aria-modal="true" aria-labelledby="reg-popup-title">
+    <button class="reg-popup-close" id="reg-popup-close" aria-label="Close">&times;</button>
+
+    <p class="reg-popup-eyebrow">Register</p>
+    <h2 id="reg-popup-title" class="reg-popup-title"><em>Agent &amp; landlord</em> registration</h2>
+    <p class="reg-popup-body">List once, reach ready-to-view tenants. Takes less than two minutes.</p>
+
+    <form id="reg-popup-form" class="reg-popup-form">
+      <label class="reg-popup-label" for="rp-agency">Agency / company name</label>
+      <input class="reg-popup-input" type="text" id="rp-agency" name="agency" required>
+
+      <label class="reg-popup-label" for="rp-contact">Contact name</label>
+      <input class="reg-popup-input" type="text" id="rp-contact" name="contact" required>
+
+      <label class="reg-popup-label" for="rp-email">Work email</label>
+      <input class="reg-popup-input" type="email" id="rp-email" name="email" required>
+
+      <button type="submit" class="reg-popup-submit" id="reg-popup-submit">Register</button>
+    </form>
+
+    <div class="reg-popup-success" id="reg-popup-success">
+      <p>Thanks — we've got your details. Redirecting you to finish setting up your account…</p>
+    </div>
+
+    <div class="reg-popup-legal">
+      <a href="/terms">Terms of Service</a>
+      <span class="reg-popup-divider">|</span>
+      <a href="/privacy">Privacy Policy</a>
+    </div>
+  </div>
+</div>
+
+  
 <style>
-  /*
-   * The map wrapper already has position:relative.
-   * This overlay therefore covers only the map, not the whole page.
-   */
-  .map-registration-popup {
-    position: absolute;
+  #reg-popup-overlay {
+    --brass-fallback: #A67C3D;
+    position: fixed;
     inset: 0;
-    z-index: 20;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     display: none;
     align-items: center;
     justify-content: center;
-    padding: 24px;
-    background: rgba(10, 10, 10, 0.46);
-    backdrop-filter: blur(7px);
-    -webkit-backdrop-filter: blur(7px);
+    z-index: 9999;
     opacity: 0;
     transition: opacity 0.35s ease;
+    padding: 20px;
   }
 
-  .map-registration-popup.is-visible {
+  #reg-popup-overlay.is-visible {
     display: flex;
     opacity: 1;
   }
 
-  .map-registration-card {
+  .reg-popup-card {
     position: relative;
-    width: min(440px, 100%);
-    padding: 42px 36px 36px;
-    border-radius: 18px;
-    background: #fff;
-    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+    width: min(80vw, 460px);
+    max-height: 85vh;
+    overflow-y: auto;
+    background: #FFFFFF;
+    border: 1px solid #E4E0D8;
+    border-radius: 14px;
+    box-shadow: 0 24px 60px rgba(22, 25, 15, 0.16);
+    padding: 44px 40px 32px;
     transform: translateY(12px);
     transition: transform 0.35s ease;
   }
 
-  .map-registration-popup.is-visible .map-registration-card {
+  #reg-popup-overlay.is-visible .reg-popup-card {
     transform: translateY(0);
   }
 
-  .map-registration-content {
+  .reg-popup-close {
+    position: absolute;
+    top: 16px;
+    right: 18px;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    font-size: 22px;
+    line-height: 1;
+    color: #9CA3AF;
+    cursor: pointer;
+    border-radius: 50%;
+  }
+
+  .reg-popup-close:hover {
+    background: #F4F1EA;
+    color: #111111;
+  }
+
+  .reg-popup-eyebrow {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--brass, var(--brass-fallback));
+    margin: 0 0 6px 0;
+  }
+
+  .reg-popup-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 30px;
+    line-height: 1.2;
+    color: #111111;
+    margin: 0 0 12px 0;
+    font-weight: 600;
+  }
+
+  .reg-popup-title em {
+    font-style: italic;
+  }
+
+  .reg-popup-body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #6B7280;
+    margin: 0 0 24px 0;
+  }
+
+  .reg-popup-form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .reg-popup-label {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #111111;
+    margin: 14px 0 6px 0;
+  }
+
+  .reg-popup-label:first-child {
+    margin-top: 0;
+  }
+
+  .reg-popup-input {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px;
+    color: #111111;
+    padding: 12px 14px;
+    border: 1px solid #E4E0D8;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.15s ease;
+  }
+
+  .reg-popup-input::placeholder {
+    color: #9CA3AF;
+  }
+
+  .reg-popup-input:focus {
+    border-color: var(--brass, var(--brass-fallback));
+  }
+
+  .reg-popup-submit {
+    margin-top: 22px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: #FFFFFF;
+    background: var(--brass, var(--brass-fallback));
+    border: none;
+    border-radius: 8px;
+    padding: 13px 24px;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+  }
+
+  .reg-popup-submit:hover {
+    opacity: 0.9;
+  }
+
+  .reg-popup-submit:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+
+  .reg-popup-success {
+    display: none;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px;
+    color: #111111;
+    padding: 20px 0;
+  }
+
+  .reg-popup-success.is-visible {
+    display: block;
+  }
+
+  .reg-popup-legal {
+    margin-top: 26px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 12px;
+    color: #9CA3AF;
     text-align: center;
   }
 
-  .map-registration-content .eyebrow {
-    margin-bottom: 8px;
+  .reg-popup-legal a {
+    color: #6B7280;
+    text-decoration: none;
   }
 
-  .map-registration-content h2 {
-    color: var(--black);
-    font-size: clamp(25px, 4vw, 34px);
-    margin-bottom: 12px;
+  .reg-popup-legal a:hover {
+    text-decoration: underline;
   }
 
-  .map-registration-content p {
-    max-width: 360px;
-    margin: 0 auto 24px;
-    font-size: 14px;
-  }
-
-  .map-registration-button {
-    border: 0;
-    border-radius: 999px;
-    padding: 13px 24px;
-    background: var(--brass);
-    color: #fff;
-    font: 600 13px 'Inter', sans-serif;
-    cursor: pointer;
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
-  }
-
-  .map-registration-button:hover {
-    background: #9d7332;
-  }
-
-  .map-registration-close {
-    position: absolute;
-    top: 12px;
-    right: 14px;
-    width: 32px;
-    height: 32px;
-    border: 1px solid var(--line);
-    border-radius: 50%;
-    background: #fff;
-    color: var(--muted);
-    font-size: 22px;
-    line-height: 1;
-    cursor: pointer;
-  }
-
-  .map-registration-close:hover {
-    color: var(--black);
-    background: var(--cream);
+  .reg-popup-divider {
+    margin: 0 8px;
+    color: #D1D5DB;
   }
 
   @media (max-width: 600px) {
-    .map-registration-popup {
-      padding: 16px;
+    .reg-popup-card {
+      width: 88vw;
+      padding: 32px 24px 24px;
     }
-
-    .map-registration-card {
-      padding: 38px 24px 28px;
+    .reg-popup-title {
+      font-size: 24px;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .map-registration-popup,
-    .map-registration-card {
+    #reg-popup-overlay,
+    .reg-popup-card {
       transition: none;
     }
   }
 </style>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
 <script>
   (function () {
-    var popup = document.getElementById('map-registration-popup');
-    var mapSection = document.getElementById('inAreaSection');
-    var popupTimer = null;
-    var hasShown = false;
+    var STORAGE_KEY = 'reg_popup_shown';
+    if (sessionStorage.getItem(STORAGE_KEY)) return; // remove this line to show on every page load
 
-    if (!popup || !mapSection) return;
+    var overlay = document.getElementById('reg-popup-overlay');
+    var closeBtn = document.getElementById('reg-popup-close');
+    var form = document.getElementById('reg-popup-form');
+    var submitBtn = document.getElementById('reg-popup-submit');
+    var successEl = document.getElementById('reg-popup-success');
 
-    function showMapRegistrationPopup() {
-      if (hasShown) return;
-
-      hasShown = true;
-      popup.classList.add('is-visible');
-      popup.setAttribute('aria-hidden', 'false');
+    function openPopup() {
+      overlay.classList.add('is-visible');
+      overlay.setAttribute('aria-hidden', 'false');
+      sessionStorage.setItem(STORAGE_KEY, '1');
     }
 
-    window.closeMapRegistrationPopup = function () {
-      if (popupTimer) {
-        clearTimeout(popupTimer);
-        popupTimer = null;
-      }
+    function closePopup() {
+      overlay.classList.remove('is-visible');
+      overlay.setAttribute('aria-hidden', 'true');
+    }
 
-      popup.classList.remove('is-visible');
-      popup.setAttribute('aria-hidden', 'true');
-    };
+    setTimeout(openPopup, 2000);
 
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting || hasShown || popupTimer) return;
-
-        // Start the two-second countdown once the map is visible.
-        popupTimer = setTimeout(showMapRegistrationPopup, 2000);
-      });
-    }, {
-      threshold: 0.35
+    closeBtn.addEventListener('click', closePopup);
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) closePopup();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closePopup();
     });
 
-    observer.observe(mapSection);
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Registering…';
 
-    popup.addEventListener('click', function (event) {
-      if (event.target === popup) {
-        window.closeMapRegistrationPopup();
-      }
-    });
+      var payload = {
+        agency: document.getElementById('rp-agency').value,
+        contact: document.getElementById('rp-contact').value,
+        email: document.getElementById('rp-email').value
+      };
 
-    document.addEventListener('keydown', function (event) {
-      if (event.key === 'Escape') {
-        window.closeMapRegistrationPopup();
-      }
+      // REPLACE ME: point this at your real lead-capture endpoint
+      fetch('/api/agent-quick-signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+        .then(function () {
+          form.style.display = 'none';
+          successEl.classList.add('is-visible');
+          // REPLACE ME: send them into your full registration flow, prefilled
+          setTimeout(function () {
+            window.location.href = '/register?email=' + encodeURIComponent(payload.email);
+          }, 1400);
+        })
+        .catch(function () {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Register';
+          alert('Something went wrong — please try again.');
+        });
     });
   })();
 </script>
