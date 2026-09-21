@@ -371,7 +371,7 @@ footer a:hover{color:var(--black)}
         <button class="panel-btn agent-btn" onclick="openPanel('agent-form')" data-i18n="cta_agent_btn">Quick Sign-Up</button>
       </div>
       <div class="panel-visual">
-        <img class="panel-photo" src="./she.jpeg" alt="List your houses">
+        <img class="panel-photo" src="./she.png" alt="List your houses">
         <div class="mock-chip">
           <div class="chip-logo"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V10"/><path d="M9.5 20.5V14h5v6.5"/></svg></div>
           <div><strong>00.house</strong><span class="chip-time" data-i18n="notif1_time">1m ago</span><br><span data-i18n="notif1_text">New enquiry from Adam M.</span></div>
@@ -1163,5 +1163,206 @@ function initInAreaMap(){
   Docs: https://developers.google.com/maps/documentation/javascript/get-api-key
 -->
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-I8268eF9w7JYVrXEv7xi3WM0KnYRI0Q&callback=initInAreaMap"></script>
+
+<!-- Map registration popup -->
+<div id="map-registration-popup" class="map-registration-popup" aria-hidden="true">
+  <div class="map-registration-card" role="dialog" aria-modal="true" aria-labelledby="map-registration-title">
+    <button
+      type="button"
+      class="map-registration-close"
+      aria-label="Close popup"
+      onclick="closeMapRegistrationPopup()"
+    >
+      ×
+    </button>
+
+    <div class="map-registration-content">
+      <span class="eyebrow">Find your next home</span>
+      <h2 id="map-registration-title">
+        <em>Ready to explore?</em>
+      </h2>
+
+      <p>
+        Register as a tenant to discover properties, save searches and connect
+        with agents and landlords.
+      </p>
+
+      <button
+        type="button"
+        class="map-registration-button"
+        onclick="openPanel('tenant-form'); closeMapRegistrationPopup();"
+      >
+        Register as a tenant
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  /*
+   * The map wrapper already has position:relative.
+   * This overlay therefore covers only the map, not the whole page.
+   */
+  .map-registration-popup {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(10, 10, 10, 0.46);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  .map-registration-popup.is-visible {
+    display: flex;
+    opacity: 1;
+  }
+
+  .map-registration-card {
+    position: relative;
+    width: min(440px, 100%);
+    padding: 42px 36px 36px;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+    transform: translateY(12px);
+    transition: transform 0.35s ease;
+  }
+
+  .map-registration-popup.is-visible .map-registration-card {
+    transform: translateY(0);
+  }
+
+  .map-registration-content {
+    text-align: center;
+  }
+
+  .map-registration-content .eyebrow {
+    margin-bottom: 8px;
+  }
+
+  .map-registration-content h2 {
+    color: var(--black);
+    font-size: clamp(25px, 4vw, 34px);
+    margin-bottom: 12px;
+  }
+
+  .map-registration-content p {
+    max-width: 360px;
+    margin: 0 auto 24px;
+    font-size: 14px;
+  }
+
+  .map-registration-button {
+    border: 0;
+    border-radius: 999px;
+    padding: 13px 24px;
+    background: var(--brass);
+    color: #fff;
+    font: 600 13px 'Inter', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+  }
+
+  .map-registration-button:hover {
+    background: #9d7332;
+  }
+
+  .map-registration-close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: #fff;
+    color: var(--muted);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .map-registration-close:hover {
+    color: var(--black);
+    background: var(--cream);
+  }
+
+  @media (max-width: 600px) {
+    .map-registration-popup {
+      padding: 16px;
+    }
+
+    .map-registration-card {
+      padding: 38px 24px 28px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .map-registration-popup,
+    .map-registration-card {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    var popup = document.getElementById('map-registration-popup');
+    var mapSection = document.getElementById('inAreaSection');
+    var popupTimer = null;
+    var hasShown = false;
+
+    if (!popup || !mapSection) return;
+
+    function showMapRegistrationPopup() {
+      if (hasShown) return;
+
+      hasShown = true;
+      popup.classList.add('is-visible');
+      popup.setAttribute('aria-hidden', 'false');
+    }
+
+    window.closeMapRegistrationPopup = function () {
+      if (popupTimer) {
+        clearTimeout(popupTimer);
+        popupTimer = null;
+      }
+
+      popup.classList.remove('is-visible');
+      popup.setAttribute('aria-hidden', 'true');
+    };
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting || hasShown || popupTimer) return;
+
+        // Start the two-second countdown once the map is visible.
+        popupTimer = setTimeout(showMapRegistrationPopup, 2000);
+      });
+    }, {
+      threshold: 0.35
+    });
+
+    observer.observe(mapSection);
+
+    popup.addEventListener('click', function (event) {
+      if (event.target === popup) {
+        window.closeMapRegistrationPopup();
+      }
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') {
+        window.closeMapRegistrationPopup();
+      }
+    });
+  })();
+</script>
 </body>
 </html>
