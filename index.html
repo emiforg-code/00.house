@@ -744,7 +744,7 @@ function handleTenantSubmit(e){
       }
     })
     .catch(()=>{
-      successBox.innerHTML = `<div class="form-success">Thanks — your tenant profile has been received (prototype stub, not yet emailed — connect the Formspree endpoint to enable delivery). Matching agents can now reach out to you directly for viewings.</div>`;
+      successBox.innerHTML = `<div class="legal-callout">Something went wrong sending this — please check your connection and try again.</div>`;
     });
   return false;
 }
@@ -761,7 +761,7 @@ function handleAgentSubmit(e){
       }
     })
     .catch(()=>{
-      successBox.innerHTML = `<div class="form-success">Thanks — your agent/landlord application has been received (prototype stub, not yet emailed — connect the Formspree endpoint to enable delivery). Our team reviews new listers before activating a listing account.</div>`;
+      successBox.innerHTML = `<div class="legal-callout">Something went wrong sending this — please check your connection and try again.</div>`;
     });
   return false;
 }
@@ -1117,5 +1117,778 @@ function initInAreaMap(){
   Docs: https://developers.google.com/maps/documentation/javascript/get-api-key
 -->
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-I8268eF9w7JYVrXEv7xi3WM0KnYRI0Q&callback=initInAreaMap"></script>
+<!--
+  00.house | Map teaser: early launch offer for agents + quick registration
+  =========================================================================
+
+  WHAT IT DOES
+  - Nothing happens on page load. When the visitor scrolls the map into view,
+    a dark red panel fades in and covers the map (only the map, not the whole
+    screen). It asks agents and landlords to register before the offer ends
+    to get early launch access and 2 years of promotion.
+  - Scroll away and it fades out. Scroll back and it returns.
+  - "Register for early access" opens the registration card (agency, contact,
+    work email). On success the map is unlocked for that visitor.
+
+  HOW TO INSTALL
+  Paste this whole file just before the closing </body> tag in index.html.
+
+  IMAGES (all live in the repo root, next to index.html)
+    header%20dark%20red.jpeg   panel background (%20 = the spaces in the file name)
+    she.png                    agent portrait (arch, left)
+    he.png                     tenant portrait (arch, right)
+  These are plain relative paths, so they work on 00.house via GitHub Pages.
+  Do NOT use github.com/.../blob/... links: those are web pages, not image files.
+  If you upload the images to a sub folder, change the src / url paths below.
+
+  THINGS YOU MAY WANT TO CHANGE
+  1. OFFER_ENDS       (settings at the top of the script)  last day of the offer
+  2. --tz-opacity     (in the CSS below, .map-teaser-overlay)  0.8 = panel is 80% solid.
+                      Use 0.2 if you want the panel 80% see-through instead.
+  3. FORM_ENDPOINT    Formspree URL. If left empty, the script reuses
+                      AGENT_FORM_ENDPOINT from index.html. Until one of them is a
+                      real Formspree URL, submitting shows an error (it will not
+                      pretend to succeed).
+-->
+
+<style>
+  /* ------------------------------------------------------------------
+     Shared
+     ------------------------------------------------------------------ */
+  .map-teaser-overlay,
+  #reg-popup-overlay {
+    --tz-wine: #2c0a0e;
+    --tz-cream: #fbf3e8;
+    --tz-brass: var(--brass, #b98a3f);
+    --tz-brass-soft: #f0d9a8;
+    --tz-mint: #cddbd0;
+    --tz-ink: #1c0b0d;
+    --tz-line: #e4e0d8;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .map-teaser-overlay *,
+  #reg-popup-overlay * {
+    box-sizing: border-box;
+  }
+
+  .map-teaser-overlay[hidden],
+  .map-teaser-overlay [hidden],
+  #reg-popup-overlay [hidden] {
+    display: none !important;
+  }
+
+  /* ------------------------------------------------------------------
+     Map teaser panel (sits inside the map box only)
+     ------------------------------------------------------------------ */
+  .map-teaser-overlay {
+    --tz-opacity: 0.8; /* 0.8 = panel is 80% solid, map shows through at 20% */
+
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    padding: 24px;
+    overflow: auto;
+    border-radius: inherit;
+    color: var(--tz-cream);
+    text-align: center;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+    transition: opacity 0.45s ease, visibility 0s linear 0.45s;
+  }
+
+  .map-teaser-overlay.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: opacity 0.45s ease, visibility 0s;
+  }
+
+  .map-teaser-backdrop {
+    position: absolute;
+    inset: 0;
+    background: #3a0f14; /* shows if the photo is slow or missing */
+    opacity: var(--tz-opacity);
+  }
+
+  .map-teaser-backdrop img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 45%;
+  }
+
+  .map-teaser-backdrop::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgba(44, 10, 14, 0.62), rgba(44, 10, 14, 0.74));
+  }
+
+  .map-teaser-inner {
+    position: relative;
+    margin: auto; /* centres, and stays scrollable if the map box is short */
+    display: grid;
+    grid-template-columns: auto minmax(0, 440px) auto;
+    grid-template-areas: 'she copy he';
+    align-items: center;
+    column-gap: clamp(24px, 5vw, 72px);
+  }
+
+  .teaser-arch {
+    margin: 0;
+    width: clamp(150px, 17vw, 212px);
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--tz-mint);
+    border: 1px solid rgba(251, 243, 232, 0.55);
+    border-radius: 50% 50% 12px 12px / 40% 40% 12px 12px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  }
+
+  .teaser-arch img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .teaser-arch--she { grid-area: she; }
+  .teaser-arch--she img { object-position: 50% 20%; }
+  .teaser-arch--he { grid-area: he; }
+  .teaser-arch--he img { object-position: 78% 30%; }
+
+  .teaser-copy {
+    grid-area: copy;
+  }
+
+  .teaser-pill {
+    display: inline-block;
+    margin: 0 0 14px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--tz-brass-soft);
+    background: rgba(185, 138, 63, 0.2);
+    border: 1px solid rgba(240, 217, 168, 0.55);
+    border-radius: 999px;
+  }
+
+  .teaser-title {
+    margin: 0 0 12px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: clamp(25px, 3.2vw, 36px);
+    line-height: 1.15;
+    color: var(--tz-cream);
+    text-wrap: balance;
+  }
+
+  .teaser-body {
+    margin: 0 auto 22px;
+    max-width: 38ch;
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: rgba(251, 243, 232, 0.94);
+  }
+
+  .teaser-btn {
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--tz-ink);
+    background: var(--tz-brass);
+    border: 0;
+    border-radius: 4px;
+    padding: 14px 28px;
+    cursor: pointer;
+    transition: filter 0.15s ease;
+  }
+
+  .teaser-btn:hover { filter: brightness(1.1); }
+
+  .teaser-btn:focus-visible,
+  .reg-popup-submit:focus-visible,
+  .reg-popup-close:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+  }
+
+  [dir="rtl"] .teaser-title,
+  [dir="rtl"] .reg-popup-title { font-style: normal; }
+
+  @media (max-width: 720px) {
+    .map-teaser-overlay { padding: 20px 16px; }
+
+    .map-teaser-inner {
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        'she he'
+        'copy copy';
+      row-gap: 18px;
+      column-gap: 12px;
+    }
+
+    .teaser-arch { width: clamp(72px, 24vw, 104px); }
+    .teaser-arch--she { justify-self: end; }
+    .teaser-arch--he { justify-self: start; }
+    .teaser-title { font-size: 24px; }
+    .teaser-body { font-size: 14.5px; margin-bottom: 18px; }
+  }
+
+  /* ------------------------------------------------------------------
+     Registration modal
+     (z-index 225: above the sticky nav at 200/210, below the site's side
+     panels at 230/240 so the legal panel can open on top of it)
+     ------------------------------------------------------------------ */
+  #reg-popup-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 225;
+    display: flex;
+    padding: 20px;
+    overflow-y: auto;
+    background: rgba(28, 8, 11, 0.62);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+  }
+
+  #reg-popup-overlay.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease, visibility 0s;
+  }
+
+  .reg-popup-card {
+    position: relative;
+    width: min(100%, 460px);
+    margin: auto;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
+    transform: translateY(14px);
+    transition: transform 0.3s ease;
+  }
+
+  #reg-popup-overlay.is-visible .reg-popup-card { transform: translateY(0); }
+
+  .reg-popup-head {
+    position: relative;
+    padding: 34px 64px 26px 28px;
+    color: var(--tz-cream);
+    background: #3a0f14;
+  }
+
+  .reg-popup-head-bg {
+    position: absolute;
+    inset: 0;
+  }
+
+  .reg-popup-head-bg img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+  }
+
+  .reg-popup-head-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgba(44, 10, 14, 0.6), rgba(44, 10, 14, 0.8));
+  }
+
+  .reg-popup-head-copy { position: relative; }
+
+  .reg-popup-title {
+    margin: 0 0 8px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 27px;
+    line-height: 1.2;
+    color: var(--tz-cream);
+  }
+
+  .reg-popup-sub {
+    margin: 0;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: rgba(251, 243, 232, 0.92);
+  }
+
+  .reg-popup-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 2;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    font-size: 24px;
+    line-height: 1;
+    color: var(--tz-cream);
+    cursor: pointer;
+  }
+
+  .reg-popup-close:hover { background: rgba(255, 255, 255, 0.16); }
+
+  .reg-popup-body { padding: 24px 28px 26px; }
+
+  .reg-popup-form { display: flex; flex-direction: column; }
+
+  .reg-popup-label {
+    margin: 14px 0 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #111;
+  }
+
+  .reg-popup-label:first-of-type { margin-top: 0; }
+
+  .reg-popup-input {
+    width: 100%;
+    padding: 12px 14px;
+    font-family: inherit;
+    font-size: 16px; /* 16px stops iOS zooming into the field */
+    color: #111;
+    background: #fff;
+    border: 1px solid var(--tz-line);
+    border-radius: 6px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .reg-popup-input:focus {
+    outline: none;
+    border-color: var(--tz-brass);
+    box-shadow: 0 0 0 3px rgba(185, 138, 63, 0.28);
+  }
+
+  .reg-popup-hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .reg-popup-error {
+    margin: 14px 0 0;
+    padding: 10px 12px;
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: #7a1620;
+    background: #fbeaec;
+    border: 1px solid #efc3c8;
+    border-radius: 6px;
+  }
+
+  .reg-popup-submit {
+    margin-top: 20px;
+    padding: 14px 24px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--tz-ink);
+    background: var(--tz-brass);
+    border: 0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: filter 0.15s ease;
+  }
+
+  .reg-popup-submit:hover { filter: brightness(1.1); }
+  .reg-popup-submit:disabled { opacity: 0.6; cursor: default; filter: none; }
+
+  .reg-popup-body .reg-popup-submit:focus-visible { outline-color: #111; }
+
+  .reg-popup-success h3 {
+    margin: 0 0 8px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 22px;
+    color: #111;
+  }
+
+  .reg-popup-success p {
+    margin: 0;
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: #4b4b4b;
+  }
+
+  .reg-popup-success:focus { outline: none; }
+  .reg-popup-success .reg-popup-submit { width: 100%; margin-top: 22px; }
+
+  .reg-popup-legal {
+    margin: 18px 0 0;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: #6b6b6b;
+    text-align: center;
+  }
+
+  .reg-popup-legal a {
+    color: #111;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  @media (max-width: 600px) {
+    #reg-popup-overlay { padding: 12px; }
+    .reg-popup-head { padding: 28px 56px 22px 20px; }
+    .reg-popup-title { font-size: 23px; }
+    .reg-popup-body { padding: 20px 20px 22px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .map-teaser-overlay,
+    .map-teaser-overlay.is-visible,
+    #reg-popup-overlay,
+    #reg-popup-overlay.is-visible,
+    .reg-popup-card { transition: none; }
+    .reg-popup-card { transform: none; }
+  }
+</style>
+
+<!-- ============ MAP TEASER PANEL (the script moves this into the map box) ============ -->
+<div class="map-teaser-overlay" id="map-teaser" role="region" aria-label="Early launch offer for agents and landlords" hidden>
+  <div class="map-teaser-backdrop" aria-hidden="true">
+    <img src="./header%20dark%20red.jpeg" alt="" loading="lazy" decoding="async">
+  </div>
+
+  <div class="map-teaser-inner">
+    <figure class="teaser-arch teaser-arch--she">
+      <img src="./she.png" alt="" width="780" height="880" loading="lazy" decoding="async">
+    </figure>
+
+    <div class="teaser-copy">
+      <p class="teaser-pill" data-when="live"><span data-days-left>60 days left</span></p>
+
+      <h4 class="teaser-title" data-when="live">Agents and landlords: register first</h4>
+      <h4 class="teaser-title" data-when="expired" hidden>Agents and landlords: register to unlock the map</h4>
+
+      <p class="teaser-body" data-when="live">Register before <span data-offer-date>20 November 2026</span> and get early launch access plus 2 years of promotion.</p>
+      <p class="teaser-body" data-when="expired" hidden>Register to see everything available in this area.</p>
+
+      <button type="button" class="teaser-btn" id="map-teaser-btn">Register for early access</button>
+    </div>
+
+    <figure class="teaser-arch teaser-arch--he">
+      <img src="./he.png" alt="" width="1065" height="1008" loading="lazy" decoding="async">
+    </figure>
+  </div>
+</div>
+
+<!-- ============ QUICK REGISTRATION MODAL (opens from the panel button) ============ -->
+<div id="reg-popup-overlay" aria-hidden="true">
+  <div class="reg-popup-card" role="dialog" aria-modal="true" aria-labelledby="reg-popup-title">
+    <div class="reg-popup-head">
+      <div class="reg-popup-head-bg" aria-hidden="true">
+        <img src="./header%20dark%20red.jpeg" alt="" loading="lazy" decoding="async">
+      </div>
+      <button type="button" class="reg-popup-close" id="reg-popup-close" aria-label="Close">&times;</button>
+      <div class="reg-popup-head-copy">
+        <h2 class="reg-popup-title" id="reg-popup-title">
+          <span data-when="live">Register for early launch access</span>
+          <span data-when="expired" hidden>Register as an agent or landlord</span>
+        </h2>
+        <p class="reg-popup-sub" data-when="live">Plus 2 years of promotion. The offer closes <span data-offer-date>20 November 2026</span>.</p>
+        <p class="reg-popup-sub" data-when="expired" hidden>Takes less than two minutes.</p>
+      </div>
+    </div>
+
+    <div class="reg-popup-body">
+      <form id="reg-popup-form" class="reg-popup-form" novalidate>
+        <label class="reg-popup-label" for="rp-agency">Agency or company name</label>
+        <input class="reg-popup-input" type="text" id="rp-agency" name="agency" autocomplete="organization" required>
+
+        <label class="reg-popup-label" for="rp-contact">Contact name</label>
+        <input class="reg-popup-input" type="text" id="rp-contact" name="contact" autocomplete="name" required>
+
+        <label class="reg-popup-label" for="rp-email">Work email</label>
+        <input class="reg-popup-input" type="email" id="rp-email" name="email" autocomplete="email" required>
+
+        <!-- spam trap: real people never see or fill this -->
+        <div class="reg-popup-hp" aria-hidden="true">
+          <label>Leave this empty <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label>
+        </div>
+
+        <p class="reg-popup-error" id="reg-popup-error" role="alert" hidden></p>
+
+        <button type="submit" class="reg-popup-submit" id="reg-popup-submit">Register</button>
+
+        <p class="reg-popup-legal">
+          By registering you agree to our
+          <a href="#" data-legal="terms">Terms of Use</a> and
+          <a href="#" data-legal="privacy">Privacy Policy</a>.
+        </p>
+      </form>
+
+      <div class="reg-popup-success" id="reg-popup-success" tabindex="-1" hidden>
+        <h3>You're registered</h3>
+        <p>Thanks. We have your details and will be in touch at <strong id="reg-popup-success-email"></strong>.</p>
+        <button type="button" class="reg-popup-submit" id="reg-popup-done">See the map</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    'use strict';
+
+    /* ============ SETTINGS ============ */
+    var MAP_SELECTOR = '.inarea-map-wrapper';   // the box that holds only the Google Map
+    var VISIBILITY_THRESHOLD = 0.3;             // share of the map on screen before the panel shows
+    var OFFER_ENDS = '2026-11-20';              // last day of the offer, YYYY-MM-DD (60 days from 21 Sep 2026)
+    var FORM_ENDPOINT = '';                     // Formspree URL; empty = reuse AGENT_FORM_ENDPOINT from index.html
+    var STORAGE_KEY = 'agent_registered';       // same key as before
+
+    /* ============ HELPERS ============ */
+    function $(id) { return document.getElementById(id); }
+
+    var store = {
+      get: function (k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } },
+      set: function (k, v) { try { window.localStorage.setItem(k, v); } catch (e) { /* storage blocked */ }
+      }
+    };
+
+    function each(list, fn) { Array.prototype.forEach.call(list, fn); }
+
+    function parseDay(s) {
+      var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s);
+      return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null;
+    }
+
+    function getEndpoint() {
+      var url = FORM_ENDPOINT;
+      if (!url) {
+        try { url = (typeof AGENT_FORM_ENDPOINT === 'string') ? AGENT_FORM_ENDPOINT : ''; }
+        catch (e) { url = ''; }
+      }
+      return (url && url.indexOf('REPLACE_WITH') === -1) ? url : '';
+    }
+
+    var teaser = $('map-teaser');
+    var overlay = $('reg-popup-overlay');
+    var closeBtn = $('reg-popup-close');
+    var form = $('reg-popup-form');
+    var submitBtn = $('reg-popup-submit');
+    var errorBox = $('reg-popup-error');
+    var success = $('reg-popup-success');
+    var successEmail = $('reg-popup-success-email');
+    var doneBtn = $('reg-popup-done');
+    var teaserBtn = $('map-teaser-btn');
+    if (!teaser || !overlay || !form) return;
+
+    /* ============ OFFER STATE (live countdown or fallback copy) ============ */
+    var end = parseDay(OFFER_ENDS);
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+    var daysLeft = end ? Math.round((end - today) / 86400000) : -1;
+    var offerLive = daysLeft >= 0;
+
+    each(document.querySelectorAll('[data-when]'), function (el) {
+      el.hidden = (el.getAttribute('data-when') === 'live') !== offerLive;
+    });
+
+    if (offerLive) {
+      var daysText = daysLeft === 0 ? 'Last day' : daysLeft === 1 ? '1 day left' : daysLeft + ' days left';
+      var dateText = end.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+      each(document.querySelectorAll('[data-days-left]'), function (el) { el.textContent = daysText; });
+      each(document.querySelectorAll('[data-offer-date]'), function (el) { el.textContent = dateText; });
+    }
+
+    /* ============ MODAL ============ */
+    var lastFocus = null;
+    var signedUp = false;
+    var unlocked = false;
+    var observer = null;
+
+    function focusables() {
+      return Array.prototype.filter.call(
+        overlay.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]):not([tabindex="-1"]), [tabindex="0"]'),
+        function (el) { return el.offsetParent !== null; }
+      );
+    }
+
+    function openModal() {
+      lastFocus = document.activeElement;
+      overlay.classList.add('is-visible');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      setTimeout(function () {
+        var first = form.hidden ? success : $('rp-agency');
+        if (first && first.focus) first.focus();
+      }, 40);
+    }
+
+    function closeModal() {
+      overlay.classList.remove('is-visible');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+      if (signedUp) unlockMap();
+    }
+
+    function showError(message) {
+      errorBox.textContent = message;
+      errorBox.hidden = false;
+    }
+
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', function (e) { if (e.target === overlay) closeModal(); });
+
+    document.addEventListener('keydown', function (e) {
+      if (!overlay.classList.contains('is-visible')) return;
+      if (e.key === 'Escape') { closeModal(); return; }
+      if (e.key !== 'Tab') return;
+      var items = focusables();
+      if (!items.length) return;
+      var first = items[0], last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+
+    // Terms / Privacy open the site's own legal side panel (closing this card first).
+    each(overlay.querySelectorAll('[data-legal]'), function (link) {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (typeof window.openPanel !== 'function') return;
+        closeModal();
+        window.openPanel('legal', link.getAttribute('data-legal'));
+      });
+    });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      errorBox.hidden = true;
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      var data = {
+        agency: $('rp-agency').value.trim(),
+        contact: $('rp-contact').value.trim(),
+        email: $('rp-email').value.trim(),
+        source: 'map-teaser',
+        offer: 'early-launch-2-years-promotion',
+        offer_ends: OFFER_ENDS,
+        page: window.location.href
+      };
+
+      // Spam trap filled in: act as if it worked, send nothing, remember nothing.
+      if (form.elements._gotcha && form.elements._gotcha.value) {
+        onSuccess(data, false);
+        return;
+      }
+
+      var endpoint = getEndpoint();
+      if (!endpoint) {
+        console.warn('[00.house map teaser] No form endpoint. Set FORM_ENDPOINT in this file or AGENT_FORM_ENDPOINT in index.html to your Formspree URL.');
+        onFailure();
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Registering…';
+
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(data)
+      })
+        .then(function (res) {
+          // fetch only rejects on network errors, so treat HTTP errors as failures too
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+        })
+        // two-argument then: an error inside onSuccess can never fall into onFailure
+        .then(function () { onSuccess(data, true); }, onFailure);
+    });
+
+    function onFailure(err) {
+      if (err) console.error('[00.house map teaser] Registration failed:', err);
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Register';
+      showError('We could not send your details. Check your connection and try again.');
+    }
+
+    function onSuccess(data, remember) {
+      signedUp = true;
+      if (remember) store.set(STORAGE_KEY, '1');
+      successEmail.textContent = data.email;
+      form.hidden = true;
+      success.hidden = false;
+      success.focus();
+    }
+
+    doneBtn.addEventListener('click', closeModal);
+
+    /* ============ MAP TEASER ============ */
+    var mapEl = document.querySelector(MAP_SELECTOR);
+
+    if (!mapEl) {
+      console.warn('[00.house map teaser] Map element not found for selector "' + MAP_SELECTOR + '". Panel not added.');
+      teaser.parentNode.removeChild(teaser);
+      return;
+    }
+
+    if (store.get(STORAGE_KEY)) {
+      teaser.parentNode.removeChild(teaser);
+      return;
+    }
+
+    if (window.getComputedStyle(mapEl).position === 'static') mapEl.style.position = 'relative';
+    mapEl.style.isolation = 'isolate'; // keeps Google Maps' own layers underneath the panel
+    mapEl.appendChild(teaser);
+    teaser.hidden = false;
+
+    // The modal covers the panel, so the panel stays put and reappears if the card is closed.
+    teaserBtn.addEventListener('click', openModal);
+
+    function unlockMap() {
+      unlocked = true;
+      if (observer) observer.disconnect();
+      teaser.classList.remove('is-visible');
+      setTimeout(function () {
+        if (teaser.parentNode) teaser.parentNode.removeChild(teaser);
+      }, 600);
+    }
+
+    if ('IntersectionObserver' in window) {
+      observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (unlocked) return;
+          teaser.classList.toggle('is-visible', entry.isIntersecting);
+        });
+      }, { threshold: VISIBILITY_THRESHOLD });
+      observer.observe(mapEl);
+    }
+    // Very old browsers without IntersectionObserver simply never see the panel (map stays usable).
+  })();
+</script>
+
 </body>
-</html>
+  </html>
