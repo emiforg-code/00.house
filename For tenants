@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en" id="htmlRoot">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>For tenants — 00.house</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --black:#0a0a0a; --muted:#6b6b6b; --white:#fff;
+  --accent:#c57b83;           /* dusty rose (kept for legal/form accents) */
+  --racing:#1f4632;           /* British racing green — agent panel deep */
+  --brass:#b98a3f;            /* brass gold — single bright accent */
+  --cream:#f6f2ea;
+  --line:rgba(0,0,0,0.08);
+  --ok:#2f6b4f;
+  --trust-blue-deep:#0F3D5C;  /* tenant panel deep */
+  --trust-blue-tint:#DCEBF3;  /* tenant panel bg */
+  --racing-green-tint:#E1EFE6;/* agent panel bg */
+}
+*{box-sizing:border-box}
+body{font-family:'Inter',system-ui,-apple-system,Helvetica,Arial,sans-serif;margin:0;color:var(--black);background:var(--white)}
+h1,h2,h3{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;margin:0 0 8px}
+h4{font-weight:600;margin:0 0 8px;font-family:'Inter',sans-serif}
+p{line-height:1.55;color:var(--muted)}
+a{color:inherit}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ============ NAV (same chrome as the homepage) ============ */
+nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:rgba(255,255,255,0.97);z-index:200;border-bottom:1px solid var(--line);backdrop-filter:blur(6px)}
+.logo{display:flex;align-items:center;gap:8px;border:0;background:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:700;font-size:16px;color:var(--black);padding:0;text-decoration:none}
+.nav-right{display:flex;align-items:center;gap:10px}
+.nav-btn{border:1px solid var(--black);padding:9px 16px;border-radius:3px;background:transparent;cursor:pointer;font-family:inherit;font-size:11.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--black);text-decoration:none;display:inline-block}
+.nav-btn:hover{background:var(--black);color:#fff}
+.nav-btn.filled{background:var(--black);color:#fff}
+.nav-btn.filled:hover{opacity:0.85;background:var(--black)}
+@media (max-width:640px){ nav{padding:12px 16px} .nav-right{gap:6px} .nav-btn{padding:8px 11px;font-size:10.5px} }
+
+/* ============ PAGE HERO ============ */
+.page-hero{position:relative;width:100%;min-height:480px;overflow:hidden;background:#e9e6dc url('./home-house-rent.jpeg') center/cover no-repeat}
+.page-hero-veil{position:absolute;inset:0;background:linear-gradient(100deg,rgba(10,10,10,0.62) 0%,rgba(10,10,10,0.42) 42%,rgba(10,10,10,0.08) 78%)}
+.page-hero-content{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:96px 28px 72px;color:#fff}
+.page-hero .eyebrow{color:var(--brass)}
+.page-hero h1{font-size:clamp(30px,4.4vw,52px);max-width:640px;color:#fff;line-height:1.15}
+.page-hero p.lede{max-width:480px;color:rgba(255,255,255,0.88);font-size:16px}
+.page-hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.btn{display:inline-block;border:0;border-radius:3px;padding:13px 24px;font-family:inherit;font-size:12.5px;letter-spacing:0.05em;text-transform:uppercase;font-weight:600;cursor:pointer;text-decoration:none}
+.btn-primary{background:var(--trust-blue-deep);color:#fff}
+.btn-primary:hover{opacity:0.92}
+.btn-ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.7)}
+.btn-ghost:hover{background:rgba(255,255,255,0.14)}
+.eyebrow{font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--brass);font-weight:500;margin-bottom:6px;display:block;font-family:'Inter',sans-serif}
+
+/* ============ HOW IT WORKS ============ */
+.howitworks-wrap{max-width:1200px;margin:0 auto;padding:88px 24px 70px}
+.howitworks-head{max-width:560px;margin:0 auto 44px;text-align:center}
+.howitworks-head h2{font-size:clamp(26px,3vw,36px)}
+.howitworks-head p{font-size:15.5px}
+.howitworks-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+.hiw-step{padding:26px 22px 24px;background:var(--trust-blue-tint);border-radius:10px;border:1px solid rgba(15,61,92,0.1)}
+.hiw-num{width:34px;height:34px;border-radius:50%;background:var(--trust-blue-deep);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;margin-bottom:16px}
+.hiw-step h4{font-size:15px;color:var(--black)}
+.hiw-step p{font-size:13.5px;margin:0}
+@media (max-width:900px){ .howitworks-steps{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:560px){ .howitworks-steps{grid-template-columns:1fr} }
+
+/* ============ CTA BANNER ============ */
+.tenant-cta{max-width:1200px;margin:0 auto 10px;padding:0 24px 70px}
+.tenant-cta-inner{background:var(--black);border-radius:14px;padding:44px 40px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;color:#fff}
+.tenant-cta h3{color:#fff;font-size:23px;margin-bottom:6px}
+.tenant-cta p{color:rgba(255,255,255,0.72);margin:0;max-width:440px;font-size:14px}
+.tenant-cta .btn-primary{background:var(--brass);color:#111}
+.tenant-cta-actions{display:flex;gap:12px;flex-wrap:wrap}
+.tenant-cta-actions .btn-ghost{border-color:rgba(255,255,255,0.4)}
+
+/* ============ COUNTRY RULES ============ */
+.rules-wrap{max-width:1000px;margin:0 auto;padding:10px 24px 96px}
+.rules-head{text-align:center;max-width:600px;margin:0 auto 30px}
+.rules-head h2{font-size:clamp(24px,3vw,32px)}
+
+.rules-controls{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:28px}
+.rules-select{font-family:inherit;font-size:13.5px;color:var(--black);background:#fff;border:1px solid var(--line);border-radius:6px;padding:11px 14px;cursor:pointer;min-width:220px}
+.rules-detect{display:inline-flex;align-items:center;gap:7px;font-family:inherit;font-size:12.5px;font-weight:600;letter-spacing:0.02em;color:var(--black);background:#fff;border:1px solid var(--black);border-radius:6px;padding:11px 16px;cursor:pointer}
+.rules-detect:hover{background:var(--black);color:#fff}
+.rules-detect svg{flex:0 0 auto}
+.rules-status{width:100%;text-align:center;font-size:12.5px;color:var(--muted);min-height:16px}
+.rules-status.is-note::before{content:'● '; color:var(--brass)}
+
+.rules-panel{display:none;border:1px solid var(--line);border-radius:14px;padding:36px 34px;background:var(--cream)}
+.rules-panel.is-active{display:block}
+.rules-panel-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.rules-panel-head h3{margin:0;font-size:22px}
+.rules-checked{font-size:11.5px;color:var(--muted);white-space:nowrap}
+.rules-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px 28px}
+.rules-item h5{margin:0 0 5px;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;color:var(--brass);font-weight:600;font-family:'Inter',sans-serif}
+.rules-item p{margin:0;font-size:14px;color:var(--black);line-height:1.55}
+.rules-item p .muted{color:var(--muted);font-weight:400}
+.rules-note{margin-top:22px;padding-top:18px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);line-height:1.6}
+@media (max-width:640px){ .rules-grid{grid-template-columns:1fr} .rules-panel{padding:26px 22px} }
+
+/* ============ FOOTER (same chrome as the homepage) ============ */
+footer{padding:40px 20px;color:var(--muted);border-top:1px solid var(--line);margin-top:20px}
+footer .foot-grid{display:flex;gap:56px;flex-wrap:wrap;max-width:1200px;margin:0 auto}
+footer h4{color:var(--black);font-size:13px;margin-bottom:10px}
+footer a{display:block;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:7px;cursor:pointer;background:none;border:0;padding:0;font-family:inherit}
+footer a:hover{color:var(--black)}
+.foot-legal-note{max-width:1200px;margin:24px auto 0;padding-top:20px;border-top:1px solid var(--line);font-size:11.5px;color:#9a9a9a;line-height:1.6}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="index.html">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="#111" stroke-width="1.2" fill="none"/></svg>
+    <span>00.house</span>
+  </a>
+  <div class="nav-right">
+    <a class="nav-btn" href="index.html#exploreSection">Explore</a>
+    <a class="nav-btn" href="index.html?open=account">Account</a>
+    <a class="nav-btn filled" href="index.html?open=tenant-form">Register as a tenant</a>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="page-hero">
+  <div class="page-hero-veil"></div>
+  <div class="page-hero-content">
+    <span class="eyebrow">For tenants</span>
+    <h1>Renting made simple, from search to move-in</h1>
+    <p class="lede">Tell us what you're after once. We pass it straight to agents and landlords with a matching open house — no repeated forms, no middleman fees from us.</p>
+    <div class="page-hero-actions">
+      <a class="btn btn-primary" href="index.html?open=tenant-form">Register as a tenant</a>
+      <a class="btn btn-ghost" href="#howItWorksSection">See how it works</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS (for tenants) ============ -->
+<section class="howitworks-wrap" id="howItWorksSection">
+  <div class="howitworks-head">
+    <span class="eyebrow" data-i18n="hiw_eyebrow">For tenants</span>
+    <h2 data-i18n="hiw_title">How registering works</h2>
+    <p data-i18n="hiw_sub">From telling us what you're after to booking a viewing — here's the whole journey.</p>
+  </div>
+  <div class="howitworks-steps">
+    <div class="hiw-step">
+      <div class="hiw-num">1</div>
+      <h4 data-i18n="hiw_1_h">Register as a tenant</h4>
+      <p data-i18n="hiw_1_p">Tell us your budget, preferred areas and move-in date. Takes about two minutes.</p>
+    </div>
+    <div class="hiw-step">
+      <div class="hiw-num">2</div>
+      <h4 data-i18n="hiw_2_h">We send your enquiry to the agent</h4>
+      <p data-i18n="hiw_2_p">Your details go straight to the agent or landlord behind the open house you're interested in.</p>
+    </div>
+    <div class="hiw-step">
+      <div class="hiw-num">3</div>
+      <h4 data-i18n="hiw_3_h">The agent gets in touch</h4>
+      <p data-i18n="hiw_3_p">They'll contact you directly with full property details and answer any questions.</p>
+    </div>
+    <div class="hiw-step">
+      <div class="hiw-num">4</div>
+      <h4 data-i18n="hiw_4_h">You book your viewing</h4>
+      <p data-i18n="hiw_4_p">Arrange a time to see the property directly with your matched agent — no middleman.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA BANNER ============ -->
+<section class="tenant-cta">
+  <div class="tenant-cta-inner">
+    <div>
+      <h3>Ready to start looking?</h3>
+      <p>Your Tenant Pass takes about two minutes and goes straight to matching agents.</p>
+    </div>
+    <div class="tenant-cta-actions">
+      <a class="btn btn-primary" href="index.html?open=tenant-form">Register as a tenant</a>
+      <a class="btn btn-ghost" href="index.html#exploreSection">Browse properties first</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RENTING RULES BY COUNTRY ============ -->
+<section class="rules-wrap" id="rulesSection">
+  <div class="rules-head">
+    <span class="eyebrow">Know before you sign</span>
+    <h2>Renting rules where you live</h2>
+    <p>Deposits, notice periods and tenant protections vary a lot by country. Pick yours, or let us guess from your location.</p>
+  </div>
+
+  <div class="rules-controls">
+    <select class="rules-select" id="rulesCountrySelect" aria-label="Choose your country">
+      <option value="uk">United Kingdom</option>
+      <option value="usa">United States</option>
+      <option value="france">France</option>
+      <option value="germany">Germany</option>
+      <option value="uae">United Arab Emirates</option>
+      <option value="canada">Canada</option>
+      <option value="other">Somewhere else</option>
+    </select>
+    <button type="button" class="rules-detect" id="rulesDetectBtn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+      Use my location
+    </button>
+    <p class="rules-status" id="rulesStatus" role="status" aria-live="polite"></p>
+  </div>
+
+  <!-- UNITED KINGDOM -->
+  <div class="rules-panel" data-country="uk">
+    <div class="rules-panel-head"><h3>United Kingdom</h3><span class="rules-checked">Checked Sept 2026 · England</span></div>
+    <div class="rules-grid">
+      <div class="rules-item"><h5>Deposit</h5><p>Capped at 5 weeks' rent (6 weeks if annual rent is over £50,000). Must be placed in a government-approved protection scheme <span class="muted">(TDS, mydeposits or DPS)</span> within 30 days.</p></div>
+      <div class="rules-item"><h5>Upfront fees</h5><p>The Tenant Fees Act 2019 bans most letting fees. A landlord or agent can only ask for rent, the deposit, and a holding deposit capped at 1 week's rent.</p></div>
+      <div class="rules-item"><h5>Ending a tenancy</h5><p>Since the Renters' Rights Act took effect on 1 May 2026, "no-fault" Section 21 eviction no longer exists in England. Tenancies are periodic, and a landlord must use a Section 8 ground to seek possession.</p></div>
+      <div class="rules-item"><h5>Rent increases</h5><p>Under the same reforms, rent on an existing tenancy can only be increased once every 12 months, with proper written notice.</p></div>
+    </div>
+    <p class="rules-note">Scotland, Wales and Northern Ireland run their own separate tenancy systems — this summary covers England only. This is general guidance, not legal advice; check <span class="muted">gov.uk</span> or a free adviser like Shelter or Citizens Advice for your situation.</p>
+  </div>
+
+  <!-- UNITED STATES -->
+  <div class="rules-panel" data-country="usa">
+    <div class="rules-panel-head"><h3>United States</h3><span class="rules-checked">Checked Sept 2026</span></div>
+    <div class="rules-grid">
+      <div class="rules-item"><h5>No single national law</h5><p>Landlord–tenant law is set state by state, and often city by city on top of that. Deposit caps, notice periods and rent control (where it exists at all) vary widely.</p></div>
+      <div class="rules-item"><h5>Federal baseline</h5><p>The Fair Housing Act bans discrimination in renting, and most states recognise an implied "warranty of habitability" — a landlord's duty to keep the place livable.</p></div>
+      <div class="rules-item"><h5>Typical pattern</h5><p>Where deposits are capped at all, 1–2 months' rent is common. A month-to-month tenancy usually needs 30 days' notice to end, though this varies by state.</p></div>
+      <div class="rules-item"><h5>Eviction</h5><p>A landlord can't legally change the locks or remove belongings without a court order — that's true in every state, regardless of what the lease says.</p></div>
+    </div>
+    <p class="rules-note">Because the details depend entirely on your state (and sometimes city), check your state attorney general's tenant guide, HUD.gov, or a local tenants' rights organization before relying on any of this.</p>
+  </div>
+
+  <!-- FRANCE -->
+  <div class="rules-panel" data-country="france">
+    <div class="rules-panel-head"><h3>France</h3><span class="rules-checked">Checked Sept 2026</span></div>
+    <div class="rules-grid">
+      <div class="rules-item"><h5>Dépôt de garantie</h5><p>Capped at 1 month's rent for an unfurnished let, or 2 months' for furnished. The landlord has up to 1 month to return it (2 months if deductions apply) after the "état des lieux de sortie".</p></div>
+      <div class="rules-item"><h5>Agency fees</h5><p>Under the loi ALUR, certain agency fees are shared between tenant and landlord, and the tenant's share is capped per square metre depending on the area.</p></div>
+      <div class="rules-item"><h5>Giving notice</h5><p>A tenant can generally leave with 1 month's notice in a designated tense housing zone (3 months elsewhere for unfurnished lets), or 1 month for a furnished let.</p></div>
+      <div class="rules-item"><h5>Landlord ending the lease</h5><p>A landlord can only decline to renew on specific legal grounds, and typically owes 6 months' notice before the end of an unfurnished lease.</p></div>
+    </div>
+    <p class="rules-note">Governed mainly by the loi du 6 juillet 1989. This is general guidance, not legal advice — an ADIL (Agence Départementale d'Information sur le Logement) offers free local advice, or check service-public.fr.</p>
+  </div>
+
+  <!-- GERMANY -->
+  <div class="rules-panel" data-country="germany">
+    <div class="rules-panel-head"><h3>Germany</h3><span class="rules-checked">Checked Sept 2026</span></div>
+    <div class="rules-grid">
+      <div class="rules-item"><h5>Kaution (deposit)</h5><p>Capped at 3 months' cold rent (Kaltmiete, excluding utilities), payable in up to 3 monthly instalments, and must be held separately from the landlord's own money.</p></div>
+      <div class="rules-item"><h5>Mietpreisbremse</h5><p>In designated tight housing markets, rent on a new contract can't be set more than 10% above the local comparable rent (Mietspiegel). This rent brake has been extended to run until 31 December 2029.</p></div>
+      <div class="rules-item"><h5>Giving notice</h5><p>A tenant can typically end an open-ended tenancy with 3 months' written notice.</p></div>
+      <div class="rules-item"><h5>Landlord ending the lease</h5><p>A landlord needs a recognised reason — personal use (Eigenbedarf) is the most common — and owes longer notice the longer you've lived there.</p></div>
+    </div>
+    <p class="rules-note">Set out in the Bürgerliches Gesetzbuch (BGB), §535–577a — among the strongest tenant protections in Europe. Joining a local Mieterverein (tenants' association), such as the Deutscher Mieterbund, is common practice and gives access to affordable legal advice before you sign anything.</p>
+  </div>
+
+  <!-- UAE -->
+  <div class="rules-panel" data-country="uae">
+    <div class="rules-panel-head"><h3>United Arab Emirates</h3><span class="rules-checked">Checked Sept 2026 · Dubai</span></div>
+    <div class="rules-grid">
+      <div class="rules-item"><h5>Ejari registration</h5><p>Every residential tenancy contract in Dubai must be registered through Ejari. An unregistered contract can cause problems with utilities, visas and disputes later.</p></div>
+      <div class="rules-item"><h5>Deposit</h5><p>Market practice, rather than a fixed legal cap, is typically around 5% of the annual rent for an unfurnished property, or 10% for furnished.</p></div>
+      <div class="rules-item"><h5>Renewal increases</h5><p>Governed by the RERA Rental Index: the allowed increase ranges from 0% to 20%, based on how far your current rent sits below the average for comparable properties nearby.</p></div>
+      <div class="rules-item"><h5>Notice of increase</h5><p>A landlord must give 90 days' written notice before a rent increase takes effect at renewal.</p></div>
+    </div>
+    <p class="rules-note">This summary covers Dubai; Abu Dhabi and the other emirates run their own separate rental systems. Check the official rent calculator on the Dubai Land Department site (dubailand.gov.ae) or the Dubai REST app.</p>
+  </div>
+
+  <!-- CANADA -->
+  <div class="rules-panel" data-country="canada">
+    <div class="rules-panel-head"><h3>Canada</h3><span class="rules-checked">Checked Sept 2026</span></div>
+    <div class="rules-grid">
+      <div class="rules-item"><h5>No single national law</h5><p>Residential tenancies are regulated separately by each province and territory — deposit rules, rent control and the eviction process all differ.</p></div>
+      <div class="rules-item"><h5>Deposits</h5><p>Most provinces ban or tightly restrict deposits beyond a "last month's rent" payment held toward the final month.</p></div>
+      <div class="rules-item"><h5>Ending a tenancy</h5><p>A landlord generally can't remove a tenant without an order from the provincial tribunal — for example Ontario's Landlord and Tenant Board or BC's Residential Tenancy Branch.</p></div>
+      <div class="rules-item"><h5>Rent increases</h5><p>Some provinces (e.g. Ontario, BC) cap annual increases on an existing tenancy with a published guideline percentage; others (e.g. Alberta) have no such cap.</p></div>
+    </div>
+    <p class="rules-note">Search "[your province] residential tenancies act" or your provincial Landlord and Tenant Board / Residential Tenancy Branch for the rules that actually apply to you.</p>
+  </div>
+
+  <!-- OTHER / FALLBACK -->
+  <div class="rules-panel" data-country="other">
+    <div class="rules-panel-head"><h3>Somewhere else</h3><span class="rules-checked">General guidance</span></div>
+    <div class="rules-grid">
+      <div class="rules-item"><h5>Start here</h5><p>Check whether your country requires deposits to be capped or protected, sets a minimum notice period, and requires a court or tribunal order before eviction.</p></div>
+      <div class="rules-item"><h5>Find a local body</h5><p>Most countries have either a national tenants' union or a consumer-protection agency that publishes a plain-language renting guide.</p></div>
+      <div class="rules-item"><h5>Before you sign</h5><p>Get the deposit amount, notice period and any renewal terms in writing, and keep a dated record of the property's condition when you move in.</p></div>
+      <div class="rules-item"><h5>Close to one of ours?</h5><p>If your country is close to one of the ones in the dropdown above, that page is a reasonable starting point — but always verify locally.</p></div>
+    </div>
+    <p class="rules-note">This is general guidance only, not legal advice, and isn't specific to any one country. Please verify with a local tenants' advice service before relying on it.</p>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="foot-grid">
+    <div>
+      <h4>Company</h4>
+      <a href="index.html?open=about">About Us</a>
+      <a href="index.html?open=contact">Contact</a>
+    </div>
+    <div>
+      <h4>For users</h4>
+      <a href="index.html?open=tenant-form">Tenant registration</a>
+      <a href="index.html?open=agent-form">Agent / landlord registration</a>
+      <a href="index.html#exploreSection">Browse properties</a>
+    </div>
+    <div>
+      <h4>Legal</h4>
+      <a href="index.html?legal=terms">Terms of Service</a>
+      <a href="index.html?legal=privacy">Privacy Policy</a>
+      <a href="index.html?legal=disclaimer">Disclosures</a>
+      <a href="index.html?legal=cookies">Cookies</a>
+    </div>
+  </div>
+  <div class="foot-legal-note">
+    00.house is a brand operated by Q Investments International Ltd, a property listings and open-house scheduling portal. We are not a licensed estate agent, letting agent, property manager or financial adviser, and we do not collect rent, deposits or any other payment on behalf of any party. The country summaries above are a general starting point, not legal advice, and rules change — verify anything important with an official source or a local adviser before relying on it.
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  var COUNTRIES = ['uk', 'usa', 'france', 'germany', 'uae', 'canada', 'other'];
+  var STORAGE_KEY = 'tenant_rules_country';
+
+  var select = document.getElementById('rulesCountrySelect');
+  var detectBtn = document.getElementById('rulesDetectBtn');
+  var status = document.getElementById('rulesStatus');
+  var panels = document.querySelectorAll('.rules-panel');
+
+  function show(country) {
+    var match = COUNTRIES.indexOf(country) !== -1 ? country : 'other';
+    panels.forEach(function (p) {
+      p.classList.toggle('is-active', p.getAttribute('data-country') === match);
+    });
+    select.value = match;
+  }
+
+  function setStatus(text, isNote) {
+    status.textContent = text || '';
+    status.classList.toggle('is-note', !!isNote);
+  }
+
+  // ISO 3166-1 alpha-2 -> our bucket. Everything else falls back to "other".
+  function bucketFromIso(iso) {
+    if (!iso) return 'other';
+    switch (iso.toUpperCase()) {
+      case 'GB': return 'uk';
+      case 'US': return 'usa';
+      case 'FR': return 'france';
+      case 'DE': return 'germany';
+      case 'AE': return 'uae';
+      case 'CA': return 'canada';
+      default: return 'other';
+    }
+  }
+
+  function remember(country) {
+    try { window.localStorage.setItem(STORAGE_KEY, country); } catch (e) { /* storage blocked, fine */ }
+  }
+  function recall() {
+    try { return window.localStorage.getItem(STORAGE_KEY); } catch (e) { return null; }
+  }
+
+  select.addEventListener('change', function () {
+    show(select.value);
+    remember(select.value);
+    setStatus('');
+  });
+
+  // ---- "Use my location" -> browser geolocation + OpenStreetMap reverse geocode ----
+  detectBtn.addEventListener('click', function () {
+    if (!('geolocation' in navigator)) {
+      setStatus("Your browser doesn't support location detection — pick your country above.", true);
+      return;
+    }
+    setStatus('Finding your location…');
+    navigator.geolocation.getCurrentPosition(
+      function (pos) {
+        var lat = pos.coords.latitude, lon = pos.coords.longitude;
+        fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lon + '&zoom=3')
+          .then(function (res) { if (!res.ok) throw new Error('reverse geocode failed'); return res.json(); })
+          .then(function (data) {
+            var iso = data && data.address && data.address.country_code;
+            var country = bucketFromIso(iso);
+            show(country);
+            remember(country);
+            setStatus(data && data.address && data.address.country ? 'Showing rules for ' + data.address.country + '.' : 'Showing your closest match.', true);
+          })
+          .catch(function () {
+            setStatus("Couldn't work out your country from that — pick one above.", true);
+          });
+      },
+      function () {
+        setStatus('Location permission was declined — pick your country above.', true);
+      },
+      { timeout: 8000 }
+    );
+  });
+
+  // ---- Silent best-guess on load: saved choice, else a quick IP lookup, else UK default ----
+  var saved = recall();
+  if (saved) {
+    show(saved);
+  } else {
+    show('uk'); // sensible default while the IP lookup (if any) resolves
+    var controller = ('AbortController' in window) ? new AbortController() : null;
+    var timeoutId = controller ? setTimeout(function () { controller.abort(); }, 4000) : null;
+    fetch('https://ipapi.co/json/', controller ? { signal: controller.signal } : undefined)
+      .then(function (res) { if (!res.ok) throw new Error('ip lookup failed'); return res.json(); })
+      .then(function (data) {
+        if (timeoutId) clearTimeout(timeoutId);
+        var country = bucketFromIso(data && data.country_code);
+        show(country);
+        setStatus('Guessed from your location — change it above if that is wrong.', true);
+      })
+      .catch(function () {
+        if (timeoutId) clearTimeout(timeoutId);
+        // Silent fallback: UK default stays, no error shown for an unprompted guess.
+      });
+  }
+})();
+</script>
+
+</body>
+</html>
