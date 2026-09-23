@@ -104,6 +104,11 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .agent-btn{background:var(--racing)}
 .agent-btn:hover{background:#153322}
 
+.panel-cta-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.panel-link{font-family:'Inter',sans-serif;font-size:13px;font-weight:600;text-decoration:underline;text-underline-offset:2px}
+.tenant-panel .panel-link{color:var(--trust-blue-deep)}
+.agent-panel .panel-link{color:var(--racing)}
+
 .panel-visual{position:relative;margin-top:34px;flex:1;min-height:460px}
 .panel-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;border-radius:20px 20px 0 0;display:block}
 
@@ -133,6 +138,8 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .panel-visual .notif-float.n1{top:-10px;left:0}
 .panel-visual .notif-float.n2{top:64px;left:0}
 .panel-visual .notif-float.n3{top:138px;left:0}
+.panel-visual .notif-float.tenant-msg{top:20px;right:-14px;left:auto;box-shadow:0 14px 30px rgba(15,61,92,0.22)}
+.tenant-msg .chip-logo{background:var(--trust-blue-deep);font-size:12px}
 
 @media(max-width:860px){
   .panel{min-height:auto;padding:40px 28px 0}
@@ -225,61 +232,6 @@ footer a:hover{color:var(--black)}
   .nav-btn{padding:8px 10px;font-size:10px}
   .side-panel{width:100vw;max-width:100vw}
 }
-
-/* ============ TENANT SHOWCASE (single light-blue panel, no agent side) ============ */
-.tenant-showcase-wrap{max-width:1200px;margin:8px auto 0;padding:10px 24px 40px}
-.tenant-showcase{background:var(--trust-blue-tint);border-radius:28px;padding:56px 48px;position:relative;overflow:hidden}
-.tenant-showcase-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
-@media(max-width:860px){.tenant-showcase{padding:40px 28px}.tenant-showcase-grid{grid-template-columns:1fr;gap:32px}}
-
-.tenant-showcase-copy h2{color:var(--trust-blue-deep);font-size:clamp(24px,3vw,32px);line-height:1.15;margin-bottom:14px}
-.tenant-showcase-copy > p{font-size:15px;color:#3f3f3f;margin-bottom:24px}
-.tenant-showcase-copy > p strong{color:var(--black)}
-
-.chat-mock{margin-top:30px;display:flex;flex-direction:column;max-width:400px}
-.chat-label{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin:10px 4px 4px}
-.chat-label.outgoing{align-self:flex-end}
-.chat-label.incoming{align-self:flex-start}
-.chat-bubble{padding:12px 15px;border-radius:15px;font-size:13.5px;line-height:1.5;max-width:90%}
-.chat-bubble.outgoing{align-self:flex-end;background:var(--trust-blue-deep);color:#fff;border-bottom-right-radius:4px}
-.chat-bubble.incoming{align-self:flex-start;background:#fff;color:var(--black);border-bottom-left-radius:4px;box-shadow:0 8px 20px rgba(15,61,92,0.12)}
-
-.tenant-showcase-visual{min-height:440px}
-.tenant-showcase-visual .panel-photo{border-radius:20px}
-@media(max-width:860px){.tenant-showcase-visual{min-height:280px}.tenant-showcase-visual .mock-card,.tenant-showcase-visual .mock-chip.float{position:static;width:100%;margin-top:12px}}
-
-/* ============ HOW IT WORKS (tenant explainer) ============ */
-.howitworks-wrap{max-width:1200px;margin:0 auto;padding:30px 24px 10px}
-.howitworks-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
-@media(max-width:860px){.howitworks-grid{grid-template-columns:1fr;gap:32px}}
-.howitworks-copy p{max-width:480px;font-size:14.5px;margin-top:6px;margin-bottom:26px}
-
-/* Left column: compact numbered timeline (text-forward, no boxy cards) */
-.hiw-timeline{display:flex;flex-direction:column;gap:22px}
-.hiw-tl-item{display:flex;gap:14px;align-items:flex-start}
-.hiw-tl-num{flex:0 0 30px;width:30px;height:30px;border-radius:50%;background:var(--trust-blue-deep);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;font-family:'Inter',sans-serif}
-.hiw-tl-item:nth-child(2n) .hiw-tl-num{background:var(--brass)}
-.hiw-tl-item h4{font-size:14.5px;margin:0 0 3px;color:var(--black)}
-.hiw-tl-item p{font-size:13px;line-height:1.5;margin:0;color:var(--muted)}
-
-/* Right column: a mock activity feed, same visual language as the panel chips */
-.howitworks-visual{background:var(--trust-blue-tint);border-radius:24px;padding:44px 28px;position:relative;min-height:300px;display:flex;flex-direction:column;justify-content:center}
-.hiw-chip-stack{display:flex;flex-direction:column;gap:16px}
-.hiw-chip{background:#fff;border-radius:14px;box-shadow:0 16px 34px rgba(15,61,92,0.16);padding:13px 16px;display:flex;gap:11px;align-items:flex-start;font-size:12.5px}
-.hiw-chip:nth-child(1){transform:translateX(-6px)}
-.hiw-chip:nth-child(2){transform:translateX(10px)}
-.hiw-chip:nth-child(3){transform:translateX(-2px)}
-.hiw-chip .chip-logo{width:26px;height:26px;border-radius:8px;background:var(--trust-blue-deep);color:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 26px}
-.hiw-chip:nth-child(3) .chip-logo{background:var(--brass)}
-.hiw-chip strong{color:var(--black)}
-.hiw-chip .chip-time{color:var(--muted);font-weight:400;font-size:11px;float:right}
-.hiw-chip .chip-desc{display:block;margin-top:2px;color:#3f3f3f}
-@media(max-width:860px){.hiw-chip:nth-child(1),.hiw-chip:nth-child(2),.hiw-chip:nth-child(3){transform:none}}
-
-/* Compact version shown inside the tenant registration form itself */
-.hiw-mini{display:flex;flex-direction:column;gap:10px;background:var(--trust-blue-tint);border-radius:12px;padding:14px 16px;margin-bottom:20px}
-.hiw-mini-item{display:flex;align-items:flex-start;gap:10px;font-size:12.5px;color:var(--black)}
-.hiw-mini-num{flex:0 0 20px;width:20px;height:20px;border-radius:50%;background:var(--trust-blue-deep);color:#fff;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif}
 </style>
 </head>
 <body>
@@ -383,106 +335,20 @@ footer a:hover{color:var(--black)}
   </div>
 </section>
 
-<!-- ============ TENANT SHOWCASE (single light-blue panel — no agent side) ============ -->
-<section class="tenant-showcase-wrap" id="tenantShowcaseSection">
-  <div class="tenant-showcase">
-    <div class="tenant-showcase-grid">
-
-      <div class="tenant-showcase-copy">
-        <h2>Find your next home with trusted advisors</h2>
-        <p>Tell us what you're looking for and get matched with agents and landlords who have relevant open houses. <strong>Get your Tenant Pass in minutes.</strong></p>
-        <button class="panel-btn tenant-btn" onclick="openPanel('tenant-form')">Register as a tenant</button>
-
-        <div class="chat-mock">
-          <span class="chat-label outgoing">You, to the agent</span>
-          <div class="chat-bubble outgoing">Hi, I'm interested in 24 Ashford Rd — is it still available for a viewing this weekend?</div>
-          <span class="chat-label incoming">Agent · Sarah</span>
-          <div class="chat-bubble incoming">Hi Adam! Yes, still available — I've got a slot Saturday at 11am, shall I book you in?</div>
-        </div>
-      </div>
-
-      <div class="tenant-showcase-visual panel-visual">
-        <img class="panel-photo" src="./tenant-photo.jpg" alt="Tenant registering with 00.house on their phone">
-        <div class="mock-card">
-          <div class="mock-card-head"><span>Tenant Pass</span><span class="mock-badge">2 of 4</span></div>
-          <div class="app-check">
-            <div class="item"><span class="box done">✓</span><span>Profile registered</span></div>
-            <div class="item"><span class="box done">✓</span><span>Preferences saved</span></div>
-            <div class="item"><span class="box">3</span><span>Viewing booked</span></div>
-            <div class="item"><span class="box">4</span><span>Screening &amp; references (via agent)</span></div>
-          </div>
-          <div class="progress-track light"><div class="progress-fill"></div></div>
-          <div class="progress-label">2 of 4 steps complete — the rest happens with your chosen agent</div>
-        </div>
-        <div class="mock-chip float">
-          <div class="chip-ico">✓</div>
-          <div><strong>Profile verified</strong><br><span>Ready to apply</span></div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ============ HOW IT WORKS (for tenants) ============ -->
-<section class="howitworks-wrap" id="howItWorksSection">
-  <div class="howitworks-grid">
-
-    <div class="howitworks-copy">
-      <span class="eyebrow" data-i18n="hiw_eyebrow">For tenants</span>
-      <h2 data-i18n="hiw_title">How registering works</h2>
-      <p data-i18n="hiw_sub">From telling us what you're after to booking a viewing — here's the whole journey.</p>
-      <div class="hiw-timeline">
-        <div class="hiw-tl-item">
-          <div class="hiw-tl-num">1</div>
-          <div><h4 data-i18n="hiw_1_h">Register as a tenant</h4><p data-i18n="hiw_1_p">Tell us your budget, preferred areas and move-in date. Takes about two minutes.</p></div>
-        </div>
-        <div class="hiw-tl-item">
-          <div class="hiw-tl-num">2</div>
-          <div><h4 data-i18n="hiw_2_h">We send your enquiry to the agent</h4><p data-i18n="hiw_2_p">Your details go straight to the agent or landlord behind the open house you're interested in.</p></div>
-        </div>
-        <div class="hiw-tl-item">
-          <div class="hiw-tl-num">3</div>
-          <div><h4 data-i18n="hiw_3_h">The agent gets in touch</h4><p data-i18n="hiw_3_p">They'll contact you directly with full property details and answer any questions.</p></div>
-        </div>
-        <div class="hiw-tl-item">
-          <div class="hiw-tl-num">4</div>
-          <div><h4 data-i18n="hiw_4_h">You book your viewing</h4><p data-i18n="hiw_4_p">Arrange a time to see the property directly with your matched agent — no middleman.</p></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="howitworks-visual">
-      <div class="hiw-chip-stack">
-        <div class="hiw-chip">
-          <div class="chip-logo"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V10"/><path d="M9.5 20.5V14h5v6.5"/></svg></div>
-          <div><strong>00.house</strong><span class="chip-time" data-i18n="hiw_chip1_time">1m ago</span><span class="chip-desc" data-i18n="hiw_chip1_text">New enquiry sent to the agency — property details received</span></div>
-        </div>
-        <div class="hiw-chip">
-          <div class="chip-logo"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V10"/><path d="M9.5 20.5V14h5v6.5"/></svg></div>
-          <div><strong>00.house</strong><span class="chip-time" data-i18n="hiw_chip2_time">1h ago</span><span class="chip-desc" data-i18n="hiw_chip2_text">Viewing booked — 24 Ashford Rd</span></div>
-        </div>
-        <div class="hiw-chip">
-          <div class="chip-logo">✓</div>
-          <div><strong>00.house</strong><span class="chip-time" data-i18n="hiw_chip3_time">1h ago</span><span class="chip-desc" data-i18n="hiw_chip3_text">Rental agreement signed</span></div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
 <section class="split-wrap">
   <div class="split-panels">
 
     <div class="panel tenant-panel">
       <div class="panel-copy">
-        <h2 data-i18n="panel_tenant_h">Find your next home with trusted advisors</h2>
-        <p data-i18n="panel_tenant_p">Tell us what you're looking for and get matched with agents and landlords who have relevant open houses. <strong data-i18n="panel_tenant_bold">Get your Tenant Pass in minutes.</strong></p>
-        <button class="panel-btn tenant-btn" onclick="openPanel('tenant-form')" data-i18n="cta_tenant_btn">Register as a tenant</button>
+        <h2 data-i18n="panel_tenant_h">Looking for a home?</h2>
+        <p data-i18n="panel_tenant_p">Register once and we'll match you with agents who have relevant open houses.</p>
+        <div class="panel-cta-row">
+          <button class="panel-btn tenant-btn" onclick="openPanel('tenant-form')" data-i18n="cta_tenant_btn">Register as a tenant</button>
+          <a class="panel-link" href="tenants.html" data-i18n="cta_tenant_learn">See how it works →</a>
+        </div>
       </div>
       <div class="panel-visual">
-     <img class="panel-photo" src="./he.jpeg" alt="Get your Tenant Pass in minutes.">
+     <img class="panel-photo" src="./he.jpeg" alt="">
         <div class="mock-card">
           <div class="mock-card-head"><span data-i18n="app_title">Tenant Pass</span><span class="mock-badge" data-i18n="mock_badge">2 of 4</span></div>
           <div class="app-check">
@@ -498,6 +364,10 @@ footer a:hover{color:var(--black)}
           <div class="chip-ico">✓</div>
           <div><strong data-i18n="chip_tenant_title">Profile verified</strong><br><span data-i18n="chip_tenant_sub">Ready to apply</span></div>
         </div>
+        <div class="mock-chip notif-float tenant-msg">
+          <div class="chip-logo">💬</div>
+          <div><strong data-i18n="tenant_msg_title">Your agent</strong><span class="chip-time" data-i18n="tenant_msg_time">2m ago</span><br><span data-i18n="tenant_msg_text">Happy to show you Saturday at 2pm</span></div>
+        </div>
       </div>
     </div>
 
@@ -508,7 +378,7 @@ footer a:hover{color:var(--black)}
         <button class="panel-btn agent-btn" onclick="openPanel('agent-form')" data-i18n="cta_agent_btn">Quick Sign-Up</button>
       </div>
       <div class="panel-visual">
-        <img class="panel-photo" src="./she.jpeg" alt="List your houses">
+        <img class="panel-photo" src="./she.jpeg" alt="">
         <div class="mock-chip notif-float n1">
           <div class="chip-logo"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V10"/><path d="M9.5 20.5V14h5v6.5"/></svg></div>
           <div><strong>00.house</strong><span class="chip-time" data-i18n="notif1_time">1m ago</span><br><span data-i18n="notif1_text">New enquiry from Adam M.</span></div>
@@ -580,22 +450,15 @@ const i18n = {
     explore_eyebrow:'Explore', explore_title:'Explore Properties', live_feed:'Live feed',
     hl_1:'Independent villas', hl_2:'Townhouses', hl_3:'With garden or terrace', hl_4:'New build',
     cat_eyebrow:'Property Types', cat_title:'Browse by Category',
-    hiw_eyebrow:'For tenants', hiw_title:'How registering works', hiw_sub:'From telling us what you\u2019re after to booking a viewing — here\u2019s the whole journey.',
-    hiw_1_h:'Register as a tenant', hiw_1_p:'Tell us your budget, preferred areas and move-in date. Takes about two minutes.',
-    hiw_2_h:'We send your enquiry to the agent', hiw_2_p:'Your details go straight to the agent or landlord behind the open house you\u2019re interested in.',
-    hiw_3_h:'The agent gets in touch', hiw_3_p:'They\u2019ll contact you directly with full property details and answer any questions.',
-    hiw_4_h:'You book your viewing', hiw_4_p:'Arrange a time to see the property directly with your matched agent — no middleman.',
-    hiw_chip1_time:'1m ago', hiw_chip1_text:'New enquiry sent to the agency — property details received',
-    hiw_chip2_time:'1h ago', hiw_chip2_text:'Viewing booked — 24 Ashford Rd',
-    hiw_chip3_time:'1h ago', hiw_chip3_text:'Rental agreement signed',
     btn_explore_all:'Explore all', btn_find_home:'Find your home', btn_my_account:'My account',
     map_search_ph:'City, town, or UK postcode e.g. SW1A 1AA', map_note:'Listings are supplied and maintained by independent third-party agents and landlords.',
     app_title:'Tenant Pass', app_sub:'Required to apply. Secure your properties with our tenant card.',
     app_step1:'Profile registered', app_step2:'Preferences saved', app_step3:'Viewing booked', app_step4:'Screening & references (via agent)',
     app_progress:'2 of 4 steps complete — the rest happens with your chosen agent', app_cta:'Continue application',
     mock_badge:'2 of 4', chip_tenant_title:'Profile verified', chip_tenant_sub:'Ready to apply',
-    panel_tenant_h:'Find your next home with trusted advisors', panel_tenant_p:'Tell us what you\u2019re looking for and get matched with agents and landlords who have relevant open houses.', panel_tenant_bold:'Get your Tenant Pass in minutes.',
-    cta_tenant_btn:'Register as a tenant',
+    panel_tenant_h:'Looking for a home?', panel_tenant_p:'Register once and we\u2019ll match you with agents who have relevant open houses.',
+    cta_tenant_btn:'Register as a tenant', cta_tenant_learn:'See how it works \u2192',
+    tenant_msg_title:'Your agent', tenant_msg_time:'2m ago', tenant_msg_text:'Happy to show you Saturday at 2pm',
     panel_agent_h:'List once, reach ready-to-view tenants', panel_agent_p:'List your open houses on 00.house and reach verified, ready-to-view tenants across your area.', panel_agent_bold:'No commission on enquiries.',
     cta_agent_btn:'Quick Sign-Up',
     notif1_time:'1m ago', notif1_text:'New enquiry from Adam M.',
@@ -612,22 +475,15 @@ const i18n = {
     explore_eyebrow:'استكشاف', explore_title:'استكشف العقارات', live_feed:'بث مباشر',
     hl_1:'فلل مستقلة', hl_2:'منازل تاون هاوس', hl_3:'مع حديقة أو شرفة', hl_4:'بناء جديد',
     cat_eyebrow:'أنواع العقارات', cat_title:'تصفح حسب الفئة',
-    hiw_eyebrow:'للمستأجرين', hiw_title:'كيف يتم التسجيل', hiw_sub:'من إخبارنا بما تبحث عنه إلى حجز المعاينة — هذه هي الرحلة بالكامل.',
-    hiw_1_h:'سجّل كمستأجر', hiw_1_p:'أخبرنا بميزانيتك والمناطق المفضلة وتاريخ الانتقال. يستغرق ذلك دقيقتين تقريبًا.',
-    hiw_2_h:'نُرسل استفسارك إلى الوكيل', hiw_2_p:'تذهب بياناتك مباشرة إلى الوكيل أو المالك المسؤول عن البيت المفتوح الذي يهمك.',
-    hiw_3_h:'يتواصل معك الوكيل', hiw_3_p:'سيتواصل معك مباشرة بكامل تفاصيل العقار ويجيب على أي أسئلة.',
-    hiw_4_h:'احجز معاينتك', hiw_4_p:'رتّب موعدًا لمعاينة العقار مباشرة مع الوكيل المطابق لك — دون وسيط.',
-    hiw_chip1_time:'قبل دقيقة', hiw_chip1_text:'تم إرسال استفسار جديد إلى الوكالة — تم استلام تفاصيل العقار',
-    hiw_chip2_time:'قبل ساعة', hiw_chip2_text:'تم حجز معاينة — 24 أشفورد رود',
-    hiw_chip3_time:'قبل ساعة', hiw_chip3_text:'تم توقيع عقد الإيجار',
     btn_explore_all:'استكشف الكل', btn_find_home:'ابحث عن منزلك', btn_my_account:'حسابي',
     map_search_ph:'المدينة أو الرمز البريدي البريطاني', map_note:'يتم توفير الإعلانات وصيانتها من قبل وكلاء وملاك عقارات مستقلين من طرف ثالث.',
     app_title:'بطاقة المستأجر', app_sub:'مطلوبة للتقديم. أمّن عقارك ببطاقة المستأجر الخاصة بنا.',
     app_step1:'تم تسجيل الملف الشخصي', app_step2:'تم حفظ التفضيلات', app_step3:'تم حجز المعاينة', app_step4:'الفحص والمراجع (عبر الوكيل)',
     app_progress:'اكتملت خطوتان من أصل 4 — البقية تتم مع الوكيل الذي تختاره', app_cta:'متابعة الطلب',
     mock_badge:'2 من 4', chip_tenant_title:'تم التحقق من الملف الشخصي', chip_tenant_sub:'جاهز للتقديم',
-    panel_tenant_h:'اعثر على منزلك القادم مع مستشارين موثوقين', panel_tenant_p:'أخبرنا بما تبحث عنه وسنطابقك مع وكلاء وملاك لديهم بيوت مفتوحة مناسبة.', panel_tenant_bold:'احصل على بطاقة المستأجر خلال دقائق.',
-    cta_tenant_btn:'سجّل كمستأجر',
+    panel_tenant_h:'تبحث عن منزل؟', panel_tenant_p:'سجّل مرة واحدة وسنطابقك مع وكلاء لديهم بيوت مفتوحة مناسبة.',
+    cta_tenant_btn:'سجّل كمستأجر', cta_tenant_learn:'كيف تعمل الخدمة ←',
+    tenant_msg_title:'وكيلك', tenant_msg_time:'قبل دقيقتين', tenant_msg_text:'يسعدني عرضه عليك السبت الساعة 2 مساءً',
     panel_agent_h:'أدرج مرة واحدة وتواصل مع مستأجرين جاهزين للمعاينة', panel_agent_p:'أدرج بيوتك المفتوحة على 00.house وتواصل مع مستأجرين موثوقين وجاهزين للمعاينة.', panel_agent_bold:'بدون عمولة على الاستفسارات.',
     cta_agent_btn:'تسجيل سريع',
     notif1_time:'قبل دقيقة', notif1_text:'استفسار جديد من آدم م.',
@@ -702,6 +558,7 @@ function renderPanel(mode, sub){
         <strong>I'm looking for a home</strong>
         <p style="margin:4px 0 0">Register as a tenant to save searches, book open house viewings and get matched with agents.</p>
         <button onclick="openPanel('tenant-form')">Register as a tenant →</button>
+        <a href="tenants.html" style="display:inline-block;margin-top:10px;font-size:12.5px;text-decoration:underline;color:var(--muted)">Or see how the tenant journey works →</a>
       </div>
       <div class="sample-card">
         <strong>I'm an agent, landlord or developer</strong>
@@ -776,11 +633,6 @@ function tenantFormHTML(){
     <div class="panel-eyebrow">Register</div>
     <h2>Tenant registration</h2>
     <p>Tell us what you're looking for. Agents and landlords with matching open houses will be able to contact you directly — 00.house does not charge tenants to register.</p>
-    <div class="hiw-mini">
-      <div class="hiw-mini-item"><span class="hiw-mini-num">1</span><span>You register with your budget, areas and move-in date.</span></div>
-      <div class="hiw-mini-item"><span class="hiw-mini-num">2</span><span>We send your enquiry straight to the matching agent.</span></div>
-      <div class="hiw-mini-item"><span class="hiw-mini-num">3</span><span>The agent contacts you to arrange a viewing.</span></div>
-    </div>
     <form id="tenantForm" onsubmit="return handleTenantSubmit(event)">
       <input type="hidden" name="_subject" value="New tenant registration — 00.house">
       <div class="form-row">
@@ -2052,6 +1904,34 @@ function initInAreaMap(){
       observer.observe(mapEl);
     }
     // Very old browsers without IntersectionObserver simply never see the panel (map stays usable).
+  })();
+</script>
+
+<!-- ============ DEEP-LINK OPENER ============
+     Lets other pages (e.g. tenants.html) link straight into a panel here:
+       index.html?open=tenant-form   -> openPanel('tenant-form')
+       index.html?open=agent-form    -> openPanel('agent-form')
+       index.html?open=account       -> openPanel('account')
+       index.html?legal=terms        -> openPanel('legal','terms')  (also privacy / disclaimer / cookies)
+     Runs after the main script above so openPanel already exists. -->
+<script>
+  (function () {
+    var params = new URLSearchParams(window.location.search);
+    var legalTab = params.get('legal');
+    var openMode = params.get('open');
+    if (!legalTab && !openMode) return;
+
+    function run() {
+      if (typeof window.openPanel !== 'function') return;
+      if (legalTab) window.openPanel('legal', legalTab);
+      else window.openPanel(openMode);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', run);
+    } else {
+      run();
+    }
   })();
 </script>
 
