@@ -109,7 +109,7 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .tenant-panel .panel-link{color:var(--trust-blue-deep)}
 .agent-panel .panel-link{color:var(--racing)}
 
-.panel-visual{position:relative;margin-top:34px;flex:1;min-height:460px}
+.panel-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:right center;opacity:0.95;border-radius:20px 20px 0 0;display:block}
 .panel-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;border-radius:20px 20px 0 0;display:block}
 
 /* Tenant: floating checklist card bottom-left, verified chip top-right */
@@ -1124,6 +1124,13 @@ function initInAreaMap(){
       inAreaInfoWindow.setContent(`<strong>${inAreaSubject.name}</strong><div style="color:#888;font-size:11.5px;margin-top:2px">This property</div>`);
       inAreaInfoWindow.open(inAreaMap, inAreaSubjectMarker);
     });
+
+
+setTimeout(()=>{
+  inAreaInfoWindow.setContent(`<strong>${inAreaSubject.name}</strong><div style="color:#888;font-size:11.5px;margin-top:2px">This property</div>`);
+  inAreaInfoWindow.open(inAreaMap, inAreaSubjectMarker);
+}, 3000);
+
 
     /* No category pre-selected — matches reference: plain "In This Area" heading
        and only the subject pin shown until the user opens the filter and picks one or more. */
