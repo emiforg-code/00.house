@@ -52,7 +52,7 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .lang-menu button:hover{background:#f6f2ea}
 
 /* ============ HERO ============ */
-.hero{position:relative;width:100%;height:640px;overflow:hidden;background:#e9e6dc url('./header-dark-red.jpeg') center/cover no-repeat;background-attachment:fixed}
+.hero{position:relative;width:100%;height:640px;overflow:hidden;background:#e9e6dc url('./home-house-rent.jpeg') center/cover no-repeat;background-attachment:fixed}
   .hero-veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0) 35%,rgba(255,255,255,0.6) 100%);z-index:20}
 .hero-content{position:relative;z-index:30;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 20px 46px;text-align:center}
 .hero-content h1{font-size:clamp(26px,4vw,42px);color:#1b1b1b;text-shadow:0 2px 20px rgba(255,255,255,0.6);max-width:720px}
@@ -125,11 +125,6 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .quick-tenant-form input[type="email"]:focus{outline:none;border-color:var(--trust-blue-deep)}
 .quick-tenant-form .panel-btn{flex:0 0 auto}
 
-.quick-dispatch-success{font-size:13px;color:var(--trust-blue-deep);background:#eef6fb;border:1px solid rgba(15,61,92,0.15);border-radius:6px;padding:10px 14px;margin-top:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.quick-dispatch-success a{color:var(--trust-blue-deep);font-weight:600;text-decoration:underline}
-.quick-dispatch-success button{border:1px solid var(--trust-blue-deep);background:#fff;color:var(--trust-blue-deep);font:inherit;font-size:12px;font-weight:600;padding:5px 10px;border-radius:5px;cursor:pointer}
-.quick-dispatch-success button:hover{background:var(--trust-blue-deep);color:#fff}
-
 .dispatch-success{text-align:center;padding:6px 4px 2px}
 .dispatch-success-icon{width:42px;height:42px;border-radius:50%;background:#e3f3ea;color:var(--ok);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;margin:0 auto 12px}
 .dispatch-success h3{font-size:20px;margin-bottom:8px}
@@ -139,7 +134,10 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .dispatch-route strong{color:var(--black);font-family:monospace,monospace}
 .dispatch-whatsapp-btn{width:100%;margin-top:14px;background:#25D366;color:#fff;border:0;border-radius:8px;padding:13px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
 .dispatch-whatsapp-btn:hover{filter:brightness(1.05)}
+.dispatch-email-btn{display:block;width:100%;margin-top:14px;background:var(--trust-blue-deep);color:#fff;text-align:center;text-decoration:none;border:0;border-radius:8px;padding:13px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.dispatch-email-btn:hover{filter:brightness(1.1)}
 .dispatch-email-link{display:block;text-align:center;margin-top:10px;font-size:12.5px;color:var(--muted);text-decoration:underline}
+.inline-error{background:#fbeaec;border:1px solid #efc3c8;color:#7a1620;padding:10px 12px;border-radius:8px;font-size:12.5px;margin:0 0 12px}
 
 /* ---- Account: sign-in tabs, demo grid, dashboards ---- */
 .acct-tabs{display:flex;gap:8px;margin:16px 0 18px}
@@ -264,7 +262,7 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .form-field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:5px}
 .form-row{display:flex;gap:10px}
 .form-row .form-field{flex:1}
-input[type=text],input[type=email],input[type=tel],input[type=date],input[type=number],select,textarea{
+input[type=text],input[type=email],input[type=tel],input[type=date],input[type=number],input[type=password],select,textarea{
   width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:13.5px;background:#fff;color:var(--black)
 }
 textarea{resize:vertical;min-height:70px}
@@ -272,6 +270,7 @@ textarea{resize:vertical;min-height:70px}
 .checkbox-row input{margin-top:3px}
 .submit-btn{width:100%;background:var(--black);color:#fff;border:0;padding:12px;border-radius:8px;cursor:pointer;font-weight:600;font-size:14px;margin-top:6px}
 .submit-btn:hover{background:#222}
+.submit-btn:disabled{opacity:0.6;cursor:default}
 .form-success{background:#eef6f0;border:1px solid #cfe6d6;color:var(--ok);padding:12px;border-radius:8px;font-size:13px;margin-top:14px}
 .panel-eyebrow{font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:4px}
 
@@ -435,16 +434,15 @@ footer a:hover{color:var(--black)}
     <div class="panel tenant-panel">
       <div class="panel-copy">
         <h2 data-i18n="panel_tenant_h">Find your next home with trusted advisors</h2>
-        <p data-i18n="panel_tenant_p">Tell us what you're looking for and get matched with agents and landlords who have relevant open houses. <strong data-i18n="panel_tenant_bold">Get your Tenant Pass in minutes.</strong></p>
+        <!-- text and bold sentence live in separate elements so switching language does not wipe the bold part -->
+        <p><span data-i18n="panel_tenant_p">Tell us what you're looking for and get matched with agents and landlords who have relevant open houses.</span> <strong data-i18n="panel_tenant_bold">Get your Tenant Pass in minutes.</strong></p>
         <form class="quick-tenant-form" id="quickTenantForm" onsubmit="return handleQuickTenantSubmit(event)">
-          <input type="hidden" name="source" value="homepage-quick-panel">
           <input type="email" name="email" id="qtf-email" data-i18n-placeholder="quick_tenant_ph" placeholder="Your email address" required autocomplete="email">
           <button type="submit" class="panel-btn tenant-btn" data-i18n="cta_tenant_btn">Register as a tenant</button>
         </form>
-        <div id="quickTenantSuccess"></div>
       </div>
       <div class="panel-visual">
-     <img class="panel-photo" src="./tenant-photo.jpg" alt="">
+     <img class="panel-photo" src="./he.jpeg" alt="">
         <div class="mock-card">
           <div class="mock-card-head"><span data-i18n="app_title">Tenant Pass</span><span class="mock-badge" data-i18n="mock_badge">2 of 4</span></div>
           <div class="app-check">
@@ -466,14 +464,14 @@ footer a:hover{color:var(--black)}
     <div class="panel agent-panel">
       <div class="panel-copy">
         <h2 data-i18n="panel_agent_h">Renting made simple, from search to move-in</h2>
-        <p data-i18n="panel_agent_p">Tell us what you're after once. We pass it straight to agents and landlords with a matching open house — no repeated forms. <strong data-i18n="panel_agent_bold">No commission on enquiries.</strong></p>
-        <button class="panel-btn agent-btn" onclick="openPanel('agent-form')" data-i18n="cta_agent_btn">Your Tenant Pass takes about 1 minute</button>
+        <p><span data-i18n="panel_agent_p">Tell us what you're after once. We pass it straight to agents and landlords with a matching open house — no repeated forms.</span> <strong data-i18n="panel_agent_bold">No commission on enquiries.</strong></p>
+        <button class="panel-btn agent-btn" onclick="openPanel('agent-form')" data-i18n="cta_agent_btn">Your Tenant Pass takes 1 minute</button>
       </div>
       <div class="panel-visual">
-        <img class="panel-photo" src="./tenants-movein.png" alt="move-in">
+        <img class="panel-photo" src="./she.jpeg" alt="">
         <div class="mock-chip notif-float n1">
           <div class="chip-logo"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V10"/><path d="M9.5 20.5V14h5v6.5"/></svg></div>
-          <div><strong>00.house</strong><span class="chip-time" data-i18n="notif1_time">2d ago</span><br><span data-i18n="notif1_text">Holding deposit received (£550) for  house 4B</span></div>
+          <div><strong>00.house</strong><span class="chip-time" data-i18n="notif1_time">2d ago</span><br><span data-i18n="notif1_text">Holding deposit received (£550) for house 4B</span></div>
         </div>
         <div class="mock-chip notif-float n2">
           <div class="chip-logo"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V10"/><path d="M9.5 20.5V14h5v6.5"/></svg></div>
@@ -534,6 +532,12 @@ footer a:hover{color:var(--black)}
 </div>
 
 <script>
+/* ============ SMALL HELPERS ============ */
+/* Escape anything a visitor typed before it is placed into innerHTML. */
+function esc(v){
+  return String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
 /* ============ LANGUAGE TOGGLE (EN/AR demo) ============ */
 const i18n = {
   en:{
@@ -551,9 +555,9 @@ const i18n = {
     mock_badge:'2 of 4', chip_tenant_title:'Profile verified', chip_tenant_sub:'Ready to apply',
     panel_tenant_h:'Find your next home with trusted advisors', panel_tenant_p:'Tell us what you\u2019re looking for and get matched with agents and landlords who have relevant open houses.', panel_tenant_bold:'Get your Tenant Pass in minutes.',
     cta_tenant_btn:'Register as a tenant', quick_tenant_ph:'Your email address',
-    panel_agent_h:'Renting made simple, from search to move-in', panel_agent_p:'Tell us what you\'re after once. We pass it straight to agents and landlords with a matching open house \u2014 no repeated forms.', panel_agent_bold:'No commission on enquiries.',
-    cta_agent_btn:'Your Tenant Pass takes about 1 minute',
-    notif1_time:'2d ago', notif1_text:'Holding deposit received (\u00a3550) for house 4B',
+    panel_agent_h:'Renting made simple, from search to move-in', panel_agent_p:'Tell us what you\'re after once. We pass it straight to agents and landlords with a matching open house — no repeated forms.', panel_agent_bold:'No commission on enquiries.',
+    cta_agent_btn:'Your Tenant Pass takes 1 minute',
+    notif1_time:'2d ago', notif1_text:'Holding deposit received (£550) for house 4B',
     notif2_time:'8h ago', notif2_text:'Reference check requested',
     notif3_time:'1h ago', notif3_text:'Your listing just went live',
     legal_strip_link:'Read the full disclaimer',
@@ -576,10 +580,10 @@ const i18n = {
     mock_badge:'2 من 4', chip_tenant_title:'تم التحقق من الملف الشخصي', chip_tenant_sub:'جاهز للتقديم',
     panel_tenant_h:'اعثر على منزلك القادم مع مستشارين موثوقين', panel_tenant_p:'أخبرنا بما تبحث عنه وسنطابقك مع وكلاء وملاك لديهم بيوت مفتوحة مناسبة.', panel_tenant_bold:'احصل على بطاقة المستأجر خلال دقائق.',
     cta_tenant_btn:'سجّل كمستأجر', quick_tenant_ph:'بريدك الإلكتروني',
-    panel_agent_h:'تأجير مبسّط، من البحث حتى الانتقال', panel_agent_p:'أخبرنا بما تبحث عنه مرة واحدة. نمرّره مباشرة إلى الوكلاء والملاك الذين لديهم بيت مفتوح مناسب — دون نماذج متكررة.', panel_agent_bold:'بدون عمولة على الاستفسارات.',
-    cta_agent_btn:'بطاقة المستأجر تستغرق حوالي دقيقة',
-    notif1_time:'قبل يومين', notif1_text:'تم استلام عربون الحجز (550 جنيهًا) للمنزل 4B',
-    notif2_time:'قبل 8 ساعات', notif2_text:'تم طلب التحقق من المراجع',
+    panel_agent_h:'أدرج مرة واحدة وتواصل مع مستأجرين جاهزين للمعاينة', panel_agent_p:'أدرج بيوتك المفتوحة على 00.house وتواصل مع مستأجرين موثوقين وجاهزين للمعاينة.', panel_agent_bold:'بدون عمولة على الاستفسارات.',
+    cta_agent_btn:'تسجيل سريع',
+    notif1_time:'قبل دقيقة', notif1_text:'استفسار جديد من آدم م.',
+    notif2_time:'قبل ساعة', notif2_text:'تم حجز معاينة — 24 أشفورد رود',
     notif3_time:'قبل ساعة', notif3_text:'تم نشر إعلانك للتو',
     legal_strip_link:'اقرأ إخلاء المسؤولية الكامل',
     foot_company:'الشركة', foot_about:'من نحن', foot_careers:'الوظائف', foot_contact:'تواصل معنا',
@@ -701,10 +705,12 @@ function renderPanel(mode, sub){
     body.innerHTML = `
       <div class="panel-eyebrow">Get in touch</div>
       <h2>Contact 00.house</h2>
-      <div class="form-field"><label for="ct-name">Name</label><input type="text" id="ct-name"></div>
-      <div class="form-field"><label for="ct-email">Email</label><input type="email" id="ct-email"></div>
+      <div id="contactError"></div>
+      <div class="form-field"><label for="ct-name">Name</label><input type="text" id="ct-name" autocomplete="name"></div>
+      <div class="form-field"><label for="ct-email">Email</label><input type="email" id="ct-email" autocomplete="email"></div>
       <div class="form-field"><label for="ct-msg">Message</label><textarea id="ct-msg"></textarea></div>
-      <button class="submit-btn" onclick="stubSubmit(this,'Thanks — we\\'ll get back to you within one working day.')">Send message</button>
+      <button class="submit-btn" id="ct-send" onclick="handleContactSubmit()">Send message</button>
+      <div id="contactResult"></div>
     `;
     return;
   }
@@ -714,7 +720,7 @@ function renderPanel(mode, sub){
 function tenantFormHTML(){
   return `
     <div class="panel-eyebrow">Register</div>
-    <h2>Tenant registration</h2>
+    <h2>Tenant Pass</h2>
     <p>Tell us what you're looking for. Agents and landlords with matching open houses will be able to contact you directly — 00.house does not charge tenants to register.</p>
     <form id="tenantForm" onsubmit="return handleTenantSubmit(event)">
       <input type="hidden" name="_subject" value="New tenant registration — 00.house">
@@ -722,7 +728,7 @@ function tenantFormHTML(){
         <div class="form-field"><label for="t-first">First name</label><input required type="text" id="t-first" name="first_name"></div>
         <div class="form-field"><label for="t-last">Last name</label><input required type="text" id="t-last" name="last_name"></div>
       </div>
-      <div class="form-field"><label for="t-email">Email</label><input required type="email" id="t-email" name="email"></div>
+      <div class="form-field"><label for="t-email">Email</label><input required type="email" id="t-email" name="email" value="${esc(pendingTenantEmail)}"></div>
       <div class="form-field"><label for="t-phone">Phone</label><input required type="tel" id="t-phone" name="phone" placeholder="+44"></div>
       <div class="form-field"><label for="t-areas">Preferred areas or postcodes</label><input type="text" id="t-areas" name="preferred_areas" placeholder="e.g. Marylebone, NW1, SW1A"></div>
       <div class="form-row">
@@ -801,45 +807,44 @@ function agentFormHTML(){
 /*
   EMAIL DELIVERY — one-time setup required
   ------------------------------------------------------------------
-  This is a static prototype with no server, so it can't send email on
-  its own. The two form handlers below POST to Formspree (a hosted
-  form-backend service) which forwards submissions straight to an inbox.
+  This is a static site with no server, so it can't send email on its
+  own. The tenant form and the contact form POST to Formspree (a hosted
+  form-backend service) which forwards submissions to an inbox.
 
-  To receive tenant + agent registrations at emilia@qinvestments.london:
-    1. Go to https://formspree.io and create a free account using
-       emilia@qinvestments.london.
-    2. Create a new form and set its notification email to
-       emilia@qinvestments.london (or leave it — Formspree defaults to
-       the account's own email).
+  To receive tenant applications and contact messages at partner@00.house:
+    1. Go to https://formspree.io and create an account.
+    2. Create a form and set its notification email to partner@00.house.
+       (Formspree, not this page, decides who receives the email.)
     3. Copy the form's endpoint, which looks like
        https://formspree.io/f/xyzabcde
-    4. Replace TENANT_FORM_ENDPOINT and AGENT_FORM_ENDPOINT below with
-       that URL (you can use the same endpoint for both, or create two
-       separate Formspree forms to keep tenant and agent leads apart).
-  Until you do this, submissions will show the success message in the
-  UI but will not actually be delivered anywhere.
+    4. Replace TENANT_FORM_ENDPOINT (and CONTACT_FORM_ENDPOINT, and
+       AGENT_FORM_ENDPOINT if you want) below with that URL. You can use
+       the same URL for all of them.
+  Until you do this the forms fall back to opening the visitor's own email
+  app with the message addressed to partner@00.house — the visitor has to
+  press send themselves, so some enquiries can be lost.
 */
-const TENANT_FORM_ENDPOINT = 'https://formspree.io/f/REPLACE_WITH_TENANT_FORM_ID';
-const AGENT_FORM_ENDPOINT  = 'https://formspree.io/f/REPLACE_WITH_AGENT_FORM_ID';
+const TENANT_FORM_ENDPOINT  = 'https://formspree.io/f/REPLACE_WITH_TENANT_FORM_ID';
+const CONTACT_FORM_ENDPOINT = 'https://formspree.io/f/REPLACE_WITH_CONTACT_FORM_ID';
+const AGENT_FORM_ENDPOINT   = 'https://formspree.io/f/REPLACE_WITH_AGENT_FORM_ID';
+function endpointReady(url){ return !!url && url.indexOf('REPLACE_WITH') === -1; }
 
 /*
-  REGISTRATION & DISPATCH SERVICE
+  ROUTING SUMMARY
   ------------------------------------------------------------------
-  Every registration (tenant, agent/landlord, early-access) is routed
-  two ways with zero backend setup required:
-    1. A prefilled WhatsApp message opens automatically, addressed to
-       the 00.house ops number below.
-    2. A mailto: link to the right inbox is shown as a fallback.
-  If a real Formspree endpoint has been set above, submissions are
-  ALSO sent there in the background (best-effort, never blocks and
-  never shown as an error if it fails — WhatsApp + email are the
-  guaranteed channels).
+  • Tenants: homepage email box -> Tenant Pass form (email prefilled) ->
+    emailed to TENANT_EMAIL (partner@00.house). No WhatsApp.
+  • Contact form: emailed to TENANT_EMAIL the same way.
+  • Agents / landlords + the early-access map popup: prefilled WhatsApp
+    message opens automatically, with a mailto: fallback to AGENT_EMAIL.
+    If AGENT_FORM_ENDPOINT is set, the agent form is also sent there.
 */
 const WHATSAPP_NUMBER = '+44 7956 716677';
 const WHATSAPP_INT = '447956716677';
 const AGENT_EMAIL = 'partner@00.house';
 const TENANT_EMAIL = 'partner@00.house';
 const ENQUIRY_LOG_KEY = '00_house_enquiries_log';
+let pendingTenantEmail = '';   // email typed into the homepage quick form, prefilled into the Tenant Pass
 
 function saveEnquiryToLog(enquiry){
   const item = Object.assign({}, enquiry, {
@@ -880,24 +885,23 @@ function buildAgentWhatsAppText(d){
 *Destination:* ${AGENT_EMAIL} & WhatsApp (${WHATSAPP_NUMBER})
 *Offer:* 2 Years Complimentary Promotion`;
 }
-function buildTenantWhatsAppText(d){
-  return `*00.house — New Tenant Pass Application*
+function buildTenantEmailText(d){
+  return `00.house — New Tenant Pass Application
 ----------------------------------------
-• Name: ${d.firstName} ${d.lastName}
-• Email: ${d.email}
-• Phone: ${d.phone}
-• Preferred Areas / Postcodes: ${d.areas}
-• Budget Range: £${d.budgetMin || '\u2014'} - £${d.budgetMax || '\u2014'} / month
-• Earliest Move-in: ${d.moveIn || 'Flexible'}
-• Occupants: ${d.occupants || '1'}
-• Employment Status: ${d.employment || 'Employed'}
-• Notes: ${d.notes || 'None'}
+Name: ${d.firstName} ${d.lastName}
+Email: ${d.email}
+Phone: ${d.phone}
+Preferred areas / postcodes: ${d.areas}
+Budget range: £${d.budgetMin || '\u2014'} - £${d.budgetMax || '\u2014'} / month
+Earliest move-in: ${d.moveIn || 'Flexible'}
+Occupants: ${d.occupants || '1'}
+Employment status: ${d.employment || 'Employed'}
+Notes: ${d.notes || 'None'}
 ----------------------------------------
-*Destination:* ${TENANT_EMAIL} & WhatsApp (${WHATSAPP_NUMBER})
-*Status:* Verified Profile — Ready to Apply`;
+Sent to: ${TENANT_EMAIL}`;
 }
 function buildEarlyAccessWhatsAppText(d){
-  return `*00.house — Early Access Registration (60 Days Left)*
+  return `*00.house — Early Access Registration*
 ----------------------------------------
 • Agency / Landlord: ${d.agency}
 • Contact: ${d.contact}
@@ -908,26 +912,51 @@ function buildEarlyAccessWhatsAppText(d){
 *Promotion:* 2 Years Free Launch Promotion`;
 }
 
-/* Shared success UI shown after a form is dispatched: WhatsApp opens
-   automatically, and this stays on screen as a fallback / resend option. */
+/* Shared success UI for the AGENT form: WhatsApp opens automatically,
+   and this stays on screen as a fallback / resend option. */
 function renderDispatchSuccess(successBoxId, formEl, whatsappText, email, name){
   const successBox = document.getElementById(successBoxId);
   formEl.style.display = 'none';
-  const greeting = name ? ', ' + name : '';
+  const greeting = name ? ', ' + esc(name) : '';
   successBox.innerHTML = `
     <div class="dispatch-success">
       <div class="dispatch-success-icon">✓</div>
       <h3>Registration sent</h3>
       <p>Thanks${greeting} — WhatsApp should have opened with your details ready to send. If it didn't, use the button below, or email us directly.</p>
-      <div class="dispatch-route"><span>Official inbox</span><strong>${email}</strong></div>
+      <div class="dispatch-route"><span>Official inbox</span><strong>${esc(email)}</strong></div>
       <div class="dispatch-route"><span>Direct WhatsApp</span><strong>${WHATSAPP_NUMBER}</strong></div>
       <button type="button" class="dispatch-whatsapp-btn" id="${successBoxId}-wa">💬 Open in WhatsApp</button>
-      <a class="dispatch-email-link" href="${getMailtoLink(email, 'New 00.house registration', whatsappText.replace(/\*/g, ''))}">✉️ Or email ${email}</a>
+      <a class="dispatch-email-link" href="${getMailtoLink(email, 'New 00.house registration', whatsappText.replace(/\*/g, ''))}">✉️ Or email ${esc(email)}</a>
     </div>`;
   document.getElementById(successBoxId + '-wa').onclick = function(){ openWhatsAppLink(whatsappText); };
   openWhatsAppLink(whatsappText);
 }
 
+/* Tenant / contact result: 'sent' = delivered through Formspree;
+   'fallback' = open the visitor's email app addressed to partner@00.house. */
+function renderTenantResult(formEl, name, state, emailText){
+  const box = document.getElementById('tenantSuccess');
+  formEl.style.display = 'none';
+  const greeting = name ? ', ' + esc(name) : '';
+  const mailto = getMailtoLink(TENANT_EMAIL, 'New 00.house Tenant Pass application', emailText);
+  if(state === 'sent'){
+    box.innerHTML = `
+      <div class="dispatch-success">
+        <div class="dispatch-success-icon">✓</div>
+        <h3>Tenant Pass request sent</h3>
+        <p>Thanks${greeting} — your details have been emailed to the 00.house team. We'll be in touch shortly.</p>
+      </div>`;
+  } else {
+    box.innerHTML = `
+      <div class="dispatch-success">
+        <div class="dispatch-success-icon">✓</div>
+        <h3>One last step</h3>
+        <p>Thanks${greeting} — your email app should have opened with your details ready to send to ${esc(TENANT_EMAIL)}. If it didn't, use the button below.</p>
+        <a class="dispatch-email-btn" href="${mailto}">✉️ Email my details to ${esc(TENANT_EMAIL)}</a>
+      </div>`;
+    window.location.href = mailto;
+  }
+}
 
 function submitFormToEmail(endpoint, formEl){
   const data = new FormData(formEl);
@@ -958,9 +987,9 @@ function demoSignIn(role){ setSession(DEMO_ACCOUNTS[role]); openPanel('account')
 function accountSignInSubmit(e, role){
   e.preventDefault();
   const f = e.target;
-  const session = { role: role, name: f.name.value.trim(), email: f.email.value.trim() };
+  const session = { role: role, name: f.elements['name'].value.trim(), email: f.elements['email'].value.trim() };
   if(role === 'tenant'){ session.areas = 'Not set yet'; session.budget = 'Not set yet'; session.passId = 'TP-' + Date.now().toString().slice(-5) + '-UK'; }
-  if(role === 'agent'){ session.agencyName = (f.agency ? f.agency.value.trim() : '') || 'Independent'; session.areas = 'Not set yet'; }
+  if(role === 'agent'){ session.agencyName = (f.elements['agency'] ? f.elements['agency'].value.trim() : '') || 'Independent'; session.areas = 'Not set yet'; }
   setSession(session);
   openPanel('account');
   return false;
@@ -1010,12 +1039,13 @@ function accountSignInHTML(role){
 
 function accountDashboardHTML(session, tab){
   const roleLabel = session.role === 'tenant' ? 'Tenant' : session.role === 'agent' ? 'Agent / Landlord' : 'Admin';
+  const roleClass = ['tenant','agent','admin'].indexOf(session.role) !== -1 ? session.role : 'tenant';
   const header = `
     <div class="acct-header">
-      <div class="acct-avatar">${(session.name||'?').charAt(0).toUpperCase()}</div>
+      <div class="acct-avatar">${esc((session.name||'?').charAt(0).toUpperCase())}</div>
       <div class="acct-header-copy">
-        <strong>${session.name}</strong>
-        <span class="acct-role-badge role-${session.role}">${roleLabel}</span>
+        <strong>${esc(session.name)}</strong>
+        <span class="acct-role-badge role-${roleClass}">${roleLabel}</span>
       </div>
       <button type="button" class="acct-signout" onclick="clearSession()">Sign out</button>
     </div>
@@ -1051,24 +1081,24 @@ function tenantDashboardBody(session){
   return `
     <div class="tp-card">
       <div class="tp-card-head"><span>Tenant Pass</span><span class="tp-status">✓ Verified</span></div>
-      <div class="tp-id">${session.passId || 'TP-00000-UK'}</div>
-      <div class="tp-row"><span>Target areas</span><strong>${session.areas || 'Not set yet'}</strong></div>
-      <div class="tp-row"><span>Budget</span><strong>${session.budget || 'Not set yet'}</strong></div>
+      <div class="tp-id">${esc(session.passId || 'TP-00000-UK')}</div>
+      <div class="tp-row"><span>Target areas</span><strong>${esc(session.areas || 'Not set yet')}</strong></div>
+      <div class="tp-row"><span>Budget</span><strong>${esc(session.budget || 'Not set yet')}</strong></div>
     </div>
     <button type="button" class="dispatch-whatsapp-btn" onclick="tenantConciergeChat()">💬 Chat with your concierge (${WHATSAPP_NUMBER})</button>
-    <a class="dispatch-email-link" href="${getMailtoLink(TENANT_EMAIL, 'Tenant Pass enquiry', 'Hi, this is ' + session.name + ' (' + (session.passId||'') + ').')}">✉️ Or email ${TENANT_EMAIL}</a>
+    <a class="dispatch-email-link" href="${getMailtoLink(TENANT_EMAIL, 'Tenant Pass enquiry', 'Hi, this is ' + session.name + ' (' + (session.passId||'') + ').')}">✉️ Or email ${esc(TENANT_EMAIL)}</a>
   `;
 }
 function agentDashboardBody(session){
   return `
     <div class="agent-promo-card">
       <div class="promo-badge">2 Years Complimentary Promotion — Active until 20 November 2028</div>
-      <div class="tp-row"><span>Agency</span><strong>${session.agencyName || 'Independent'}</strong></div>
-      <div class="tp-row"><span>Coverage areas</span><strong>${session.areas || 'Not set yet'}</strong></div>
+      <div class="tp-row"><span>Agency</span><strong>${esc(session.agencyName || 'Independent')}</strong></div>
+      <div class="tp-row"><span>Coverage areas</span><strong>${esc(session.areas || 'Not set yet')}</strong></div>
       <div class="tp-row"><span>Commission on enquiries</span><strong>0%</strong></div>
     </div>
     <button type="button" class="dispatch-whatsapp-btn agent-variant" onclick="agentPartnerDeskChat()">💬 Chat with the Partner Desk (${WHATSAPP_NUMBER})</button>
-    <a class="dispatch-email-link" href="${getMailtoLink(AGENT_EMAIL, 'Partner Desk enquiry', 'Hi, this is ' + session.name + ' from ' + (session.agencyName||'') + '.')}">✉️ Or email ${AGENT_EMAIL}</a>
+    <a class="dispatch-email-link" href="${getMailtoLink(AGENT_EMAIL, 'Partner Desk enquiry', 'Hi, this is ' + session.name + ' from ' + (session.agencyName||'') + '.')}">✉️ Or email ${esc(AGENT_EMAIL)}</a>
   `;
 }
 function adminDashboardBody(session){
@@ -1076,12 +1106,12 @@ function adminDashboardBody(session){
   const rows = log.length ? log.map(e => `
       <div class="enq-item">
         <div class="enq-item-main">
-          <strong>${e.name}</strong>
-          <span class="enq-item-type type-${e.type}">${e.type === 'agent' ? 'Agent' : 'Tenant'}</span>
-          <span class="enq-item-time">${e.timestamp}</span>
+          <strong>${esc(e.name)}</strong>
+          <span class="enq-item-type type-${e.type === 'agent' ? 'agent' : 'tenant'}">${e.type === 'agent' ? 'Agent' : 'Tenant'}</span>
+          <span class="enq-item-time">${esc(e.timestamp)}</span>
         </div>
-        <p>${e.details}</p>
-        <button type="button" class="enq-followup-btn" onclick="adminFollowUp('${e.id}')">💬 Reply on WhatsApp</button>
+        <p>${esc(e.details)}</p>
+        <button type="button" class="enq-followup-btn" onclick="adminFollowUp('${esc(e.id)}')">💬 Reply on WhatsApp</button>
       </div>`).join('')
     : `<p class="enq-empty">No registrations yet in this browser. Submit a tenant or agent form to see it appear here instantly.</p>`;
 
@@ -1109,113 +1139,95 @@ function comingSoonHTML(role){
   `;
 }
 
-/* ---- Tenant flow: email only (no WhatsApp) ----
-   Quick form -> opens the Tenant Pass panel with the email prefilled (nothing sent yet).
-   Tenant Pass submit -> Formspree, which emails TENANT_EMAIL. If Formspree isn't
-   configured or fails, we open the visitor's own mail app with the application
-   prefilled instead, and say so honestly (they still have to press send). */
-function buildTenantEmailText(d){
-  return `New Tenant Pass application — 00.house
-----------------------------------------
-Name: ${d.firstName} ${d.lastName}
-Email: ${d.email}
-Phone: ${d.phone}
-Preferred areas / postcodes: ${d.areas}
-Budget: £${d.budgetMin || '\u2014'} - £${d.budgetMax || '\u2014'} per month
-Earliest move-in: ${d.moveIn || 'Flexible'}
-Occupants: ${d.occupants || '1'}
-Employment status: ${d.employment || 'Not stated'}
-Notes: ${d.notes || 'None'}`;
-}
-function openMailApp(url){
-  const a = document.createElement('a');
-  a.href = url; a.style.display = 'none';
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-}
-function renderTenantResult(formEl, delivered, mailtoUrl, name){
-  const box = document.getElementById('tenantSuccess');
-  formEl.style.display = 'none';
-  const greeting = name ? ', ' + name : '';
-  box.innerHTML = delivered ? `
-    <div class="dispatch-success">
-      <div class="dispatch-success-icon">✓</div>
-      <h3>Application sent</h3>
-      <p>Thanks${greeting} — your Tenant Pass application has been emailed to <strong>${TENANT_EMAIL}</strong>. We'll be in touch.</p>
-    </div>` : `
-    <div class="dispatch-success">
-      <div class="dispatch-success-icon" style="background:#fdf1dc;color:#9a6a12">✉</div>
-      <h3>One more step</h3>
-      <p>Thanks${greeting} — we couldn't send this automatically, so we've opened your email app with your application ready, addressed to <strong>${TENANT_EMAIL}</strong>. <strong>Please press send</strong> to complete it.</p>
-      <a class="dispatch-whatsapp-btn" style="display:block;text-align:center;text-decoration:none;background:var(--black)" id="tenantMailBtn" href="${mailtoUrl}">✉️ Open my email app again</a>
-    </div>`;
+/* ---- Tenant flow: quick email box -> Tenant Pass -> emailed to partner@00.house ---- */
+function handleQuickTenantSubmit(e){
+  e.preventDefault();
+  pendingTenantEmail = e.target.elements['email'].value.trim();
+  e.target.reset();
+  openPanel('tenant-form');   // opens the Tenant Pass with the email already filled in
+  return false;
 }
 function handleTenantSubmit(e){
   e.preventDefault();
   const f = e.target;
   const data = {
-    firstName: f.first_name.value, lastName: f.last_name.value,
-    email: f.email.value, phone: f.phone.value,
-    areas: f.preferred_areas.value || 'Flexible',
-    budgetMin: f.budget_min.value, budgetMax: f.budget_max.value,
-    moveIn: f.move_in_date.value, occupants: f.occupants.value,
-    employment: f.employment_status.value, notes: f.notes.value
+    firstName: f.elements['first_name'].value, lastName: f.elements['last_name'].value,
+    email: f.elements['email'].value, phone: f.elements['phone'].value,
+    areas: f.elements['preferred_areas'].value || 'Flexible',
+    budgetMin: f.elements['budget_min'].value, budgetMax: f.elements['budget_max'].value,
+    moveIn: f.elements['move_in_date'].value, occupants: f.elements['occupants'].value,
+    employment: f.elements['employment_status'].value, notes: f.elements['notes'].value
   };
-  const mailtoUrl = getMailtoLink(TENANT_EMAIL, 'New Tenant Pass application \u2014 ' + (data.firstName + ' ' + data.lastName).trim(), buildTenantEmailText(data));
-  const name = (data.firstName + ' ' + data.lastName).trim();
-  const btn = f.querySelector('button[type="submit"]');
-  const label = btn ? btn.textContent : '';
-  const log = (delivered) => saveEnquiryToLog({
-    type: 'tenant', name: name, email: data.email, phone: data.phone,
-    details: 'Tenant Pass application \u2014 ' + data.areas, routedTo: TENANT_EMAIL + (delivered ? '' : ' (via visitor\u2019s email app)'), whatsappRouted: false
+  const emailText = buildTenantEmailText(data);
+  saveEnquiryToLog({
+    type: 'tenant', name: (data.firstName + ' ' + data.lastName).trim(), email: data.email, phone: data.phone,
+    details: 'Tenant Pass application — ' + data.areas, routedTo: TENANT_EMAIL, whatsappRouted: false
   });
-  const fallback = () => { log(false); renderTenantResult(f, false, mailtoUrl, data.firstName); openMailApp(mailtoUrl); };
-
-  if (TENANT_FORM_ENDPOINT.indexOf('REPLACE_WITH') !== -1) { fallback(); return false; }
-
-  if (btn) { btn.disabled = true; btn.textContent = 'Sending\u2026'; }
-  submitFormToEmail(TENANT_FORM_ENDPOINT, f)
-    .then(res => {
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      log(true); renderTenantResult(f, true, mailtoUrl, data.firstName);
-    })
-    .catch(() => {
-      if (btn) { btn.disabled = false; btn.textContent = label; }
-      fallback();
-    });
-  return false;
-}
-function handleQuickTenantSubmit(e){
-  e.preventDefault();
-  const email = e.target.email.value.trim();
-  openPanel('tenant-form');
-  const field = document.getElementById('t-email');
-  if (field) { field.value = email; const first = document.getElementById('t-first'); if (first) first.focus(); }
+  pendingTenantEmail = '';
+  if (endpointReady(TENANT_FORM_ENDPOINT)) {
+    const btn = f.querySelector('.submit-btn');
+    if(btn){ btn.disabled = true; btn.textContent = 'Sending…'; }
+    submitFormToEmail(TENANT_FORM_ENDPOINT, f)
+      .then(res => { if(!res.ok) throw new Error('HTTP ' + res.status); renderTenantResult(f, data.firstName, 'sent', emailText); })
+      .catch(() => renderTenantResult(f, data.firstName, 'fallback', emailText));
+  } else {
+    renderTenantResult(f, data.firstName, 'fallback', emailText);
+  }
   return false;
 }
 function handleAgentSubmit(e){
   e.preventDefault();
   const f = e.target;
   const data = {
-    agencyName: f.company_name.value, accountType: f.account_type.value,
-    contactName: f.contact_name.value, role: f.role.value,
-    workEmail: f.email.value, phone: f.phone.value,
-    areas: f.areas_covered.value || 'Not specified',
-    regNumber: f.registration_number.value, cmpScheme: f.cmp_scheme.value, redressScheme: f.redress_scheme.value
+    agencyName: f.elements['company_name'].value, accountType: f.elements['account_type'].value,
+    contactName: f.elements['contact_name'].value, role: f.elements['role'].value,
+    workEmail: f.elements['email'].value, phone: f.elements['phone'].value,
+    areas: f.elements['areas_covered'].value || 'Not specified',
+    regNumber: f.elements['registration_number'].value, cmpScheme: f.elements['cmp_scheme'].value, redressScheme: f.elements['redress_scheme'].value
   };
   const whatsappText = buildAgentWhatsAppText(data);
   saveEnquiryToLog({
     type: 'agent', name: data.contactName + ' (' + data.agencyName + ')', email: data.workEmail, phone: data.phone,
     details: 'Agent & landlord registration — ' + data.areas, routedTo: AGENT_EMAIL + ' & WhatsApp ' + WHATSAPP_NUMBER, whatsappRouted: true
   });
-  if (AGENT_FORM_ENDPOINT.indexOf('REPLACE_WITH') === -1) { submitFormToEmail(AGENT_FORM_ENDPOINT, f).catch(()=>{}); }
+  if (endpointReady(AGENT_FORM_ENDPOINT)) { submitFormToEmail(AGENT_FORM_ENDPOINT, f).catch(()=>{}); }
   renderDispatchSuccess('agentSuccess', f, whatsappText, AGENT_EMAIL, data.contactName);
   return false;
 }
-function stubSubmit(btn,msg){
-  const div = document.createElement('div');
-  div.className='form-success';
-  div.textContent = msg;
-  btn.parentElement.appendChild(div);
+
+/* ---- Contact form: really sends (Formspree) or falls back to the visitor's email app ---- */
+function handleContactSubmit(){
+  const name = document.getElementById('ct-name').value.trim();
+  const email = document.getElementById('ct-email').value.trim();
+  const msg = document.getElementById('ct-msg').value.trim();
+  const errBox = document.getElementById('contactError');
+  const result = document.getElementById('contactResult');
+  errBox.innerHTML = '';
+  if(!name || !email || !msg || email.indexOf('@') < 1){
+    errBox.innerHTML = '<p class="inline-error">Please enter your name, a valid email address and a message.</p>';
+    return;
+  }
+  const text = 'Name: ' + name + '\nEmail: ' + email + '\n\n' + msg;
+  const mailto = getMailtoLink(TENANT_EMAIL, 'Message from the 00.house contact form', text);
+  const btn = document.getElementById('ct-send');
+  function fallback(){
+    result.innerHTML = `<div class="form-success">Your email app should have opened with your message addressed to ${esc(TENANT_EMAIL)}. If it didn't, <a href="${mailto}" style="color:inherit;text-decoration:underline">click here to send it</a>.</div>`;
+    window.location.href = mailto;
+  }
+  if(endpointReady(CONTACT_FORM_ENDPOINT)){
+    btn.disabled = true; btn.textContent = 'Sending…';
+    fetch(CONTACT_FORM_ENDPOINT, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'Accept':'application/json' },
+      body: JSON.stringify({ name:name, email:email, message:msg, _subject:'Message from the 00.house contact form' })
+    }).then(res => {
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      result.innerHTML = '<div class="form-success">Thanks — your message has been sent. We\u2019ll get back to you within one working day.</div>';
+      btn.style.display = 'none';
+    }).catch(() => { btn.disabled = false; btn.textContent = 'Send message'; fallback(); });
+  } else {
+    fallback();
+  }
 }
 function contactStub(name){ alert('Contact request sent (stub) to '+name+'. This would route to their own contact details, not to 00.house.'); }
 
@@ -1266,7 +1278,7 @@ function legalContent(active){
     return `
       <div class="legal-section"><h4>Essential cookies</h4><p>Used to keep you logged in and remember basic preferences (e.g. selected country, language). The Platform cannot function correctly without these.</p></div>
       <div class="legal-section"><h4>Analytics cookies</h4><p>Help us understand how the Platform is used so we can improve it. Used only with your consent where required by law.</p></div>
-      <div class="legal-section"><h4>Third-party map tiles</h4><p>The map is powered by OpenStreetMap contributors, with requests made to their tile servers when you browse the map.</p></div>
+      <div class="legal-section"><h4>Third-party maps and search</h4><p>The map is provided by Google Maps, which may set its own cookies and receive your IP address when the map loads. Postcode and city searches are sent to OpenStreetMap's Nominatim service to find the location.</p></div>
     `;
   }
   return `
@@ -1576,8 +1588,9 @@ function initInAreaMap(){
 })();
 </script>
 <!--
-  Google Maps JS API — replace YOUR_GOOGLE_MAPS_API_KEY with a real key from
-  Google Cloud Console (Maps JavaScript API enabled, billing account attached).
+  Google Maps JS API. The key below is visible to anyone who views the page source,
+  so in Google Cloud Console restrict it to "HTTP referrers" (00.house/*) and to the
+  Maps JavaScript API only, otherwise anyone can use it and run up your bill.
   Docs: https://developers.google.com/maps/documentation/javascript/get-api-key
 -->
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-I8268eF9w7JYVrXEv7xi3WM0KnYRI0Q&callback=initInAreaMap"></script>
@@ -1592,27 +1605,23 @@ function initInAreaMap(){
     to get early launch access and 2 years of promotion.
   - Scroll away and it fades out. Scroll back and it returns.
   - "Register for early access" opens the registration card (agency, contact,
-    work email). On success the map is unlocked for that visitor.
-
-  HOW TO INSTALL
-  Paste this whole file just before the closing </body> tag in index.html.
+    work email, phone). On success WhatsApp opens with the details and the map
+    is unlocked for that visitor.
 
   IMAGES (all live in the repo root, next to index.html)
-    header-dark-red.jpeg   panel background
+    header%20dark%20red.jpeg   panel background (%20 = the spaces in the file name)
     she.png                    agent portrait (arch, left)
     he.png                     tenant portrait (arch, right)
   These are plain relative paths, so they work on 00.house via GitHub Pages.
   Do NOT use github.com/.../blob/... links: those are web pages, not image files.
-  If you upload the images to a sub folder, change the src / url paths below.
 
   THINGS YOU MAY WANT TO CHANGE
   1. OFFER_ENDS       (settings at the top of the script)  last day of the offer
   2. --tz-opacity     (in the CSS below, .map-teaser-overlay)  0.8 = panel is 80% solid.
                       Use 0.2 if you want the panel 80% see-through instead.
-  3. FORM_ENDPOINT    Formspree URL. If left empty, the script reuses
-                      AGENT_FORM_ENDPOINT from index.html. Until one of them is a
-                      real Formspree URL, submitting shows an error (it will not
-                      pretend to succeed).
+  3. FORM_ENDPOINT    Optional Formspree URL. If left empty, the script reuses
+                      AGENT_FORM_ENDPOINT from the main script. Delivery does not
+                      depend on it: WhatsApp opens on success either way.
 -->
 
 <style>
@@ -2037,7 +2046,7 @@ function initInAreaMap(){
 <!-- ============ MAP TEASER PANEL (the script moves this into the map box) ============ -->
 <div class="map-teaser-overlay" id="map-teaser" role="region" aria-label="Early launch offer for agents and landlords" hidden>
   <div class="map-teaser-backdrop" aria-hidden="true">
-    <img src="./header-dark-red.jpeg" alt="" loading="lazy" decoding="async">
+    <img src="./header%20dark%20red.jpeg" alt="" loading="lazy" decoding="async">
   </div>
 
   <div class="map-teaser-inner">
@@ -2068,7 +2077,7 @@ function initInAreaMap(){
   <div class="reg-popup-card" role="dialog" aria-modal="true" aria-labelledby="reg-popup-title">
     <div class="reg-popup-head">
       <div class="reg-popup-head-bg" aria-hidden="true">
-        <img src="./header-dark-red.jpeg" alt="" loading="lazy" decoding="async">
+        <img src="./header%20dark%20red.jpeg" alt="" loading="lazy" decoding="async">
       </div>
       <button type="button" class="reg-popup-close" id="reg-popup-close" aria-label="Close">&times;</button>
       <div class="reg-popup-head-copy">
@@ -2132,8 +2141,8 @@ function initInAreaMap(){
     /* ============ SETTINGS ============ */
     var MAP_SELECTOR = '.inarea-map-wrapper';   // the box that holds only the Google Map
     var VISIBILITY_THRESHOLD = 0.3;             // share of the map on screen before the panel shows
-    var OFFER_ENDS = '2026-11-20';              // last day of the offer, YYYY-MM-DD (60 days from 21 Sep 2026)
-    var FORM_ENDPOINT = '';                     // Formspree URL; empty = reuse AGENT_FORM_ENDPOINT from index.html
+    var OFFER_ENDS = '2026-11-20';              // last day of the offer, YYYY-MM-DD
+    var FORM_ENDPOINT = '';                     // Formspree URL; empty = reuse AGENT_FORM_ENDPOINT from the main script
     var STORAGE_KEY = 'agent_registered';       // same key as before
 
     /* ============ HELPERS ============ */
@@ -2274,13 +2283,13 @@ function initInAreaMap(){
 
       // Spam trap filled in: act as if it worked, send nothing, remember nothing.
       if (form.elements._gotcha && form.elements._gotcha.value) {
-        onSuccess(data, false);
+        onSuccess(data, false, true);
         return;
       }
 
       // Best-effort background delivery to Formspree if a real endpoint has
-      // been configured; WhatsApp + email below are the guaranteed channels,
-      // so this never blocks and is never shown to the visitor as an error.
+      // been configured; WhatsApp below is the guaranteed channel, so this
+      // never blocks and is never shown to the visitor as an error.
       var endpoint = getEndpoint();
       if (endpoint) {
         fetch(endpoint, {
@@ -2290,10 +2299,10 @@ function initInAreaMap(){
         }).catch(function(){});
       }
 
-      onSuccess(data, true);
+      onSuccess(data, true, false);
     });
 
-    function onSuccess(data, remember) {
+    function onSuccess(data, remember, isBot) {
       signedUp = true;
       if (remember) store.set(STORAGE_KEY, '1');
       successEmail.textContent = data.email;
@@ -2302,10 +2311,11 @@ function initInAreaMap(){
         ? buildEarlyAccessWhatsAppText(data)
         : '00.house — Early Access Registration\nAgency: ' + data.agency + '\nContact: ' + data.contact + '\nEmail: ' + data.email + '\nPhone: ' + data.phone;
 
-      if (typeof saveEnquiryToLog === 'function') {
+      // Bots see the success screen but nothing is logged or opened for them.
+      if (!isBot && typeof saveEnquiryToLog === 'function') {
         saveEnquiryToLog({
           type: 'agent', name: data.contact + ' (' + data.agency + ')', email: data.email, phone: data.phone,
-          details: 'Early access — 60-day launch promotion', routedTo: 'partner@00.house & WhatsApp +44 7956 716677', whatsappRouted: true
+          details: 'Early access — launch promotion', routedTo: 'partner@00.house & WhatsApp +44 7956 716677', whatsappRouted: true
         });
       }
 
@@ -2324,7 +2334,7 @@ function initInAreaMap(){
         if (typeof openPanel === 'function') openPanel('account');
       };
 
-      if (typeof openWhatsAppLink === 'function') openWhatsAppLink(whatsappText);
+      if (!isBot && typeof openWhatsAppLink === 'function') openWhatsAppLink(whatsappText);
     }
 
     doneBtn.addEventListener('click', closeModal);
