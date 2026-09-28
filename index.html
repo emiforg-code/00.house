@@ -52,7 +52,7 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .lang-menu button:hover{background:#f6f2ea}
 
 /* ============ HERO ============ */
-.hero{position:relative;width:100%;height:640px;overflow:hidden;background:#e9e6dc url('./header-dark-red.jpeg') center/cover no-repeat;background-attachment:fixed}
+.hero{position:relative;width:100%;height:640px;overflow:hidden;background:#e9e6dc url('./home-house-rent.jpeg') center/cover no-repeat;background-attachment:fixed}
   .hero-veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0) 35%,rgba(255,255,255,0.6) 100%);z-index:20}
 .hero-content{position:relative;z-index:30;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 20px 46px;text-align:center}
 .hero-content h1{font-size:clamp(26px,4vw,42px);color:#1b1b1b;text-shadow:0 2px 20px rgba(255,255,255,0.6);max-width:720px}
@@ -140,6 +140,61 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .dispatch-whatsapp-btn{width:100%;margin-top:14px;background:#25D366;color:#fff;border:0;border-radius:8px;padding:13px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
 .dispatch-whatsapp-btn:hover{filter:brightness(1.05)}
 .dispatch-email-link{display:block;text-align:center;margin-top:10px;font-size:12.5px;color:var(--muted);text-decoration:underline}
+
+/* ---- Account: sign-in tabs, demo grid, dashboards ---- */
+.acct-tabs{display:flex;gap:8px;margin:16px 0 18px}
+.acct-tab{flex:1;border:1px solid var(--line);background:#fff;padding:10px 8px;border-radius:6px;font:600 11.5px 'Inter',sans-serif;letter-spacing:0.02em;color:var(--muted);cursor:pointer;text-align:center}
+.acct-tab.active{background:var(--black);color:#fff;border-color:var(--black)}
+.acct-form{display:flex;flex-direction:column}
+.demo-divider{display:flex;align-items:center;gap:10px;margin:22px 0 14px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em}
+.demo-divider::before,.demo-divider::after{content:'';flex:1;height:1px;background:var(--line)}
+.demo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.demo-btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:12px 6px;font:600 11px 'Inter',sans-serif;line-height:1.6;cursor:pointer;text-align:center}
+.demo-btn:hover{border-color:var(--black);background:var(--cream)}
+
+.acct-header{display:flex;align-items:center;gap:12px;margin:14px 0 16px}
+.acct-avatar{width:42px;height:42px;border-radius:50%;background:var(--black);color:#fff;display:flex;align-items:center;justify-content:center;font:700 16px 'Inter',sans-serif;flex:0 0 auto}
+.acct-header-copy{flex:1;display:flex;flex-direction:column;gap:3px}
+.acct-header-copy strong{font-size:14.5px}
+.acct-role-badge{display:inline-block;width:fit-content;font-size:10px;font-weight:600;letter-spacing:0.03em;text-transform:uppercase;padding:2px 8px;border-radius:4px}
+.acct-role-badge.role-tenant{background:var(--trust-blue-tint);color:var(--trust-blue-deep)}
+.acct-role-badge.role-agent{background:var(--racing-green-tint);color:var(--racing)}
+.acct-role-badge.role-admin{background:#eee;color:#333}
+.acct-signout{border:1px solid var(--line);background:#fff;font:600 11px 'Inter',sans-serif;padding:7px 12px;border-radius:6px;cursor:pointer;color:var(--muted)}
+.acct-signout:hover{color:var(--black);border-color:var(--black)}
+
+.tp-card{border-radius:14px;padding:20px 22px;background:linear-gradient(135deg,var(--trust-blue-deep),#123a55);color:#fff;margin-bottom:16px}
+.tp-card-head{display:flex;justify-content:space-between;align-items:center;font:700 15px 'Inter',sans-serif;margin-bottom:10px}
+.tp-status{font-size:10.5px;font-weight:600;background:rgba(255,255,255,0.18);padding:3px 9px;border-radius:999px}
+.tp-id{font-family:monospace,monospace;font-size:13px;letter-spacing:0.03em;opacity:0.85;margin-bottom:14px}
+.tp-row{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;padding:7px 0;border-top:1px solid rgba(255,255,255,0.14)}
+.tp-row span{opacity:0.75}
+.tp-row strong{font-weight:600;text-align:right}
+
+.agent-promo-card{border-radius:14px;padding:20px 22px;background:linear-gradient(135deg,var(--racing),#0d2117);color:#fff;margin-bottom:16px}
+.agent-promo-card .tp-row{border-top:1px solid rgba(255,255,255,0.14)}
+.promo-badge{display:inline-block;font-size:11px;font-weight:600;background:rgba(255,255,255,0.16);color:#fff;padding:6px 12px;border-radius:999px;margin-bottom:14px}
+.promo-badge.admin-variant{background:#222;border-radius:8px;padding:10px 14px;display:block;font-size:12.5px}
+
+.dispatch-whatsapp-btn.agent-variant{background:var(--racing)}
+.admin-hub-card{margin-bottom:14px}
+.enq-feed{display:flex;flex-direction:column;gap:10px;max-height:340px;overflow-y:auto}
+.enq-item{border:1px solid var(--line);border-radius:8px;padding:12px 14px;background:#fff}
+.enq-item-main{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px}
+.enq-item-time{margin-left:auto;font-size:11px;color:var(--muted)}
+.enq-item-type{font-size:10px;font-weight:600;text-transform:uppercase;padding:2px 7px;border-radius:4px}
+.enq-item-type.type-tenant{background:var(--trust-blue-tint);color:var(--trust-blue-deep)}
+.enq-item-type.type-agent{background:var(--racing-green-tint);color:var(--racing)}
+.enq-item p{margin:6px 0 8px;font-size:12.5px}
+.enq-followup-btn{border:1px solid #25D366;color:#1a9c4e;background:#fff;font:600 11.5px 'Inter',sans-serif;padding:6px 12px;border-radius:6px;cursor:pointer}
+.enq-followup-btn:hover{background:#25D366;color:#fff}
+.enq-empty{font-size:13px;color:var(--muted);padding:18px 0}
+
+.coming-soon-box{border:1px dashed var(--brass);background:#fdf8ef;border-radius:10px;padding:18px 20px}
+.coming-soon-badge{font-size:13px;font-weight:700;margin-bottom:8px}
+.coming-soon-box p{margin:0 0 8px;font-size:12.5px;color:var(--black)}
+.coming-soon-box ul{margin:0 0 12px;padding-left:18px;font-size:12.5px;color:var(--muted);line-height:1.7}
+.coming-soon-footer{font-size:11px !important;color:#9a9a9a !important;margin:0 !important}
 
 .panel-visual{position:relative;margin-top:34px;flex:1;min-height:460px}
 .panel-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;border-radius:20px 20px 0 0;display:block}
@@ -389,7 +444,7 @@ footer a:hover{color:var(--black)}
         <div id="quickTenantSuccess"></div>
       </div>
       <div class="panel-visual">
-     <img class="panel-photo" src="./tenant-photo.jpg" alt="">
+     <img class="panel-photo" src="./he.jpeg" alt="">
         <div class="mock-card">
           <div class="mock-card-head"><span data-i18n="app_title">Tenant Pass</span><span class="mock-badge" data-i18n="mock_badge">2 of 4</span></div>
           <div class="app-check">
@@ -410,25 +465,23 @@ footer a:hover{color:var(--black)}
 
     <div class="panel agent-panel">
       <div class="panel-copy">
-        <h2 data-i18n="panel_agent_h">Renting made simple, from search to move-in</h2>
-        <p data-i18n="panel_agent_p">Tell us what you're after once. We pass it straight to agents and landlords with a matching open house — no repeated forms. 
- <strong data-i18n="panel_agent_bold">No commission on enquiries.</strong></p>
-        <button class="panel-btn agent-btn" onclick="openPanel('agent-form')" data-i18n="cta_agent_btn">Your Tenant Pass takes about 1 minute</button>
+        <h2 data-i18n="panel_agent_h">List once, reach ready-to-view tenants</h2>
+        <p data-i18n="panel_agent_p">List your open houses on 00.house and reach verified, ready-to-view tenants across your area. <strong data-i18n="panel_agent_bold">No commission on enquiries.</strong></p>
+        <button class="panel-btn agent-btn" onclick="openPanel('agent-form')" data-i18n="cta_agent_btn">Quick Sign-Up</button>
       </div>
       <div class="panel-visual">
-        <img class="panel-photo" src="./tenants-movein.png" alt="move-in">
+        <img class="panel-photo" src="./she.jpeg" alt="">
         <div class="mock-chip notif-float n1">
           <div class="chip-logo"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V10"/><path d="M9.5 20.5V14h5v6.5"/></svg></div>
-          <div><strong>00.house</strong><span class="chip-time" data-i18n="notif1_time">2d ago</span><br><span data-i18n="notif1_text">Holding deposit received (£550) for  house 4B</span></div>
+          <div><strong>00.house</strong><span class="chip-time" data-i18n="notif1_time">1m ago</span><br><span data-i18n="notif1_text">New enquiry from Adam M.</span></div>
         </div>
         <div class="mock-chip notif-float n2">
           <div class="chip-logo"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V10"/><path d="M9.5 20.5V14h5v6.5"/></svg></div>
-          <div><strong>00.house</strong><span class="chip-time" data-i18n="notif2_time">8h ago</span><br><span data-i18n="notif2_text">Reference check requested</span></div>
+          <div><strong>00.house</strong><span class="chip-time" data-i18n="notif2_time">1h ago</span><br><span data-i18n="notif2_text">Viewing booked — 24 Ashford Rd</span></div>
         </div>
         <div class="mock-chip notif-float n3">
           <div class="chip-logo"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V10"/><path d="M9.5 20.5V14h5v6.5"/></svg></div>
-          <div><strong>00.house</strong><span class="chip-time" data-i18n="notif3_time">1m ago</span><br><span data-i18n="notif3_text">Tenancy agreement ready to sign via e-signature
-</span></div></div>
+          <div><strong>00.house</strong><span class="chip-time" data-i18n="notif3_time">1h ago</span><br><span data-i18n="notif3_text">Your listing just went live</span></div>
         </div>
       </div>
     </div>
@@ -575,16 +628,7 @@ function renderPanel(mode, sub){
   const body = document.getElementById('panelBody');
 
   if(mode==='account'){
-    body.innerHTML = `
-      <div class="panel-eyebrow">Account</div>
-      <h2>Sign in to 00.house</h2>
-      <p>Tenants, agents and landlords use the same account system.</p>
-      <div class="form-field"><label for="acc-email">Email</label><input type="email" id="acc-email" placeholder="you@example.com"></div>
-      <div class="form-field"><label for="acc-pass">Password</label><input type="text" id="acc-pass" placeholder="••••••••"></div>
-      <button class="submit-btn" onclick="alert('Login stub — connect an auth provider to enable real sign-in.')">Log in</button>
-      <p style="margin-top:14px;font-size:12.5px">New here? <a onclick="openPanel('register-choice')" style="text-decoration:underline;cursor:pointer;color:var(--black)">Create an account</a></p>
-      <p style="margin-top:18px;font-size:11px;color:#9a9a9a">Authentication is a stub in this prototype — wire up your identity provider (e.g. Auth0, Clerk, Firebase Auth) before launch.</p>
-    `;
+    body.innerHTML = accountPanelHTML(sub);
     return;
   }
 
@@ -706,8 +750,8 @@ function tenantFormHTML(){
       <div class="checkbox-row"><input type="checkbox" id="t-consent-terms" name="consent_terms" required><label for="t-consent-terms">I have read and agree to the <a onclick="event.preventDefault();openPanel('legal','terms')" style="text-decoration:underline;cursor:pointer;color:var(--black)">Terms of Use</a> and <a onclick="event.preventDefault();openPanel('legal','privacy')" style="text-decoration:underline;cursor:pointer;color:var(--black)">Privacy Policy</a>, and understand that 00.house is a listings portal only and is not party to any tenancy I enter into.</label></div>
 
       <button type="submit" class="submit-btn">Submit registration</button>
-      <div id="tenantSuccess"></div>
     </form>
+    <div id="tenantSuccess"></div>
   `;
 }
 
@@ -749,8 +793,8 @@ function agentFormHTML(){
       <div class="checkbox-row"><input type="checkbox" id="a-consent-terms" name="consent_terms" required><label for="a-consent-terms">I have read and agree to the <a onclick="event.preventDefault();openPanel('legal','terms')" style="text-decoration:underline;cursor:pointer;color:var(--black)">Terms of Use</a> for Agents &amp; Landlords and the <a onclick="event.preventDefault();openPanel('legal','disclaimer')" style="text-decoration:underline;cursor:pointer;color:var(--black)">Portal Disclaimer</a>.</label></div>
 
       <button type="submit" class="submit-btn">Submit registration</button>
-      <div id="agentSuccess"></div>
     </form>
+    <div id="agentSuccess"></div>
   `;
 }
 
@@ -794,7 +838,7 @@ const AGENT_FORM_ENDPOINT  = 'https://formspree.io/f/REPLACE_WITH_AGENT_FORM_ID'
 const WHATSAPP_NUMBER = '+44 7956 716677';
 const WHATSAPP_INT = '447956716677';
 const AGENT_EMAIL = 'partner@00.house';
-const TENANT_EMAIL = 'admin@qinvestments.london';
+const TENANT_EMAIL = 'partner@00.house';
 const ENQUIRY_LOG_KEY = '00_house_enquiries_log';
 
 function saveEnquiryToLog(enquiry){
@@ -894,6 +938,217 @@ function submitFormToEmail(endpoint, formEl){
   });
 }
 
+/* ============ ACCOUNT: SIGN-IN, DEMO ROLES & DASHBOARDS ============
+   No real backend yet — sessions live in this browser's localStorage,
+   consistent with the rest of this prototype's "Information Coming
+   Soon" framing. Wire up a real identity provider before launch. */
+const SESSION_KEY = 'oohouse_session';
+const DEMO_ACCOUNTS = {
+  tenant: { role:'tenant', name:'Oliver Davies', email:'oliver.davies@example.co.uk', areas:'Windsor, Richmond, SW1', budget:'\u00a31,800 \u2013 \u00a33,200 / month', passId:'TP-84920-UK' },
+  agent:  { role:'agent', name:'Sarah Jenkins', agencyName:'Berkshire & Thames Fine Properties', email:'s.jenkins@thamesfinehomes.co.uk', areas:'Windsor, Eton & Ascot' },
+  admin:  { role:'admin', name:'Management Admin', email:'admin@00.house' }
+};
+function getSession(){
+  try { const d = localStorage.getItem(SESSION_KEY); return d ? JSON.parse(d) : null; } catch(e){ return null; }
+}
+function setSession(s){ try { localStorage.setItem(SESSION_KEY, JSON.stringify(s)); } catch(e){ /* storage blocked */ } }
+function clearSession(){ try { localStorage.removeItem(SESSION_KEY); } catch(e){} openPanel('account'); }
+function demoSignIn(role){ setSession(DEMO_ACCOUNTS[role]); openPanel('account'); }
+
+function accountSignInSubmit(e, role){
+  e.preventDefault();
+  const f = e.target;
+  const session = { role: role, name: f.name.value.trim(), email: f.email.value.trim() };
+  if(role === 'tenant'){ session.areas = 'Not set yet'; session.budget = 'Not set yet'; session.passId = 'TP-' + Date.now().toString().slice(-5) + '-UK'; }
+  if(role === 'agent'){ session.agencyName = (f.agency ? f.agency.value.trim() : '') || 'Independent'; session.areas = 'Not set yet'; }
+  setSession(session);
+  openPanel('account');
+  return false;
+}
+
+function accountPanelHTML(sub){
+  const session = getSession();
+  if(!session){
+    const role = ['tenant','agent','admin'].indexOf(sub) !== -1 ? sub : 'tenant';
+    return accountSignInHTML(role);
+  }
+  return accountDashboardHTML(session, sub === 'roadmap' ? 'roadmap' : 'profile');
+}
+
+function accountSignInHTML(role){
+  const roleLabels = { tenant:'Tenant Pass', agent:'Agent / Landlord', admin:'Admin' };
+  const tabs = ['tenant','agent','admin'].map(r =>
+    `<button type="button" class="acct-tab ${r===role?'active':''}" onclick="openPanel('account','${r}')">${roleLabels[r]}</button>`
+  ).join('');
+  const agencyField = role === 'agent'
+    ? `<div class="form-field"><label for="acc-agency">Agency / company</label><input type="text" id="acc-agency" name="agency" placeholder="Your agency name"></div>`
+    : '';
+
+  return `
+    <div class="panel-eyebrow">Account</div>
+    <h2>Sign in to 00.house</h2>
+    <p>Tenants, agents and landlords use the same account system.</p>
+    <div class="acct-tabs">${tabs}</div>
+    <form class="acct-form" onsubmit="return accountSignInSubmit(event, '${role}')">
+      <div class="form-field"><label for="acc-name">Full name</label><input type="text" id="acc-name" name="name" required></div>
+      <div class="form-field"><label for="acc-email">Email</label><input type="email" id="acc-email" name="email" required></div>
+      ${agencyField}
+      <div class="form-field"><label for="acc-pass">Password</label><input type="password" id="acc-pass" name="password" placeholder="••••••••"></div>
+      <button class="submit-btn" type="submit">Sign in</button>
+    </form>
+    <p style="margin-top:14px;font-size:12.5px">New here? <a onclick="openPanel('register-choice')" style="text-decoration:underline;cursor:pointer;color:var(--black)">Create an account</a></p>
+
+    <div class="demo-divider"><span>Or 1-click instant demo access</span></div>
+    <div class="demo-grid">
+      <button type="button" class="demo-btn" onclick="demoSignIn('tenant')">👤<br>Demo Tenant</button>
+      <button type="button" class="demo-btn" onclick="demoSignIn('agent')">🏠<br>Demo Agent</button>
+      <button type="button" class="demo-btn" onclick="demoSignIn('admin')">🛠️<br>Demo Admin</button>
+    </div>
+    <p style="margin-top:16px;font-size:11px;color:#9a9a9a">This is a demo sign-in for the prototype — no password is checked. Wire up a real identity provider (e.g. Auth0, Clerk, Firebase Auth) before launch.</p>
+  `;
+}
+
+function accountDashboardHTML(session, tab){
+  const roleLabel = session.role === 'tenant' ? 'Tenant' : session.role === 'agent' ? 'Agent / Landlord' : 'Admin';
+  const header = `
+    <div class="acct-header">
+      <div class="acct-avatar">${(session.name||'?').charAt(0).toUpperCase()}</div>
+      <div class="acct-header-copy">
+        <strong>${session.name}</strong>
+        <span class="acct-role-badge role-${session.role}">${roleLabel}</span>
+      </div>
+      <button type="button" class="acct-signout" onclick="clearSession()">Sign out</button>
+    </div>
+    <div class="acct-tabs">
+      <button type="button" class="acct-tab ${tab==='profile'?'active':''}" onclick="openPanel('account')">Account &amp; Pass</button>
+      <button type="button" class="acct-tab ${tab==='roadmap'?'active':''}" onclick="openPanel('account','roadmap')">Coming Soon</button>
+    </div>`;
+
+  let content;
+  if(tab === 'roadmap'){ content = comingSoonHTML(session.role); }
+  else if(session.role === 'tenant'){ content = tenantDashboardBody(session); }
+  else if(session.role === 'agent'){ content = agentDashboardBody(session); }
+  else { content = adminDashboardBody(session); }
+
+  return `<div class="panel-eyebrow">My account</div>` + header + content;
+}
+
+function tenantConciergeChat(){
+  const s = getSession() || {};
+  openWhatsAppLink('Hi, this is ' + (s.name||'a tenant') + ' (Tenant Pass ' + (s.passId||'TP-00000-UK') + ') \u2014 I would like to speak with the concierge about my search.');
+}
+function agentPartnerDeskChat(){
+  const s = getSession() || {};
+  openWhatsAppLink('Hi, this is ' + (s.name||'an agent') + (s.agencyName ? ' from ' + s.agencyName : '') + ' \u2014 I would like to speak with the Partner Desk.');
+}
+function adminFollowUp(enqId){
+  const entry = getEnquiryLog().find(e => e.id === enqId);
+  if(!entry) return;
+  openWhatsAppLink('Hello ' + entry.name + ', this is 00.house admin following up on your ' + entry.type + ' registration (' + entry.details + ').');
+}
+
+function tenantDashboardBody(session){
+  return `
+    <div class="tp-card">
+      <div class="tp-card-head"><span>Tenant Pass</span><span class="tp-status">✓ Verified</span></div>
+      <div class="tp-id">${session.passId || 'TP-00000-UK'}</div>
+      <div class="tp-row"><span>Target areas</span><strong>${session.areas || 'Not set yet'}</strong></div>
+      <div class="tp-row"><span>Budget</span><strong>${session.budget || 'Not set yet'}</strong></div>
+    </div>
+    <button type="button" class="dispatch-whatsapp-btn" onclick="tenantConciergeChat()">💬 Chat with your concierge (${WHATSAPP_NUMBER})</button>
+    <a class="dispatch-email-link" href="${getMailtoLink(TENANT_EMAIL, 'Tenant Pass enquiry', 'Hi, this is ' + session.name + ' (' + (session.passId||'') + ').')}">✉️ Or email ${TENANT_EMAIL}</a>
+  `;
+}
+function agentDashboardBody(session){
+  return `
+    <div class="agent-promo-card">
+      <div class="promo-badge">2 Years Complimentary Promotion — Active until 20 November 2028</div>
+      <div class="tp-row"><span>Agency</span><strong>${session.agencyName || 'Independent'}</strong></div>
+      <div class="tp-row"><span>Coverage areas</span><strong>${session.areas || 'Not set yet'}</strong></div>
+      <div class="tp-row"><span>Commission on enquiries</span><strong>0%</strong></div>
+    </div>
+    <button type="button" class="dispatch-whatsapp-btn agent-variant" onclick="agentPartnerDeskChat()">💬 Chat with the Partner Desk (${WHATSAPP_NUMBER})</button>
+    <a class="dispatch-email-link" href="${getMailtoLink(AGENT_EMAIL, 'Partner Desk enquiry', 'Hi, this is ' + session.name + ' from ' + (session.agencyName||'') + '.')}">✉️ Or email ${AGENT_EMAIL}</a>
+  `;
+}
+function adminDashboardBody(session){
+  const log = getEnquiryLog();
+  const rows = log.length ? log.map(e => `
+      <div class="enq-item">
+        <div class="enq-item-main">
+          <strong>${e.name}</strong>
+          <span class="enq-item-type type-${e.type}">${e.type === 'agent' ? 'Agent' : 'Tenant'}</span>
+          <span class="enq-item-time">${e.timestamp}</span>
+        </div>
+        <p>${e.details}</p>
+        <button type="button" class="enq-followup-btn" onclick="adminFollowUp('${e.id}')">💬 Reply on WhatsApp</button>
+      </div>`).join('')
+    : `<p class="enq-empty">No registrations yet in this browser. Submit a tenant or agent form to see it appear here instantly.</p>`;
+
+  return `
+    <div class="admin-hub-card">
+      <div class="promo-badge admin-variant">Live Dispatch Feed — ${log.length} registration${log.length===1?'':'s'}</div>
+    </div>
+    <div class="enq-feed">${rows}</div>
+  `;
+}
+function comingSoonHTML(role){
+  const items = {
+    tenant: ['1-click open-house calendar sync (Google/Apple)', 'In-dashboard digital tenancy e-signing', 'Zero-deposit passport integration', 'Real-time WhatsApp open-house alerts'],
+    agent:  ['Self-serve open house slot scheduler', 'Pre-screened Tenant Pass applicant inbox', 'Footfall analytics', 'Rightmove / Zoopla CRM feeds'],
+    admin:  ['Automated CRM webhooks', 'WhatsApp bot RSVP automation', 'Statutory CMP registry verification']
+  };
+  const list = (items[role]||[]).map(i => `<li>${i}</li>`).join('');
+  return `
+    <div class="coming-soon-box">
+      <div class="coming-soon-badge">🚧 Information Coming Soon</div>
+      <p>Phase 2 features in active development:</p>
+      <ul>${list}</ul>
+      <p class="coming-soon-footer">Estimated rollout: Q4 2026 · Operated by Q Investments International Ltd</p>
+    </div>
+  `;
+}
+
+/* ---- Tenant flow: email only (no WhatsApp) ----
+   Quick form -> opens the Tenant Pass panel with the email prefilled (nothing sent yet).
+   Tenant Pass submit -> Formspree, which emails TENANT_EMAIL. If Formspree isn't
+   configured or fails, we open the visitor's own mail app with the application
+   prefilled instead, and say so honestly (they still have to press send). */
+function buildTenantEmailText(d){
+  return `New Tenant Pass application — 00.house
+----------------------------------------
+Name: ${d.firstName} ${d.lastName}
+Email: ${d.email}
+Phone: ${d.phone}
+Preferred areas / postcodes: ${d.areas}
+Budget: £${d.budgetMin || '\u2014'} - £${d.budgetMax || '\u2014'} per month
+Earliest move-in: ${d.moveIn || 'Flexible'}
+Occupants: ${d.occupants || '1'}
+Employment status: ${d.employment || 'Not stated'}
+Notes: ${d.notes || 'None'}`;
+}
+function openMailApp(url){
+  const a = document.createElement('a');
+  a.href = url; a.style.display = 'none';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+function renderTenantResult(formEl, delivered, mailtoUrl, name){
+  const box = document.getElementById('tenantSuccess');
+  formEl.style.display = 'none';
+  const greeting = name ? ', ' + name : '';
+  box.innerHTML = delivered ? `
+    <div class="dispatch-success">
+      <div class="dispatch-success-icon">✓</div>
+      <h3>Application sent</h3>
+      <p>Thanks${greeting} — your Tenant Pass application has been emailed to <strong>${TENANT_EMAIL}</strong>. We'll be in touch.</p>
+    </div>` : `
+    <div class="dispatch-success">
+      <div class="dispatch-success-icon" style="background:#fdf1dc;color:#9a6a12">✉</div>
+      <h3>One more step</h3>
+      <p>Thanks${greeting} — we couldn't send this automatically, so we've opened your email app with your application ready, addressed to <strong>${TENANT_EMAIL}</strong>. <strong>Please press send</strong> to complete it.</p>
+      <a class="dispatch-whatsapp-btn" style="display:block;text-align:center;text-decoration:none;background:var(--black)" id="tenantMailBtn" href="${mailtoUrl}">✉️ Open my email app again</a>
+    </div>`;
+}
 function handleTenantSubmit(e){
   e.preventDefault();
   const f = e.target;
@@ -905,38 +1160,36 @@ function handleTenantSubmit(e){
     moveIn: f.move_in_date.value, occupants: f.occupants.value,
     employment: f.employment_status.value, notes: f.notes.value
   };
-  const whatsappText = buildTenantWhatsAppText(data);
-  saveEnquiryToLog({
-    type: 'tenant', name: (data.firstName + ' ' + data.lastName).trim(), email: data.email, phone: data.phone,
-    details: 'Tenant Pass application — ' + data.areas, routedTo: TENANT_EMAIL + ' & WhatsApp ' + WHATSAPP_NUMBER, whatsappRouted: true
+  const mailtoUrl = getMailtoLink(TENANT_EMAIL, 'New Tenant Pass application \u2014 ' + (data.firstName + ' ' + data.lastName).trim(), buildTenantEmailText(data));
+  const name = (data.firstName + ' ' + data.lastName).trim();
+  const btn = f.querySelector('button[type="submit"]');
+  const label = btn ? btn.textContent : '';
+  const log = (delivered) => saveEnquiryToLog({
+    type: 'tenant', name: name, email: data.email, phone: data.phone,
+    details: 'Tenant Pass application \u2014 ' + data.areas, routedTo: TENANT_EMAIL + (delivered ? '' : ' (via visitor\u2019s email app)'), whatsappRouted: false
   });
-  if (TENANT_FORM_ENDPOINT.indexOf('REPLACE_WITH') === -1) { submitFormToEmail(TENANT_FORM_ENDPOINT, f).catch(()=>{}); }
-  renderDispatchSuccess('tenantSuccess', f, whatsappText, TENANT_EMAIL, data.firstName);
+  const fallback = () => { log(false); renderTenantResult(f, false, mailtoUrl, data.firstName); openMailApp(mailtoUrl); };
+
+  if (TENANT_FORM_ENDPOINT.indexOf('REPLACE_WITH') !== -1) { fallback(); return false; }
+
+  if (btn) { btn.disabled = true; btn.textContent = 'Sending\u2026'; }
+  submitFormToEmail(TENANT_FORM_ENDPOINT, f)
+    .then(res => {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      log(true); renderTenantResult(f, true, mailtoUrl, data.firstName);
+    })
+    .catch(() => {
+      if (btn) { btn.disabled = false; btn.textContent = label; }
+      fallback();
+    });
   return false;
 }
 function handleQuickTenantSubmit(e){
   e.preventDefault();
-  const f = e.target;
-  const email = f.email.value;
-  const whatsappText = buildTenantWhatsAppText({
-    firstName: 'Quick', lastName: 'enquiry (homepage)', email, phone: 'Not provided',
-    areas: 'Not specified yet', budgetMin: '', budgetMax: '', notes: 'Submitted via homepage quick-registration panel'
-  });
-  saveEnquiryToLog({
-    type: 'tenant', name: 'Quick enquiry', email, phone: '',
-    details: 'Homepage quick form', routedTo: TENANT_EMAIL + ' & WhatsApp ' + WHATSAPP_NUMBER, whatsappRouted: true
-  });
-  if (TENANT_FORM_ENDPOINT.indexOf('REPLACE_WITH') === -1) { submitFormToEmail(TENANT_FORM_ENDPOINT, f).catch(()=>{}); }
-  const successBox = document.getElementById('quickTenantSuccess');
-  f.style.display = 'none';
-  successBox.innerHTML = `
-    <div class="quick-dispatch-success">
-      <span>Thanks — WhatsApp should have opened to send this. </span>
-      <a href="${getMailtoLink(TENANT_EMAIL, 'New 00.house registration', whatsappText.replace(/\*/g,''))}">Or email us →</a>
-      <button type="button" id="quickTenantWaBtn">Resend via WhatsApp</button>
-    </div>`;
-  document.getElementById('quickTenantWaBtn').onclick = function(){ openWhatsAppLink(whatsappText); };
-  openWhatsAppLink(whatsappText);
+  const email = e.target.email.value.trim();
+  openPanel('tenant-form');
+  const field = document.getElementById('t-email');
+  if (field) { field.value = email; const first = document.getElementById('t-first'); if (first) first.focus(); }
   return false;
 }
 function handleAgentSubmit(e){
@@ -1859,9 +2112,14 @@ function initInAreaMap(){
       </form>
 
       <div class="reg-popup-success" id="reg-popup-success" tabindex="-1" hidden>
-        <h3>You're registered</h3>
-        <p>Thanks. We have your details and will be in touch at <strong id="reg-popup-success-email"></strong>.</p>
-        <button type="button" class="reg-popup-submit" id="reg-popup-done">See the map</button>
+        <div class="dispatch-success-icon">✓</div>
+        <h3>Early access registered</h3>
+        <p>Thanks — WhatsApp should have opened with your details ready to send. Your 2 years complimentary promotion is reserved.</p>
+        <div class="dispatch-route"><span>Official inbox</span><strong id="reg-popup-success-email"></strong></div>
+        <div class="dispatch-route"><span>Direct WhatsApp</span><strong>+44 7956 716677</strong></div>
+        <button type="button" class="dispatch-whatsapp-btn" id="reg-popup-wa-btn">💬 Open in WhatsApp</button>
+        <button type="button" class="reg-popup-submit" id="reg-popup-dashboard-btn">Open Agent Partner Dashboard →</button>
+        <button type="button" class="reg-popup-submit" id="reg-popup-done" style="background:transparent;color:var(--tz-ink);border:1px solid var(--tz-line);box-shadow:none;margin-top:8px">See the map</button>
       </div>
     </div>
   </div>
@@ -2007,6 +2265,7 @@ function initInAreaMap(){
         agency: $('rp-agency').value.trim(),
         contact: $('rp-contact').value.trim(),
         email: $('rp-email').value.trim(),
+        phone: $('rp-phone').value.trim(),
         source: 'map-teaser',
         offer: 'early-launch-2-years-promotion',
         offer_ends: OFFER_ENDS,
@@ -2019,43 +2278,53 @@ function initInAreaMap(){
         return;
       }
 
+      // Best-effort background delivery to Formspree if a real endpoint has
+      // been configured; WhatsApp + email below are the guaranteed channels,
+      // so this never blocks and is never shown to the visitor as an error.
       var endpoint = getEndpoint();
-      if (!endpoint) {
-        console.warn('[00.house map teaser] No form endpoint. Set FORM_ENDPOINT in this file or AGENT_FORM_ENDPOINT in index.html to your Formspree URL.');
-        onFailure();
-        return;
+      if (endpoint) {
+        fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(data)
+        }).catch(function(){});
       }
 
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Registering…';
-
-      fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(data)
-      })
-        .then(function (res) {
-          // fetch only rejects on network errors, so treat HTTP errors as failures too
-          if (!res.ok) throw new Error('HTTP ' + res.status);
-        })
-        // two-argument then: an error inside onSuccess can never fall into onFailure
-        .then(function () { onSuccess(data, true); }, onFailure);
+      onSuccess(data, true);
     });
-
-    function onFailure(err) {
-      if (err) console.error('[00.house map teaser] Registration failed:', err);
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Register';
-      showError('We could not send your details. Check your connection and try again.');
-    }
 
     function onSuccess(data, remember) {
       signedUp = true;
       if (remember) store.set(STORAGE_KEY, '1');
       successEmail.textContent = data.email;
+
+      var whatsappText = (typeof buildEarlyAccessWhatsAppText === 'function')
+        ? buildEarlyAccessWhatsAppText(data)
+        : '00.house — Early Access Registration\nAgency: ' + data.agency + '\nContact: ' + data.contact + '\nEmail: ' + data.email + '\nPhone: ' + data.phone;
+
+      if (typeof saveEnquiryToLog === 'function') {
+        saveEnquiryToLog({
+          type: 'agent', name: data.contact + ' (' + data.agency + ')', email: data.email, phone: data.phone,
+          details: 'Early access — 60-day launch promotion', routedTo: 'partner@00.house & WhatsApp +44 7956 716677', whatsappRouted: true
+        });
+      }
+
       form.hidden = true;
       success.hidden = false;
       success.focus();
+
+      var waBtn = document.getElementById('reg-popup-wa-btn');
+      if (waBtn) waBtn.onclick = function () {
+        if (typeof openWhatsAppLink === 'function') openWhatsAppLink(whatsappText);
+      };
+      var dashBtn = document.getElementById('reg-popup-dashboard-btn');
+      if (dashBtn) dashBtn.onclick = function () {
+        if (typeof demoSignIn === 'function') { demoSignIn('agent'); }
+        closeModal();
+        if (typeof openPanel === 'function') openPanel('account');
+      };
+
+      if (typeof openWhatsAppLink === 'function') openWhatsAppLink(whatsappText);
     }
 
     doneBtn.addEventListener('click', closeModal);
