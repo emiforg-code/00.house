@@ -52,7 +52,7 @@ nav{position:sticky;top:0;left:0;right:0;display:flex;align-items:center;justify
 .lang-menu button:hover{background:#f6f2ea}
 
 /* ============ HERO ============ */
-.hero{position:relative;width:100%;height:640px;overflow:hidden;background:#e9e6dc url('./home-house-rent.jpeg') center/cover no-repeat;background-attachment:fixed}
+.hero{position:relative;width:100%;height:640px;overflow:hidden;background:#e9e6dc url('./header-dark-red.jpeg') center/cover no-repeat;background-attachment:fixed}
   .hero-veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0) 35%,rgba(255,255,255,0.6) 100%);z-index:20}
 .hero-content{position:relative;z-index:30;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 20px 46px;text-align:center}
 .hero-content h1{font-size:clamp(26px,4vw,42px);color:#1b1b1b;text-shadow:0 2px 20px rgba(255,255,255,0.6);max-width:720px}
@@ -444,7 +444,7 @@ footer a:hover{color:var(--black)}
         <div id="quickTenantSuccess"></div>
       </div>
       <div class="panel-visual">
-     <img class="panel-photo" src="./he.jpeg" alt="">
+     <img class="panel-photo" src="./tenant-photo.jpg" alt="">
         <div class="mock-card">
           <div class="mock-card-head"><span data-i18n="app_title">Tenant Pass</span><span class="mock-badge" data-i18n="mock_badge">2 of 4</span></div>
           <div class="app-check">
@@ -465,19 +465,19 @@ footer a:hover{color:var(--black)}
 
     <div class="panel agent-panel">
       <div class="panel-copy">
-        <h2 data-i18n="panel_agent_h">List once, reach ready-to-view tenants</h2>
-        <p data-i18n="panel_agent_p">List your open houses on 00.house and reach verified, ready-to-view tenants across your area. <strong data-i18n="panel_agent_bold">No commission on enquiries.</strong></p>
-        <button class="panel-btn agent-btn" onclick="openPanel('agent-form')" data-i18n="cta_agent_btn">Quick Sign-Up</button>
+        <h2 data-i18n="panel_agent_h">Renting made simple, from search to move-in</h2>
+        <p data-i18n="panel_agent_p">Tell us what you're after once. We pass it straight to agents and landlords with a matching open house — no repeated forms. <strong data-i18n="panel_agent_bold">No commission on enquiries.</strong></p>
+        <button class="panel-btn agent-btn" onclick="openPanel('agent-form')" data-i18n="cta_agent_btn">Your Tenant Pass takes about 1 minute</button>
       </div>
       <div class="panel-visual">
-        <img class="panel-photo" src="./she.jpeg" alt="">
+        <img class="panel-photo" src="./tenants-movein.png" alt="move-in">
         <div class="mock-chip notif-float n1">
           <div class="chip-logo"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V10"/><path d="M9.5 20.5V14h5v6.5"/></svg></div>
-          <div><strong>00.house</strong><span class="chip-time" data-i18n="notif1_time">1m ago</span><br><span data-i18n="notif1_text">New enquiry from Adam M.</span></div>
+          <div><strong>00.house</strong><span class="chip-time" data-i18n="notif1_time">2d ago</span><br><span data-i18n="notif1_text">Holding deposit received (£550) for  house 4B</span></div>
         </div>
         <div class="mock-chip notif-float n2">
           <div class="chip-logo"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V10"/><path d="M9.5 20.5V14h5v6.5"/></svg></div>
-          <div><strong>00.house</strong><span class="chip-time" data-i18n="notif2_time">1h ago</span><br><span data-i18n="notif2_text">Viewing booked — 24 Ashford Rd</span></div>
+          <div><strong>00.house</strong><span class="chip-time" data-i18n="notif2_time">8h ago</span><br><span data-i18n="notif2_text">Reference check requested</span></div>
         </div>
         <div class="mock-chip notif-float n3">
           <div class="chip-logo"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V10"/><path d="M9.5 20.5V14h5v6.5"/></svg></div>
@@ -551,10 +551,10 @@ const i18n = {
     mock_badge:'2 of 4', chip_tenant_title:'Profile verified', chip_tenant_sub:'Ready to apply',
     panel_tenant_h:'Find your next home with trusted advisors', panel_tenant_p:'Tell us what you\u2019re looking for and get matched with agents and landlords who have relevant open houses.', panel_tenant_bold:'Get your Tenant Pass in minutes.',
     cta_tenant_btn:'Register as a tenant', quick_tenant_ph:'Your email address',
-    panel_agent_h:'List once, reach ready-to-view tenants', panel_agent_p:'List your open houses on 00.house and reach verified, ready-to-view tenants across your area.', panel_agent_bold:'No commission on enquiries.',
-    cta_agent_btn:'Quick Sign-Up',
-    notif1_time:'1m ago', notif1_text:'New enquiry from Adam M.',
-    notif2_time:'1h ago', notif2_text:'Viewing booked — 24 Ashford Rd',
+    panel_agent_h:'Renting made simple, from search to move-in', panel_agent_p:'Tell us what you\'re after once. We pass it straight to agents and landlords with a matching open house \u2014 no repeated forms.', panel_agent_bold:'No commission on enquiries.',
+    cta_agent_btn:'Your Tenant Pass takes about 1 minute',
+    notif1_time:'2d ago', notif1_text:'Holding deposit received (\u00a3550) for house 4B',
+    notif2_time:'8h ago', notif2_text:'Reference check requested',
     notif3_time:'1h ago', notif3_text:'Your listing just went live',
     legal_strip_link:'Read the full disclaimer',
     foot_company:'Company', foot_about:'About Us', foot_careers:'Careers', foot_contact:'Contact',
@@ -576,10 +576,10 @@ const i18n = {
     mock_badge:'2 من 4', chip_tenant_title:'تم التحقق من الملف الشخصي', chip_tenant_sub:'جاهز للتقديم',
     panel_tenant_h:'اعثر على منزلك القادم مع مستشارين موثوقين', panel_tenant_p:'أخبرنا بما تبحث عنه وسنطابقك مع وكلاء وملاك لديهم بيوت مفتوحة مناسبة.', panel_tenant_bold:'احصل على بطاقة المستأجر خلال دقائق.',
     cta_tenant_btn:'سجّل كمستأجر', quick_tenant_ph:'بريدك الإلكتروني',
-    panel_agent_h:'أدرج مرة واحدة وتواصل مع مستأجرين جاهزين للمعاينة', panel_agent_p:'أدرج بيوتك المفتوحة على 00.house وتواصل مع مستأجرين موثوقين وجاهزين للمعاينة.', panel_agent_bold:'بدون عمولة على الاستفسارات.',
-    cta_agent_btn:'تسجيل سريع',
-    notif1_time:'قبل دقيقة', notif1_text:'استفسار جديد من آدم م.',
-    notif2_time:'قبل ساعة', notif2_text:'تم حجز معاينة — 24 أشفورد رود',
+    panel_agent_h:'تأجير مبسّط، من البحث حتى الانتقال', panel_agent_p:'أخبرنا بما تبحث عنه مرة واحدة. نمرّره مباشرة إلى الوكلاء والملاك الذين لديهم بيت مفتوح مناسب — دون نماذج متكررة.', panel_agent_bold:'بدون عمولة على الاستفسارات.',
+    cta_agent_btn:'بطاقة المستأجر تستغرق حوالي دقيقة',
+    notif1_time:'قبل يومين', notif1_text:'تم استلام عربون الحجز (550 جنيهًا) للمنزل 4B',
+    notif2_time:'قبل 8 ساعات', notif2_text:'تم طلب التحقق من المراجع',
     notif3_time:'قبل ساعة', notif3_text:'تم نشر إعلانك للتو',
     legal_strip_link:'اقرأ إخلاء المسؤولية الكامل',
     foot_company:'الشركة', foot_about:'من نحن', foot_careers:'الوظائف', foot_contact:'تواصل معنا',
@@ -1598,7 +1598,7 @@ function initInAreaMap(){
   Paste this whole file just before the closing </body> tag in index.html.
 
   IMAGES (all live in the repo root, next to index.html)
-    header%20dark%20red.jpeg   panel background (%20 = the spaces in the file name)
+    header-dark-red.jpeg   panel background
     she.png                    agent portrait (arch, left)
     he.png                     tenant portrait (arch, right)
   These are plain relative paths, so they work on 00.house via GitHub Pages.
@@ -2037,7 +2037,7 @@ function initInAreaMap(){
 <!-- ============ MAP TEASER PANEL (the script moves this into the map box) ============ -->
 <div class="map-teaser-overlay" id="map-teaser" role="region" aria-label="Early launch offer for agents and landlords" hidden>
   <div class="map-teaser-backdrop" aria-hidden="true">
-    <img src="./header%20dark%20red.jpeg" alt="" loading="lazy" decoding="async">
+    <img src="./header-dark-red.jpeg" alt="" loading="lazy" decoding="async">
   </div>
 
   <div class="map-teaser-inner">
@@ -2068,7 +2068,7 @@ function initInAreaMap(){
   <div class="reg-popup-card" role="dialog" aria-modal="true" aria-labelledby="reg-popup-title">
     <div class="reg-popup-head">
       <div class="reg-popup-head-bg" aria-hidden="true">
-        <img src="./header%20dark%20red.jpeg" alt="" loading="lazy" decoding="async">
+        <img src="./header-dark-red.jpeg" alt="" loading="lazy" decoding="async">
       </div>
       <button type="button" class="reg-popup-close" id="reg-popup-close" aria-label="Close">&times;</button>
       <div class="reg-popup-head-copy">
