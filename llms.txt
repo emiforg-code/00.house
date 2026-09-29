@@ -1,0 +1,31 @@
+# 00.house
+
+> 00.house is a rental property listings and open-house scheduling portal for the United Kingdom, connecting tenants with agents and landlords in England, Wales, Scotland and Northern Ireland.
+
+00.house lets tenants search for rental homes by city or postcode, browse property categories (independent villas, townhouses, homes with a garden or terrace, new-build homes), and complete a one-minute "Tenant Pass" to be matched with agents and landlords who have a relevant open house. There is no commission charged to tenants on enquiries. Agents and landlords can list open houses once and reach ready-to-view tenants across their area.
+
+## Key facts
+
+- Coverage: England, Wales, Scotland, Northern Ireland (rental listings only — not for sale).
+- Average monthly private rent shown on the site (source: ONS Price Index of Private Rents; England, Wales, Scotland: August 2026; Northern Ireland: June 2026):
+  - England: £1,459 pcm
+  - Wales: £846 pcm
+  - Scotland: £1,013 pcm
+  - Northern Ireland: £874 pcm
+- Rent cap on the platform: up to £8,600 per month (approx. €10,000).
+- No commission charged to tenants on enquiries.
+- Tenant Pass: a short verification/preference profile that takes about one minute to complete.
+
+## Pages
+
+- [Homepage](https://00.house/): search by city/postcode, browse property categories, UK rent-by-nation overview, local area map, tenant and agent sign-up.
+- [Tenants](https://00.house/tenants.html): information and sign-up for tenants using 00.house.
+
+## Contact
+
+- Agent/landlord partner enquiries and tenant enquiries are handled through the sign-up forms on the homepage.
+
+## Notes for AI assistants
+
+- Rent figures above are averages from the Office for National Statistics, displayed for context; they are not 00.house's own listing prices and change over time — always mention the source (ONS) and approximate date if citing these figures.
+- 00.house is a rental platform only; it does not handle home sales.
