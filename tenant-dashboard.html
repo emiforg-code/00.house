@@ -7,6 +7,7 @@
 <title>Tenant dashboard | 00.house</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 :root{
   --black:#0a0a0a; --muted:#6b6b6b; --white:#fff; --line:rgba(0,0,0,0.08);
@@ -18,9 +19,9 @@ h1,h2{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight
 p{color:var(--muted);line-height:1.5;margin:4px 0 0}
 nav{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:var(--trust-blue-deep);color:#fff}
 .logo{display:flex;align-items:center;gap:10px;font-weight:600;color:#fff;text-decoration:none}
-.nav-right a{color:#fff;font-size:13px;text-decoration:none;margin-left:18px;opacity:0.9}
+.nav-right a{color:#fff;font-size:13px;text-decoration:none;margin-left:18px;opacity:0.9;cursor:pointer}
 main{max-width:920px;margin:0 auto;padding:36px 20px 80px}
-.demo-note{background:var(--trust-blue-tint);border:1px solid #c4dced;color:var(--trust-blue-deep);padding:10px 14px;border-radius:8px;font-size:12.5px;margin-bottom:28px}
+.loading-note{background:var(--trust-blue-tint);border:1px solid #c4dced;color:var(--trust-blue-deep);padding:10px 14px;border-radius:8px;font-size:12.5px;margin-bottom:28px}
 .grid{display:grid;grid-template-columns:280px 1fr;gap:24px;align-items:start}
 @media (max-width:760px){ .grid{grid-template-columns:1fr} }
 .card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px}
@@ -34,14 +35,15 @@ main{max-width:920px;margin:0 auto;padding:36px 20px 80px}
 .fav-card .rent{font-size:12.5px;color:var(--muted);margin-top:2px}
 .fav-card button{background:none;border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:12px;color:var(--muted);cursor:pointer}
 .fav-card button:hover{border-color:#c0392b;color:#c0392b}
+.empty-card{background:#fff;border:1px dashed var(--line);border-radius:10px;padding:28px;text-align:center;color:var(--muted);font-size:13.5px}
 </style>
 </head>
 <body>
 <nav>
   <a class="logo" href="index.html">00.house <span style="opacity:.7;font-weight:400">· Tenant</span></a>
   <div class="nav-right">
-    <a href="#">Oliver Davies</a>
-    <a href="tenant-login.html">Sign out</a>
+    <span id="tenantNameLabel"></span>
+    <a id="signOutLink">Sign out</a>
   </div>
 </nav>
 
@@ -49,17 +51,14 @@ main{max-width:920px;margin:0 auto;padding:36px 20px 80px}
   <h1>Your account</h1>
   <p>Your contact details and the homes you've saved.</p>
 
-  <div class="demo-note">
-    <strong>Demo mode:</strong> the details below are placeholder data —
-    build step 6 connects this to your real Supabase record for this tenant only.
-  </div>
+  <div class="loading-note" id="loadingNote">Loading your account…</div>
 
-  <div class="grid">
+  <div class="grid" id="contentGrid" style="display:none">
     <div class="card">
       <h2 style="font-size:17px;margin-bottom:12px">Contact details</h2>
-      <div class="contact-row"><span class="k">Name</span><span class="v">Oliver Davies</span></div>
-      <div class="contact-row"><span class="k">Email</span><span class="v">oliver.davies@example.co.uk</span></div>
-      <div class="contact-row"><span class="k">Phone</span><span class="v">07700 900123</span></div>
+      <div class="contact-row"><span class="k">Name</span><span class="v" id="profName"></span></div>
+      <div class="contact-row"><span class="k">Email</span><span class="v" id="profEmail"></span></div>
+      <div class="contact-row"><span class="k">Phone</span><span class="v" id="profPhone"></span></div>
     </div>
 
     <div>
@@ -70,29 +69,77 @@ main{max-width:920px;margin:0 auto;padding:36px 20px 80px}
 </main>
 
 <script>
-  // TODO (build step 6): replace MOCK_FAVOURITES with a real query, e.g.
-  //   const { data } = await supabase
-  //     .from('favourites')
-  //     .select('properties(address, rent_pcm)')
-  //     .eq('tenant_id', session.user.id);
-  const MOCK_FAVOURITES = [
-    { address: '14 Riverside Walk, Windsor, SL4 1QN', rent: '£1,850 pcm' },
-    { address: '9 Park Street, Ascot, SL5 7NA', rent: '£2,100 pcm' },
-    { address: '2 Thames Side, Eton, SL4 6BW', rent: '£1,650 pcm' }
-  ];
+  const SUPABASE_URL = 'https://eyyaemqygddtxbbmbqhl.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_A_aCzMwxAPY_UX7M5cOTRg_oZGKAUVG';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+  const loadingNote = document.getElementById('loadingNote');
+  const contentGrid = document.getElementById('contentGrid');
   const favList = document.getElementById('favList');
-  MOCK_FAVOURITES.forEach(f => {
-    const row = document.createElement('div');
-    row.className = 'fav-card';
-    row.innerHTML = `
-      <div>
-        <div class="addr">${f.address}</div>
-        <div class="rent">${f.rent}</div>
-      </div>
-      <button type="button" onclick="this.closest('.fav-card').remove()">Remove</button>`;
-    favList.appendChild(row);
+
+  document.getElementById('signOutLink').addEventListener('click', async function () {
+    await supabase.auth.signOut();
+    window.location.href = 'tenant-login.html';
   });
+
+  async function removeFavourite(tenantId, propertyId, cardEl) {
+    await supabase.from('favourites').delete().eq('tenant_id', tenantId).eq('property_id', propertyId);
+    cardEl.remove();
+  }
+
+  async function init() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      window.location.href = 'tenant-login.html';
+      return;
+    }
+
+    const { data: profile } = await supabase
+      .from('tenants')
+      .select('name, email, phone')
+      .eq('id', session.user.id)
+      .maybeSingle();
+
+    document.getElementById('tenantNameLabel').textContent = profile ? profile.name : session.user.email;
+    document.getElementById('profName').textContent = profile ? profile.name : '—';
+    document.getElementById('profEmail').textContent = profile ? profile.email : session.user.email;
+    document.getElementById('profPhone').textContent = profile ? profile.phone : '—';
+
+    const { data: favourites, error } = await supabase
+      .from('favourites')
+      .select('property_id, properties(address, rent_pcm)')
+      .eq('tenant_id', session.user.id);
+
+    loadingNote.remove();
+    contentGrid.style.display = 'grid';
+
+    if (error) {
+      favList.innerHTML = '<div class="empty-card">Could not load favourites: ' + error.message + '</div>';
+      return;
+    }
+
+    if (!favourites || favourites.length === 0) {
+      favList.innerHTML = '<div class="empty-card">No favourite homes saved yet. ' +
+        'Once the main site\'s "save to favourites" button is wired up, they\'ll appear here automatically.</div>';
+      return;
+    }
+
+    favourites.forEach(f => {
+      const row = document.createElement('div');
+      row.className = 'fav-card';
+      const rent = f.properties && f.properties.rent_pcm ? '£' + f.properties.rent_pcm + ' pcm' : '';
+      row.innerHTML =
+        '<div><div class="addr">' + (f.properties ? f.properties.address : 'Unknown address') + '</div>' +
+        '<div class="rent">' + rent + '</div></div>' +
+        '<button type="button">Remove</button>';
+      row.querySelector('button').addEventListener('click', function () {
+        removeFavourite(session.user.id, f.property_id, row);
+      });
+      favList.appendChild(row);
+    });
+  }
+
+  init();
 </script>
 </body>
 </html>
