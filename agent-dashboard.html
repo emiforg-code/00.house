@@ -7,6 +7,7 @@
 <title>Agent dashboard | 00.house</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 :root{
   --black:#0a0a0a; --muted:#6b6b6b; --white:#fff; --line:rgba(0,0,0,0.08);
@@ -18,9 +19,10 @@ h1,h2{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight
 p{color:var(--muted);line-height:1.5;margin:4px 0 0}
 nav{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:var(--racing);color:#fff}
 .logo{display:flex;align-items:center;gap:10px;font-weight:600;color:#fff;text-decoration:none}
-.nav-right a{color:#fff;font-size:13px;text-decoration:none;margin-left:18px;opacity:0.9}
+.nav-right a{color:#fff;font-size:13px;text-decoration:none;margin-left:18px;opacity:0.9;cursor:pointer}
 main{max-width:920px;margin:0 auto;padding:36px 20px 80px}
-.demo-note{background:var(--racing-green-tint);border:1px solid #cfe3d6;color:#1f4632;padding:10px 14px;border-radius:8px;font-size:12.5px;margin-bottom:24px}
+.loading-note{background:var(--racing-green-tint);border:1px solid #cfe3d6;color:#1f4632;padding:10px 14px;border-radius:8px;font-size:12.5px;margin-bottom:24px}
+.empty-card{background:#fff;border:1px dashed var(--line);border-radius:10px;padding:28px;text-align:center;color:var(--muted);font-size:13.5px}
 .list{display:flex;flex-direction:column;gap:12px;margin-top:24px}
 details{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
 summary{list-style:none;cursor:pointer;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;font-weight:600}
@@ -43,8 +45,8 @@ details[open] summary .chev{transform:rotate(90deg)}
 <nav>
   <a class="logo" href="index.html">00.house <span style="opacity:.7;font-weight:400">· Agent</span></a>
   <div class="nav-right">
-    <a href="#">Sarah Jenkins</a>
-    <a href="agent-login.html">Sign out</a>
+    <span id="agentNameLabel"></span>
+    <a id="signOutLink">Sign out</a>
   </div>
 </nav>
 
@@ -52,62 +54,89 @@ details[open] summary .chev{transform:rotate(90deg)}
   <h1>Your listings</h1>
   <p>Expand an address to see viewings tenants have requested.</p>
 
-  <div class="demo-note">
-    <strong>Demo mode:</strong> the addresses and viewings below are placeholder data —
-    build step 6 connects this to your real Supabase records, filtered to this agent only.
-  </div>
+  <div class="loading-note" id="loadingNote">Loading your account…</div>
 
   <div class="list" id="listingsList"></div>
 </main>
 
 <script>
-  // TODO (build step 6): replace MOCK_PROPERTIES with a real query, e.g.
-  //   const { data } = await supabase
-  //     .from('properties')
-  //     .select('id, address, viewings(tenant_name, tenant_phone, requested_at)')
-  //     .eq('agent_id', session.user.id);
-  // RLS on the properties/viewings tables makes sure this agent can only ever
-  // get rows that belong to them, no matter what the front-end code asks for.
+  const SUPABASE_URL = 'https://eyyaemqygddtxbbmbqhl.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_A_aCzMwxAPY_UX7M5cOTRg_oZGKAUVG';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const MOCK_PROPERTIES = [
-    { address: '14 Riverside Walk, Windsor, SL4 1QN', viewings: [
-      { name: 'Oliver Davies', phone: '07700 900123', when: 'Fri 10 Oct, 4:30pm' },
-      { name: 'Amara Bello', phone: '07700 900456', when: 'Sat 11 Oct, 11:00am' }
-    ]},
-    { address: '2 Thames Side, Eton, SL4 6BW', viewings: [
-      { name: 'James Okafor', phone: '07700 900789', when: 'Mon 13 Oct, 6:00pm' }
-    ]},
-    { address: '9 Park Street, Ascot, SL5 7NA', viewings: [] }
-  ];
-
+  const loadingNote = document.getElementById('loadingNote');
   const list = document.getElementById('listingsList');
-  MOCK_PROPERTIES.forEach(p => {
-    const details = document.createElement('details');
-    const count = p.viewings.length;
-    details.innerHTML = `
-      <summary>
-        <div class="addr">
-          ${p.address}
-          <span class="sub">${count} viewing${count === 1 ? '' : 's'} requested</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px">
-          <span class="count">${count}</span>
-          <span class="chev">›</span>
-        </div>
-      </summary>
-      <div class="viewings">
-        ${count === 0
-          ? '<div class="empty">No viewings requested yet for this address.</div>'
-          : p.viewings.map(v => `
-              <div class="viewing-row">
-                <span class="who">${v.name}</span>
-                <span class="phone">${v.phone}</span>
-                <span class="when">${v.when}</span>
-              </div>`).join('')
-        }
-      </div>`;
-    list.appendChild(details);
+
+  document.getElementById('signOutLink').addEventListener('click', async function () {
+    await supabase.auth.signOut();
+    window.location.href = 'agent-login.html';
   });
+
+  async function init() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      window.location.href = 'agent-login.html';
+      return;
+    }
+
+    const { data: profile } = await supabase
+      .from('agents')
+      .select('name, agency_name')
+      .eq('id', session.user.id)
+      .maybeSingle();
+
+    document.getElementById('agentNameLabel').textContent =
+      profile ? (profile.name + (profile.agency_name ? ' · ' + profile.agency_name : '')) : session.user.email;
+
+    const { data: properties, error } = await supabase
+      .from('properties')
+      .select('id, address, viewings(tenant_name, tenant_phone, requested_at)')
+      .eq('agent_id', session.user.id)
+      .order('created_at', { ascending: false });
+
+    loadingNote.remove();
+
+    if (error) {
+      list.innerHTML = '<div class="empty-card">Could not load your listings: ' + error.message + '</div>';
+      return;
+    }
+
+    if (!properties || properties.length === 0) {
+      list.innerHTML = '<div class="empty-card">No properties linked to your account yet. ' +
+        'An "add listing" page is coming in a later step — for now, add a row to the ' +
+        '<strong>properties</strong> table in Supabase\'s Table Editor with this account\'s ' +
+        'agent_id to see it appear here.</div>';
+      return;
+    }
+
+    properties.forEach(p => {
+      const count = (p.viewings || []).length;
+      const details = document.createElement('details');
+      details.innerHTML =
+        '<summary>' +
+          '<div class="addr">' + p.address +
+            '<span class="sub">' + count + ' viewing' + (count === 1 ? '' : 's') + ' requested</span>' +
+          '</div>' +
+          '<div style="display:flex;align-items:center;gap:10px">' +
+            '<span class="count">' + count + '</span><span class="chev">&rsaquo;</span>' +
+          '</div>' +
+        '</summary>' +
+        '<div class="viewings">' +
+          (count === 0
+            ? '<div class="empty">No viewings requested yet for this address.</div>'
+            : p.viewings.map(v =>
+                '<div class="viewing-row">' +
+                  '<span class="who">' + v.tenant_name + '</span>' +
+                  '<span class="phone">' + v.tenant_phone + '</span>' +
+                  '<span class="when">' + new Date(v.requested_at).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }) + '</span>' +
+                '</div>').join('')
+          ) +
+        '</div>';
+      list.appendChild(details);
+    });
+  }
+
+  init();
 </script>
 </body>
 </html>
