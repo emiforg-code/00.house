@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>Agent dashboard | 00.house</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#0a0a0a; --muted:#6b6b6b; --white:#fff; --line:rgba(0,0,0,0.08);
+  --racing:#1f4632; --racing-green-tint:#E1EFE6; --brass:#b98a3f;
+}
+*{box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;margin:0;background:#faf9f6;color:var(--black)}
+h1,h2{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;margin:0}
+p{color:var(--muted);line-height:1.5;margin:4px 0 0}
+nav{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:var(--racing);color:#fff}
+.logo{display:flex;align-items:center;gap:10px;font-weight:600;color:#fff;text-decoration:none}
+.nav-right a{color:#fff;font-size:13px;text-decoration:none;margin-left:18px;opacity:0.9}
+main{max-width:920px;margin:0 auto;padding:36px 20px 80px}
+.demo-note{background:var(--racing-green-tint);border:1px solid #cfe3d6;color:#1f4632;padding:10px 14px;border-radius:8px;font-size:12.5px;margin-bottom:24px}
+.list{display:flex;flex-direction:column;gap:12px;margin-top:24px}
+details{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+summary{list-style:none;cursor:pointer;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;font-weight:600}
+summary::-webkit-details-marker{display:none}
+summary .addr{display:flex;flex-direction:column;gap:3px}
+summary .addr span.sub{font-size:12.5px;font-weight:400;color:var(--muted)}
+summary .count{font-size:12px;font-weight:600;background:var(--racing-green-tint);color:var(--racing);padding:3px 10px;border-radius:999px}
+summary .chev{transition:transform .2s;color:var(--muted)}
+details[open] summary .chev{transform:rotate(90deg)}
+.viewings{border-top:1px solid var(--line);padding:4px 18px 14px}
+.viewing-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
+.viewing-row:last-child{border-bottom:0}
+.viewing-row .who{font-weight:600}
+.viewing-row .phone{color:var(--muted)}
+.viewing-row .when{color:var(--brass);font-size:12.5px}
+.empty{padding:14px 0;font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="index.html">00.house <span style="opacity:.7;font-weight:400">· Agent</span></a>
+  <div class="nav-right">
+    <a href="#">Sarah Jenkins</a>
+    <a href="agent-login.html">Sign out</a>
+  </div>
+</nav>
+
+<main>
+  <h1>Your listings</h1>
+  <p>Expand an address to see viewings tenants have requested.</p>
+
+  <div class="demo-note">
+    <strong>Demo mode:</strong> the addresses and viewings below are placeholder data —
+    build step 6 connects this to your real Supabase records, filtered to this agent only.
+  </div>
+
+  <div class="list" id="listingsList"></div>
+</main>
+
+<script>
+  // TODO (build step 6): replace MOCK_PROPERTIES with a real query, e.g.
+  //   const { data } = await supabase
+  //     .from('properties')
+  //     .select('id, address, viewings(tenant_name, tenant_phone, requested_at)')
+  //     .eq('agent_id', session.user.id);
+  // RLS on the properties/viewings tables makes sure this agent can only ever
+  // get rows that belong to them, no matter what the front-end code asks for.
+
+  const MOCK_PROPERTIES = [
+    { address: '14 Riverside Walk, Windsor, SL4 1QN', viewings: [
+      { name: 'Oliver Davies', phone: '07700 900123', when: 'Fri 10 Oct, 4:30pm' },
+      { name: 'Amara Bello', phone: '07700 900456', when: 'Sat 11 Oct, 11:00am' }
+    ]},
+    { address: '2 Thames Side, Eton, SL4 6BW', viewings: [
+      { name: 'James Okafor', phone: '07700 900789', when: 'Mon 13 Oct, 6:00pm' }
+    ]},
+    { address: '9 Park Street, Ascot, SL5 7NA', viewings: [] }
+  ];
+
+  const list = document.getElementById('listingsList');
+  MOCK_PROPERTIES.forEach(p => {
+    const details = document.createElement('details');
+    const count = p.viewings.length;
+    details.innerHTML = `
+      <summary>
+        <div class="addr">
+          ${p.address}
+          <span class="sub">${count} viewing${count === 1 ? '' : 's'} requested</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="count">${count}</span>
+          <span class="chev">›</span>
+        </div>
+      </summary>
+      <div class="viewings">
+        ${count === 0
+          ? '<div class="empty">No viewings requested yet for this address.</div>'
+          : p.viewings.map(v => `
+              <div class="viewing-row">
+                <span class="who">${v.name}</span>
+                <span class="phone">${v.phone}</span>
+                <span class="when">${v.when}</span>
+              </div>`).join('')
+        }
+      </div>`;
+    list.appendChild(details);
+  });
+</script>
+</body>
+</html>

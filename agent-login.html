@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>Agent sign in | 00.house</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#0a0a0a; --muted:#6b6b6b; --white:#fff; --line:rgba(0,0,0,0.08);
+  --racing:#1f4632; --racing-green-tint:#E1EFE6; --brass:#b98a3f;
+}
+*{box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;margin:0;background:var(--racing-green-tint);color:var(--black);min-height:100vh;display:flex;flex-direction:column}
+h1{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;margin:0 0 6px;font-size:28px}
+p{color:var(--muted);line-height:1.5}
+a{color:var(--racing)}
+nav{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:rgba(255,255,255,0.9);border-bottom:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:600;text-decoration:none;color:var(--black)}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px}
+.card{background:#fff;border-radius:14px;padding:36px;max-width:380px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,0.08);border:1px solid var(--line)}
+.tag{display:inline-block;background:var(--racing);color:#fff;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;margin-bottom:14px}
+label{display:block;font-size:12.5px;font-weight:600;margin:16px 0 6px}
+input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:14px}
+input:focus{outline:2px solid var(--racing)}
+button.primary{width:100%;margin-top:22px;background:var(--racing);color:#fff;border:0;padding:12px;border-radius:8px;font-weight:600;font-size:14px;cursor:pointer}
+button.primary:hover{background:#163726}
+.foot{margin-top:18px;font-size:13px;text-align:center;color:var(--muted)}
+.demo-note{margin-top:28px;padding:12px 14px;background:var(--racing-green-tint);border-radius:8px;font-size:12.5px;color:#1f4632}
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="index.html">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="#111" stroke-width="1.2" fill="none"/></svg>
+    00.house
+  </a>
+  <a href="index.html" style="font-size:13px;text-decoration:none;color:#444">&larr; Back to site</a>
+</nav>
+
+<main>
+  <div class="card">
+    <span class="tag">Agent panel</span>
+    <h1>Sign in</h1>
+    <p>See your listed addresses and the viewings tenants have requested.</p>
+
+    <form id="loginForm">
+      <label for="email">Work email</label>
+      <input id="email" type="email" required placeholder="you@youragency.co.uk" />
+      <label for="password">Password</label>
+      <input id="password" type="password" required placeholder="••••••••" />
+      <button class="primary" type="submit">Sign in</button>
+    </form>
+
+    <p class="foot">Not registered yet? <a href="index.html?open=agent-form">Register as an agent</a></p>
+
+    <div class="demo-note">
+      <strong>Demo mode:</strong> sign-in isn't wired to a real account system yet.
+      <a href="agent-dashboard.html">Open the demo dashboard &rarr;</a>
+    </div>
+  </div>
+</main>
+
+<script>
+  // TODO (build step 4): replace this with a real Supabase call, e.g.
+  //   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  //   if (!error) window.location.href = 'agent-dashboard.html';
+  document.getElementById('loginForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    window.location.href = 'agent-dashboard.html';
+  });
+</script>
+</body>
+</html>

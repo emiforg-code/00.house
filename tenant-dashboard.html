@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>Tenant dashboard | 00.house</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#0a0a0a; --muted:#6b6b6b; --white:#fff; --line:rgba(0,0,0,0.08);
+  --trust-blue-deep:#0F3D5C; --trust-blue-tint:#DCEBF3; --brass:#b98a3f;
+}
+*{box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;margin:0;background:#faf9f6;color:var(--black)}
+h1,h2{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;margin:0}
+p{color:var(--muted);line-height:1.5;margin:4px 0 0}
+nav{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:var(--trust-blue-deep);color:#fff}
+.logo{display:flex;align-items:center;gap:10px;font-weight:600;color:#fff;text-decoration:none}
+.nav-right a{color:#fff;font-size:13px;text-decoration:none;margin-left:18px;opacity:0.9}
+main{max-width:920px;margin:0 auto;padding:36px 20px 80px}
+.demo-note{background:var(--trust-blue-tint);border:1px solid #c4dced;color:var(--trust-blue-deep);padding:10px 14px;border-radius:8px;font-size:12.5px;margin-bottom:28px}
+.grid{display:grid;grid-template-columns:280px 1fr;gap:24px;align-items:start}
+@media (max-width:760px){ .grid{grid-template-columns:1fr} }
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px}
+.contact-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
+.contact-row:last-child{border-bottom:0}
+.contact-row .k{color:var(--muted)}
+.contact-row .v{font-weight:600;text-align:right}
+.fav-list{display:flex;flex-direction:column;gap:12px}
+.fav-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:14px}
+.fav-card .addr{font-weight:600;font-size:14px}
+.fav-card .rent{font-size:12.5px;color:var(--muted);margin-top:2px}
+.fav-card button{background:none;border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:12px;color:var(--muted);cursor:pointer}
+.fav-card button:hover{border-color:#c0392b;color:#c0392b}
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="index.html">00.house <span style="opacity:.7;font-weight:400">· Tenant</span></a>
+  <div class="nav-right">
+    <a href="#">Oliver Davies</a>
+    <a href="tenant-login.html">Sign out</a>
+  </div>
+</nav>
+
+<main>
+  <h1>Your account</h1>
+  <p>Your contact details and the homes you've saved.</p>
+
+  <div class="demo-note">
+    <strong>Demo mode:</strong> the details below are placeholder data —
+    build step 6 connects this to your real Supabase record for this tenant only.
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2 style="font-size:17px;margin-bottom:12px">Contact details</h2>
+      <div class="contact-row"><span class="k">Name</span><span class="v">Oliver Davies</span></div>
+      <div class="contact-row"><span class="k">Email</span><span class="v">oliver.davies@example.co.uk</span></div>
+      <div class="contact-row"><span class="k">Phone</span><span class="v">07700 900123</span></div>
+    </div>
+
+    <div>
+      <h2 style="font-size:17px;margin-bottom:12px">Favourite homes</h2>
+      <div class="fav-list" id="favList"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+  // TODO (build step 6): replace MOCK_FAVOURITES with a real query, e.g.
+  //   const { data } = await supabase
+  //     .from('favourites')
+  //     .select('properties(address, rent_pcm)')
+  //     .eq('tenant_id', session.user.id);
+  const MOCK_FAVOURITES = [
+    { address: '14 Riverside Walk, Windsor, SL4 1QN', rent: '£1,850 pcm' },
+    { address: '9 Park Street, Ascot, SL5 7NA', rent: '£2,100 pcm' },
+    { address: '2 Thames Side, Eton, SL4 6BW', rent: '£1,650 pcm' }
+  ];
+
+  const favList = document.getElementById('favList');
+  MOCK_FAVOURITES.forEach(f => {
+    const row = document.createElement('div');
+    row.className = 'fav-card';
+    row.innerHTML = `
+      <div>
+        <div class="addr">${f.address}</div>
+        <div class="rent">${f.rent}</div>
+      </div>
+      <button type="button" onclick="this.closest('.fav-card').remove()">Remove</button>`;
+    favList.appendChild(row);
+  });
+</script>
+</body>
+</html>
