@@ -4,80 +4,168 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="noindex, nofollow" />
-<title>Admin sign in | 00.house</title>
+<title>Admin | 00.house</title>
+<!--
+  DO NOT link this page from your public navigation.
+  Before go-live, put this page's URL (ideally on its own subdomain,
+  e.g. admin.00.house) behind Cloudflare Access so only your own email
+  can ever load it. The sign-in check below is a second layer, not a
+  replacement for that.
+-->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{ --black:#0a0a0a; --muted:#6b6b6b; --white:#fff; --line:rgba(0,0,0,0.08); --brass:#b98a3f; }
+:root{ --black:#0a0a0a; --muted:#6b6b6b; --white:#fff; --line:rgba(0,0,0,0.08); --brass:#b98a3f; --cream:#f6f2ea; }
 *{box-sizing:border-box}
-body{font-family:'Inter',system-ui,sans-serif;margin:0;background:#f3f1ec;color:var(--black);min-height:100vh;display:flex;flex-direction:column}
-h1{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;margin:0 0 6px;font-size:26px}
-p{color:var(--muted);line-height:1.5}
-nav{padding:16px 28px;background:var(--black);color:#fff;font-weight:600}
-main{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px}
-.card{background:#fff;border-radius:14px;padding:36px;max-width:380px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,0.08);border:1px solid var(--line)}
-.tag{display:inline-block;background:var(--black);color:#fff;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;margin-bottom:14px}
-label{display:block;font-size:12.5px;font-weight:600;margin:16px 0 6px}
-input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:14px}
-input:focus{outline:2px solid var(--brass)}
-button.primary{width:100%;margin-top:22px;background:var(--black);color:#fff;border:0;padding:12px;border-radius:8px;font-weight:600;font-size:14px;cursor:pointer}
-button.primary:hover{background:#222}
-button.primary:disabled{opacity:0.6;cursor:default}
-#message{display:none;margin-top:16px;padding:10px 12px;border-radius:8px;font-size:13px}
-#message.error{display:block;background:#fdeceb;color:#a3312a}
-.note{margin-top:22px;font-size:12px;color:var(--muted);line-height:1.5}
+body{font-family:'Inter',system-ui,sans-serif;margin:0;background:#faf9f6;color:var(--black)}
+h1{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;margin:0}
+p{color:var(--muted);line-height:1.5;margin:4px 0 0}
+nav{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:var(--black);color:#fff}
+.logo{font-weight:600;color:#fff}
+.nav-right a{color:#fff;font-size:13px;text-decoration:none;margin-left:18px;opacity:0.9;cursor:pointer}
+main{max-width:1100px;margin:0 auto;padding:36px 20px 80px}
+.loading-note{background:var(--cream);border:1px solid var(--line);color:#6b5a3a;padding:10px 14px;border-radius:8px;font-size:12.5px;margin:18px 0 28px}
+.tabs{display:flex;gap:8px;border-bottom:1px solid var(--line);margin-bottom:22px}
+.tab-btn{background:none;border:0;padding:10px 4px;font-family:inherit;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-right:18px}
+.tab-btn.active{color:var(--black);border-bottom-color:var(--brass)}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+th{text-align:left;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);padding:12px 16px;background:#fafafa;border-bottom:1px solid var(--line)}
+td{padding:13px 16px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:top}
+tr:last-child td{border-bottom:0}
+.addr-list{display:flex;flex-direction:column;gap:6px}
+.addr-pill{font-size:12px;background:#f2f2f2;border-radius:6px;padding:4px 8px;display:inline-block}
+a.site-link{color:#0F3D5C}
+.rainbow-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.rainbow-bar{position:relative;flex:1;height:8px;border-radius:999px;background:linear-gradient(90deg,#d9453d 0%,#e0a62e 35%,#4caf6b 65%,#2f6b4f 100%);min-width:90px}
+.rainbow-bar.unknown{background:#e2e2e2}
+.rainbow-marker{position:absolute;top:-3px;width:3px;height:14px;background:#111;border-radius:2px;transform:translateX(-50%)}
+.rainbow-addr{font-size:11.5px;color:var(--muted);white-space:nowrap}
+#tenants-panel, #agents-panel{display:none}
+#agents-panel.active, #tenants-panel.active{display:block}
+.empty-card{background:#fff;border:1px dashed var(--line);border-radius:10px;padding:28px;text-align:center;color:var(--muted);font-size:13.5px}
 </style>
 </head>
 <body>
-<nav>00.house · Admin</nav>
+<nav>
+  <span class="logo">00.house · Admin</span>
+  <div class="nav-right">
+    <span id="adminLabel" style="opacity:0.8"></span>
+    <a id="signOutLink">Sign out</a>
+  </div>
+</nav>
+
 <main>
-  <div class="card">
-    <span class="tag">Internal use only</span>
-    <h1>Admin sign in</h1>
-    <p>Admin accounts are created directly in Supabase — there's no public sign-up here.</p>
-    <div id="message"></div>
-    <form id="authForm">
-      <label for="email">Email</label>
-      <input id="email" type="email" required />
-      <label for="password">Password</label>
-      <input id="password" type="password" required />
-      <button class="primary" type="submit" id="submitBtn">Sign in</button>
-    </form>
-    <p class="note">Remember to put this page behind Cloudflare Access before launch, on its own subdomain — this login is a second layer, not a replacement for that.</p>
+  <h1>Admin panel</h1>
+  <p>Agents, tenants, and the viewings and affordability data behind each enquiry.</p>
+
+  <div class="loading-note" id="loadingNote">Checking your access…</div>
+
+  <div id="panels" style="display:none">
+    <div class="tabs">
+      <button class="tab-btn active" id="btn-agents" onclick="showTab('agents')">Agents</button>
+      <button class="tab-btn" id="btn-tenants" onclick="showTab('tenants')">Tenants</button>
+    </div>
+
+    <div id="agents-panel" class="active">
+      <table>
+        <thead><tr><th>Name</th><th>Contact</th><th>Website</th></tr></thead>
+        <tbody id="agentsBody"></tbody>
+      </table>
+    </div>
+
+    <div id="tenants-panel">
+      <table>
+        <thead><tr><th>Name</th><th>Email / phone</th><th>IP location</th><th>Requested viewings</th><th>Affordability</th></tr></thead>
+        <tbody id="tenantsBody"></tbody>
+      </table>
+    </div>
   </div>
 </main>
+
 <script>
   const SUPABASE_URL = 'https://eyyaemqygddtxbbmbqhl.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_A_aCzMwxAPY_UX7M5cOTRg_oZGKAUVG';
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const messageEl = document.getElementById('message');
-  const submitBtn = document.getElementById('submitBtn');
-  function showError(text) { messageEl.textContent = text; messageEl.className = 'error'; }
-
-  if (new URLSearchParams(window.location.search).get('denied')) {
-    showError('That account is not authorised as an admin.');
+  function showTab(tab) {
+    document.getElementById('agents-panel').classList.toggle('active', tab === 'agents');
+    document.getElementById('tenants-panel').classList.toggle('active', tab === 'tenants');
+    document.getElementById('btn-agents').classList.toggle('active', tab === 'agents');
+    document.getElementById('btn-tenants').classList.toggle('active', tab === 'tenants');
   }
 
-  document.getElementById('authForm').addEventListener('submit', async function (e) {
-    e.preventDefault();
-    submitBtn.disabled = true;
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value;
+  document.getElementById('signOutLink').addEventListener('click', async function () {
+    await supabase.auth.signOut();
+    window.location.href = 'admin-login.html';
+  });
 
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) { showError(error.message); submitBtn.disabled = false; return; }
+  function renderRainbow(score) {
+    if (score === null || score === undefined) {
+      return '<div class="rainbow-row"><div class="rainbow-bar unknown"></div><span class="rainbow-addr">not available</span></div>';
+    }
+    return '<div class="rainbow-row"><div class="rainbow-bar"><div class="rainbow-marker" style="left:' + score + '%"></div></div>' +
+      '<span class="rainbow-addr">' + score + '%</span></div>';
+  }
 
-    const { data: adminRow } = await supabase.from('admins').select('id').eq('id', data.user.id).maybeSingle();
+  async function init() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) { window.location.href = 'admin-login.html'; return; }
+
+    const { data: adminRow } = await supabase.from('admins').select('email').eq('id', session.user.id).maybeSingle();
     if (!adminRow) {
       await supabase.auth.signOut();
-      showError('That account is not authorised as an admin.');
-      submitBtn.disabled = false;
+      window.location.href = 'admin-login.html?denied=1';
       return;
     }
-    window.location.href = 'admin.html';
-  });
+
+    document.getElementById('adminLabel').textContent = adminRow.email;
+
+    const [{ data: agents, error: agentsError }, { data: tenants, error: tenantsError }] = await Promise.all([
+      supabase.from('agents').select('name, email, phone, agency_name, website_url'),
+      supabase.from('tenants').select('name, email, phone, ip_location, viewings(affordability_score, properties(address))')
+    ]);
+
+    document.getElementById('loadingNote').remove();
+    document.getElementById('panels').style.display = 'block';
+
+    const agentsBody = document.getElementById('agentsBody');
+    if (agentsError) {
+      agentsBody.innerHTML = '<tr><td colspan="3">Could not load agents: ' + agentsError.message + '</td></tr>';
+    } else if (!agents || agents.length === 0) {
+      agentsBody.innerHTML = '<tr><td colspan="3">No agents registered yet.</td></tr>';
+    } else {
+      agentsBody.innerHTML = agents.map(a => {
+        const site = a.website_url || '';
+        const siteCell = site ? '<a class="site-link" href="' + site + '" target="_blank" rel="noopener">' + site.replace(/^https?:\/\//, '') + '</a>' : '—';
+        return '<tr><td>' + a.name + (a.agency_name ? ' · ' + a.agency_name : '') + '</td>' +
+          '<td>' + a.email + '<br><span style="color:#6b6b6b">' + (a.phone || '—') + '</span></td>' +
+          '<td>' + siteCell + '</td></tr>';
+      }).join('');
+    }
+
+    const tenantsBody = document.getElementById('tenantsBody');
+    if (tenantsError) {
+      tenantsBody.innerHTML = '<tr><td colspan="5">Could not load tenants: ' + tenantsError.message + '</td></tr>';
+    } else if (!tenants || tenants.length === 0) {
+      tenantsBody.innerHTML = '<tr><td colspan="5">No tenants registered yet.</td></tr>';
+    } else {
+      tenantsBody.innerHTML = tenants.map(t => {
+        const viewings = t.viewings || [];
+        const addrCell = viewings.length === 0
+          ? '<span style="color:#9a9a9a">No viewings requested</span>'
+          : '<div class="addr-list">' + viewings.map(v => '<span class="addr-pill">' + (v.properties ? v.properties.address : 'Unknown address') + '</span>').join('') + '</div>';
+        const rainbowCell = viewings.length === 0 ? '—' : viewings.map(v => renderRainbow(v.affordability_score)).join('');
+        return '<tr><td>' + t.name + '</td>' +
+          '<td>' + t.email + '<br><span style="color:#6b6b6b">' + (t.phone || '—') + '</span></td>' +
+          '<td>' + (t.ip_location || '—') + '</td>' +
+          '<td>' + addrCell + '</td>' +
+          '<td>' + rainbowCell + '</td></tr>';
+      }).join('');
+    }
+  }
+
+  init();
 </script>
 </body>
 </html>
