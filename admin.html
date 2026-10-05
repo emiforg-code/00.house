@@ -4,129 +4,80 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="noindex, nofollow" />
-<title>Admin | 00.house</title>
-<!--
-  DO NOT link this page from your public navigation.
-  Before go-live, put this page's URL (ideally on its own subdomain,
-  e.g. admin.00.house) behind Cloudflare Access so only your own email
-  can ever load it — see build step 7.
--->
+<title>Admin sign in | 00.house</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{
-  --black:#0a0a0a; --muted:#6b6b6b; --white:#fff; --line:rgba(0,0,0,0.08);
-  --brass:#b98a3f; --cream:#f6f2ea;
-}
+:root{ --black:#0a0a0a; --muted:#6b6b6b; --white:#fff; --line:rgba(0,0,0,0.08); --brass:#b98a3f; }
 *{box-sizing:border-box}
-body{font-family:'Inter',system-ui,sans-serif;margin:0;background:#faf9f6;color:var(--black)}
-h1{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;margin:0}
-p{color:var(--muted);line-height:1.5;margin:4px 0 0}
-nav{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:var(--black);color:#fff}
-.logo{font-weight:600;color:#fff}
-main{max-width:1100px;margin:0 auto;padding:36px 20px 80px}
-.demo-note{background:var(--cream);border:1px solid var(--line);color:#6b5a3a;padding:10px 14px;border-radius:8px;font-size:12.5px;margin:18px 0 28px}
-.tabs{display:flex;gap:8px;border-bottom:1px solid var(--line);margin-bottom:22px}
-.tab-btn{background:none;border:0;padding:10px 4px;font-family:inherit;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-right:18px}
-.tab-btn.active{color:var(--black);border-bottom-color:var(--brass)}
-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
-th{text-align:left;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);padding:12px 16px;background:#fafafa;border-bottom:1px solid var(--line)}
-td{padding:13px 16px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:top}
-tr:last-child td{border-bottom:0}
-.addr-list{display:flex;flex-direction:column;gap:6px}
-.addr-pill{font-size:12px;background:#f2f2f2;border-radius:6px;padding:4px 8px;display:inline-block}
-a.site-link{color:#0F3D5C}
-.rainbow-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.rainbow-bar{position:relative;flex:1;height:8px;border-radius:999px;background:linear-gradient(90deg,#d9453d 0%,#e0a62e 35%,#4caf6b 65%,#2f6b4f 100%);min-width:90px}
-.rainbow-marker{position:absolute;top:-3px;width:3px;height:14px;background:#111;border-radius:2px;transform:translateX(-50%)}
-.rainbow-addr{font-size:11.5px;color:var(--muted);white-space:nowrap}
-#tenants-panel, #agents-panel{display:none}
-#agents-panel.active, #tenants-panel.active{display:block}
+body{font-family:'Inter',system-ui,sans-serif;margin:0;background:#f3f1ec;color:var(--black);min-height:100vh;display:flex;flex-direction:column}
+h1{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;margin:0 0 6px;font-size:26px}
+p{color:var(--muted);line-height:1.5}
+nav{padding:16px 28px;background:var(--black);color:#fff;font-weight:600}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px}
+.card{background:#fff;border-radius:14px;padding:36px;max-width:380px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,0.08);border:1px solid var(--line)}
+.tag{display:inline-block;background:var(--black);color:#fff;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;margin-bottom:14px}
+label{display:block;font-size:12.5px;font-weight:600;margin:16px 0 6px}
+input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:14px}
+input:focus{outline:2px solid var(--brass)}
+button.primary{width:100%;margin-top:22px;background:var(--black);color:#fff;border:0;padding:12px;border-radius:8px;font-weight:600;font-size:14px;cursor:pointer}
+button.primary:hover{background:#222}
+button.primary:disabled{opacity:0.6;cursor:default}
+#message{display:none;margin-top:16px;padding:10px 12px;border-radius:8px;font-size:13px}
+#message.error{display:block;background:#fdeceb;color:#a3312a}
+.note{margin-top:22px;font-size:12px;color:var(--muted);line-height:1.5}
 </style>
 </head>
 <body>
-<nav>
-  <span class="logo">00.house · Admin</span>
-  <span style="font-size:13px;opacity:0.8">Internal use only</span>
-</nav>
-
+<nav>00.house · Admin</nav>
 <main>
-  <h1>Admin panel</h1>
-  <p>Agents, tenants, and the viewings and affordability data behind each enquiry.</p>
-
-  <div class="demo-note">
-    <strong>Demo mode:</strong> the rows below are placeholder data — build step 6 connects
-    this to your real Supabase tables. Remember: this page itself must be put behind
-    Cloudflare Access before launch (build step 7) so it isn't publicly reachable.
-  </div>
-
-  <div class="tabs">
-    <button class="tab-btn active" id="btn-agents" onclick="showTab('agents')">Agents</button>
-    <button class="tab-btn" id="btn-tenants" onclick="showTab('tenants')">Tenants</button>
-  </div>
-
-  <div id="agents-panel" class="active">
-    <table>
-      <thead><tr><th>Name</th><th>Contact</th><th>Website</th></tr></thead>
-      <tbody id="agentsBody"></tbody>
-    </table>
-  </div>
-
-  <div id="tenants-panel">
-    <table>
-      <thead><tr><th>Name</th><th>Email / phone</th><th>IP location</th><th>Requested viewings</th><th>Affordability</th></tr></thead>
-      <tbody id="tenantsBody"></tbody>
-    </table>
+  <div class="card">
+    <span class="tag">Internal use only</span>
+    <h1>Admin sign in</h1>
+    <p>Admin accounts are created directly in Supabase — there's no public sign-up here.</p>
+    <div id="message"></div>
+    <form id="authForm">
+      <label for="email">Email</label>
+      <input id="email" type="email" required />
+      <label for="password">Password</label>
+      <input id="password" type="password" required />
+      <button class="primary" type="submit" id="submitBtn">Sign in</button>
+    </form>
+    <p class="note">Remember to put this page behind Cloudflare Access before launch, on its own subdomain — this login is a second layer, not a replacement for that.</p>
   </div>
 </main>
-
 <script>
-  function showTab(tab) {
-    document.getElementById('agents-panel').classList.toggle('active', tab === 'agents');
-    document.getElementById('tenants-panel').classList.toggle('active', tab === 'tenants');
-    document.getElementById('btn-agents').classList.toggle('active', tab === 'agents');
-    document.getElementById('btn-tenants').classList.toggle('active', tab === 'tenants');
+  const SUPABASE_URL = 'https://eyyaemqygddtxbbmbqhl.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_A_aCzMwxAPY_UX7M5cOTRg_oZGKAUVG';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  const messageEl = document.getElementById('message');
+  const submitBtn = document.getElementById('submitBtn');
+  function showError(text) { messageEl.textContent = text; messageEl.className = 'error'; }
+
+  if (new URLSearchParams(window.location.search).get('denied')) {
+    showError('That account is not authorised as an admin.');
   }
 
-  // TODO (build step 6): replace both mock arrays with real Supabase queries.
-  // Admin role bypasses RLS restrictions so these can return every row.
-  const MOCK_AGENTS = [
-    { name: 'Sarah Jenkins', contact: 's.jenkins@thamesfinehomes.co.uk · 01753 555123', site: 'https://thamesfinehomes.co.uk' },
-    { name: 'Marcus Reid', contact: 'm.reid@riverlet.co.uk · 01784 555987', site: 'https://riverlet.co.uk' }
-  ];
+  document.getElementById('authForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
 
-  // affordability: 0–100, where it falls on the red→amber→green bar for that address
-  const MOCK_TENANTS = [
-    { name: 'Oliver Davies', email: 'oliver.davies@example.co.uk', phone: '07700 900123', ip: 'Reading, UK',
-      viewings: [
-        { addr: '14 Riverside Walk, Windsor', affordability: 78 },
-        { addr: '9 Park Street, Ascot', affordability: 40 }
-      ] },
-    { name: 'Amara Bello', email: 'amara.b@example.co.uk', phone: '07700 900456', ip: 'Slough, UK',
-      viewings: [
-        { addr: '14 Riverside Walk, Windsor', affordability: 92 }
-      ] }
-  ];
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) { showError(error.message); submitBtn.disabled = false; return; }
 
-  document.getElementById('agentsBody').innerHTML = MOCK_AGENTS.map(a => `
-    <tr>
-      <td>${a.name}</td>
-      <td>${a.contact}</td>
-      <td><a class="site-link" href="${a.site}" target="_blank" rel="noopener">${a.site.replace('https://','')}</a></td>
-    </tr>`).join('');
-
-  document.getElementById('tenantsBody').innerHTML = MOCK_TENANTS.map(t => `
-    <tr>
-      <td>${t.name}</td>
-      <td>${t.email}<br><span style="color:#6b6b6b">${t.phone}</span></td>
-      <td>${t.ip}</td>
-      <td><div class="addr-list">${t.viewings.map(v => `<span class="addr-pill">${v.addr}</span>`).join('')}</div></td>
-      <td>${t.viewings.map(v => `
-        <div class="rainbow-row">
-          <div class="rainbow-bar"><div class="rainbow-marker" style="left:${v.affordability}%"></div></div>
-          <span class="rainbow-addr">${v.affordability}%</span>
-        </div>`).join('')}</td>
-    </tr>`).join('');
+    const { data: adminRow } = await supabase.from('admins').select('id').eq('id', data.user.id).maybeSingle();
+    if (!adminRow) {
+      await supabase.auth.signOut();
+      showError('That account is not authorised as an admin.');
+      submitBtn.disabled = false;
+      return;
+    }
+    window.location.href = 'admin.html';
+  });
 </script>
 </body>
 </html>
