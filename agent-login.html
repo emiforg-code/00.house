@@ -3,150 +3,80 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="robots" content="noindex" />
-<title>Agent sign in | 00.house</title>
+<meta name="robots" content="noindex, nofollow" />
+<title>Admin sign in | 00.house</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{
-  --black:#0a0a0a; --muted:#6b6b6b; --white:#fff; --line:rgba(0,0,0,0.08);
-  --racing:#1f4632; --racing-green-tint:#E1EFE6; --brass:#b98a3f;
-}
+:root{ --black:#0a0a0a; --muted:#6b6b6b; --white:#fff; --line:rgba(0,0,0,0.08); --brass:#b98a3f; }
 *{box-sizing:border-box}
-body{font-family:'Inter',system-ui,sans-serif;margin:0;background:var(--racing-green-tint);color:var(--black);min-height:100vh;display:flex;flex-direction:column}
-h1{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;margin:0 0 6px;font-size:28px}
+body{font-family:'Inter',system-ui,sans-serif;margin:0;background:#f3f1ec;color:var(--black);min-height:100vh;display:flex;flex-direction:column}
+h1{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;margin:0 0 6px;font-size:26px}
 p{color:var(--muted);line-height:1.5}
-a{color:var(--racing)}
-nav{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:rgba(255,255,255,0.9);border-bottom:1px solid var(--line)}
-.logo{display:flex;align-items:center;gap:10px;font-weight:600;text-decoration:none;color:var(--black)}
+nav{padding:16px 28px;background:var(--black);color:#fff;font-weight:600}
 main{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px}
-.card{background:#fff;border-radius:14px;padding:36px;max-width:400px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,0.08);border:1px solid var(--line)}
-.tag{display:inline-block;background:var(--racing);color:#fff;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;margin-bottom:14px}
+.card{background:#fff;border-radius:14px;padding:36px;max-width:380px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,0.08);border:1px solid var(--line)}
+.tag{display:inline-block;background:var(--black);color:#fff;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;margin-bottom:14px}
 label{display:block;font-size:12.5px;font-weight:600;margin:16px 0 6px}
 input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:14px}
-input:focus{outline:2px solid var(--racing)}
-button.primary{width:100%;margin-top:22px;background:var(--racing);color:#fff;border:0;padding:12px;border-radius:8px;font-weight:600;font-size:14px;cursor:pointer}
-button.primary:hover{background:#163726}
+input:focus{outline:2px solid var(--brass)}
+button.primary{width:100%;margin-top:22px;background:var(--black);color:#fff;border:0;padding:12px;border-radius:8px;font-weight:600;font-size:14px;cursor:pointer}
+button.primary:hover{background:#222}
 button.primary:disabled{opacity:0.6;cursor:default}
-.foot{margin-top:18px;font-size:13px;text-align:center;color:var(--muted)}
 #message{display:none;margin-top:16px;padding:10px 12px;border-radius:8px;font-size:13px}
 #message.error{display:block;background:#fdeceb;color:#a3312a}
-#message.ok{display:block;background:var(--racing-green-tint);color:#1f4632}
-#signupFields{display:none}
+.note{margin-top:22px;font-size:12px;color:var(--muted);line-height:1.5}
 </style>
 </head>
 <body>
-<nav>
-  <a class="logo" href="index.html">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="#111" stroke-width="1.2" fill="none"/></svg>
-    00.house
-  </a>
-  <a href="index.html" style="font-size:13px;text-decoration:none;color:#444">&larr; Back to site</a>
-</nav>
-
+<nav>00.house · Admin</nav>
 <main>
   <div class="card">
-    <span class="tag">Agent panel</span>
-    <h1 id="formTitle">Sign in</h1>
-    <p id="formSub">See your listed addresses and the viewings tenants have requested.</p>
-
+    <span class="tag">Internal use only</span>
+    <h1>Admin sign in</h1>
+    <p>Admin accounts are created directly in Supabase — there's no public sign-up here.</p>
     <div id="message"></div>
-
     <form id="authForm">
-      <label for="email">Work email</label>
-      <input id="email" type="email" required placeholder="you@youragency.co.uk" />
+      <label for="email">Email</label>
+      <input id="email" type="email" required />
       <label for="password">Password</label>
-      <input id="password" type="password" required minlength="6" placeholder="********" />
-
-      <div id="signupFields">
-        <label for="name">Your name</label>
-        <input id="name" type="text" placeholder="Sarah Jenkins" />
-        <label for="agencyName">Agency name</label>
-        <input id="agencyName" type="text" placeholder="Thames Fine Homes" />
-        <label for="phone">Phone</label>
-        <input id="phone" type="tel" placeholder="01753 555123" />
-        <label for="website">Agency website</label>
-        <input id="website" type="url" placeholder="https://youragency.co.uk" />
-      </div>
-
+      <input id="password" type="password" required />
       <button class="primary" type="submit" id="submitBtn">Sign in</button>
     </form>
-
-    <p class="foot"><a href="#" id="toggleLink">New agent? Create an account</a></p>
+    <p class="note">Remember to put this page behind Cloudflare Access before launch, on its own subdomain — this login is a second layer, not a replacement for that.</p>
   </div>
 </main>
-
 <script>
   const SUPABASE_URL = 'https://eyyaemqygddtxbbmbqhl.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_A_aCzMwxAPY_UX7M5cOTRg_oZGKAUVG';
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  let mode = 'signin';
-  const toggleLink = document.getElementById('toggleLink');
-  const signupFields = document.getElementById('signupFields');
-  const formTitle = document.getElementById('formTitle');
-  const formSub = document.getElementById('formSub');
-  const submitBtn = document.getElementById('submitBtn');
   const messageEl = document.getElementById('message');
+  const submitBtn = document.getElementById('submitBtn');
+  function showError(text) { messageEl.textContent = text; messageEl.className = 'error'; }
 
-  toggleLink.addEventListener('click', function (e) {
-    e.preventDefault();
-    mode = mode === 'signin' ? 'signup' : 'signin';
-    const isSignup = mode === 'signup';
-    signupFields.style.display = isSignup ? 'block' : 'none';
-    formTitle.textContent = isSignup ? 'Create your agent account' : 'Sign in';
-    formSub.textContent = isSignup
-      ? 'Set up access to your dashboard.'
-      : 'See your listed addresses and the viewings tenants have requested.';
-    submitBtn.textContent = isSignup ? 'Create account' : 'Sign in';
-    toggleLink.textContent = isSignup ? 'Already have an account? Sign in' : 'New agent? Create an account';
-    showMessage('');
-  });
-
-  function showMessage(text, isError) {
-    if (!text) { messageEl.style.display = 'none'; return; }
-    messageEl.textContent = text;
-    messageEl.className = isError ? 'error' : 'ok';
+  if (new URLSearchParams(window.location.search).get('denied')) {
+    showError('That account is not authorised as an admin.');
   }
 
   document.getElementById('authForm').addEventListener('submit', async function (e) {
     e.preventDefault();
     submitBtn.disabled = true;
-    showMessage('');
-
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
 
-    try {
-      if (mode === 'signin') {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) { showMessage(error.message, true); return; }
-        window.location.href = 'agent-dashboard.html';
-      } else {
-        const name = document.getElementById('name').value.trim();
-        const agencyName = document.getElementById('agencyName').value.trim();
-        const phone = document.getElementById('phone').value.trim();
-        const website = document.getElementById('website').value.trim();
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) { showError(error.message); submitBtn.disabled = false; return; }
 
-        const { data, error } = await supabase.auth.signUp({ email, password });
-        if (error) { showMessage(error.message, true); return; }
-
-        if (data.session) {
-          const { error: profileError } = await supabase.from('agents').insert({
-            id: data.user.id, name, agency_name: agencyName, email, phone, website_url: website
-          });
-          if (profileError) { showMessage(profileError.message, true); return; }
-          window.location.href = 'agent-dashboard.html';
-        } else {
-          showMessage('Account created. Check your email to confirm it, then come back and sign in.');
-        }
-      }
-    } catch (err) {
-      showMessage('Something went wrong: ' + err.message, true);
-    } finally {
+    const { data: adminRow } = await supabase.from('admins').select('id').eq('id', data.user.id).maybeSingle();
+    if (!adminRow) {
+      await supabase.auth.signOut();
+      showError('That account is not authorised as an admin.');
       submitBtn.disabled = false;
+      return;
     }
+    window.location.href = 'admin.html';
   });
 </script>
 </body>
