@@ -23,13 +23,13 @@
 <meta name="twitter:description" content="Compare average monthly rent in England, Wales, Scotland and Northern Ireland, then connect with agents and landlords." />
 <meta name="twitter:image" content="https://00.house/header-dark-red.jpeg" />
 <title>00.house | Rental Homes to Rent in England, Wales, Scotland &amp; Northern Ireland</title>
-  <script type="application/ld+json"> { "@context": "https://schema.org", "@type": "WebSite", "url": "https://00.house", "name": "00.house", "description": "00.house is a property listings and open-house scheduling portal connecting tenants with agents and landlords. ", "publisher": { "@type": "Organization", "name": "00.house Ltd", "url": "https://00.house" }, "potentialAction": { "@type": "SearchAction", "target": "https://00.house/?s={search_term_string}", "query-input": "required name=search_term_string" } } </script>
+  <script type="application/ld+json"> { "@context": "https://schema.org", "@type": "WebSite", "url": "https://00.house", "name": "00.house", "description": "00.house is a property listings and open-house scheduling portal connecting tenants with agents and landlords. ", "publisher": { "@type": "Organization", "name": "Q Investments International Ltd", "url": "https://00.house" }, "potentialAction": { "@type": "SearchAction", "target": "https://00.house/?s={search_term_string}", "query-input": "required name=search_term_string" } } </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "00.house",
-    "legalName": "00.house Ltd",
+    "legalName": "Q Investments International Ltd",
     "url": "https://00.house",
     "description": "00.house is a property rental listings and open-house scheduling portal connecting tenants with agents and landlords across the United Kingdom.",
     "areaServed": [
@@ -420,7 +420,7 @@ footer a:hover{color:var(--black)}
     <div class="lang-wrap">
       <button class="nav-btn" onclick="toggleLangMenu()" data-i18n="nav_lang">Languages ▾</button>
       <div class="lang-menu" id="langMenu">
-        <button onclick="setLanguage('en')">🇺🇸 English</button>
+        <button onclick="setLanguage('en')">🇬🇧 English</button>
         <button onclick="setLanguage('ar')">🇦🇪 العربية</button>
       </div>
     </div>
@@ -617,7 +617,7 @@ footer a:hover{color:var(--black)}
         <img class="panel-photo" src="./family-house.png" alt="Family who found their rental home through 00.house">
         <div class="mock-chip notif-float n1">
           <div class="chip-logo"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V10"/><path d="M9.5 20.5V14h5v6.5"/></svg></div>
-          <div><strong>00.house</strong><span class="chip-time" data-i18n="notif1_time">2d ago</span><br><span data-i18n="notif1_text">Holding deposit received (£550) for house 4B</span></div>
+          <div><strong>00.house</strong><span class="chip-time" data-i18n="notif1_time">2d ago</span><br><span data-i18n="notif1_text">Agent requested a holding deposit for house 4B — paid directly to the agent</span></div>
         </div>
         <div class="mock-chip notif-float n2">
           <div class="chip-logo"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V10"/><path d="M9.5 20.5V14h5v6.5"/></svg></div>
@@ -649,7 +649,6 @@ footer a:hover{color:var(--black)}
     <div>
       <h4 data-i18n="foot_company">Company</h4>
       <a onclick="openPanel('about')" data-i18n="foot_about">About Us</a>
-      <a onclick="alert('Careers page — coming soon')" data-i18n="foot_careers">Careers</a>
       <a onclick="openPanel('contact')" data-i18n="foot_contact">Contact</a>
     </div>
     <div>
@@ -663,7 +662,6 @@ footer a:hover{color:var(--black)}
       <a onclick="openPanel('legal','terms')" data-i18n="foot_terms">Terms of Service</a>
       <a onclick="openPanel('legal','privacy')" data-i18n="foot_privacy">Privacy Policy</a>
       <a onclick="openPanel('legal','disclaimer')" data-i18n="foot_disclosures">Disclosures</a>
-      <a onclick="openPanel('legal','cookies')" data-i18n="foot_licenses">Licenses</a>
     </div>
   </div>
   <div class="foot-legal-note">
@@ -706,7 +704,7 @@ const i18n = {
     cta_tenant_btn:'Register as a tenant', quick_tenant_ph:'Your email address',
     panel_agent_h:'Renting made simple, from search to move-in', panel_agent_p:'Tell us what you\'re after once. We pass it straight to agents and landlords with a matching open house — no repeated forms.', panel_agent_bold:'No commission on enquiries.',
     cta_agent_btn:'Your Tenant Pass takes 1 minute',
-    notif1_time:'2d ago', notif1_text:'Holding deposit received (£550) for house 4B',
+    notif1_time:'2d ago', notif1_text:'Agent requested a holding deposit for house 4B — paid directly to the agent',
     notif2_time:'8h ago', notif2_text:'Reference check requested',
     notif3_time:'1h ago', notif3_text:'Your listing just went live',
     legal_strip_link:'Read the full disclaimer',
@@ -995,6 +993,22 @@ const WHATSAPP_NUMBER = '+44 7956 716677';
 const WHATSAPP_INT = '447956716677';
 const AGENT_EMAIL = 'partner@00.house';
 const TENANT_EMAIL = 'partner@00.house';
+/* Registrations are saved to Supabase (table: registrations). The publishable key is safe in the browser:
+   Row Level Security only allows INSERT for anonymous visitors. See supabase-setup.sql */
+const SUPABASE_URL = 'https://eyyaemqygddtxbbmbqhl.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_A_aCzMwxAPY_UX7M5cOTRg_oZGKAUVG';
+function sbSaveRegistration(enq){
+  try {
+    var kind = enq.type === 'agent' ? (/^Early access/.test(enq.details || '') ? 'early_access' : 'agent') : (enq.type || 'contact');
+    fetch(SUPABASE_URL + '/rest/v1/registrations', {
+      method: 'POST',
+      headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ kind: kind, name: enq.name || null, email: enq.email, phone: enq.phone || null,
+        details: enq.details || null, payload: enq.payload || null, page: location.href }),
+      keepalive: true
+    }).catch(function(){});
+  } catch(e) { /* never block the visitor */ }
+}
 const ENQUIRY_LOG_KEY = '00_house_enquiries_log';
 let pendingTenantEmail = '';   // email typed into the homepage quick form, prefilled into the Tenant Pass
 
@@ -1003,6 +1017,7 @@ function saveEnquiryToLog(enquiry){
     id: 'ENQ-' + Date.now().toString().slice(-6),
     timestamp: new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit', month:'short', day:'numeric' })
   });
+  sbSaveRegistration(item);
   try {
     const existing = getEnquiryLog();
     localStorage.setItem(ENQUIRY_LOG_KEY, JSON.stringify([item, ...existing].slice(0, 50)));
@@ -1313,7 +1328,7 @@ function handleTenantSubmit(e){
   const emailText = buildTenantEmailText(data);
   saveEnquiryToLog({
     type: 'tenant', name: (data.firstName + ' ' + data.lastName).trim(), email: data.email, phone: data.phone,
-    details: 'Tenant Pass application — ' + data.areas, routedTo: TENANT_EMAIL, whatsappRouted: false
+    details: 'Tenant Pass application — ' + data.areas, routedTo: TENANT_EMAIL, whatsappRouted: false, payload: data
   });
   pendingTenantEmail = '';
   if (endpointReady(TENANT_FORM_ENDPOINT)) {
@@ -1340,7 +1355,7 @@ function handleAgentSubmit(e){
   const whatsappText = buildAgentWhatsAppText(data);
   saveEnquiryToLog({
     type: 'agent', name: data.contactName + ' (' + data.agencyName + ')', email: data.workEmail, phone: data.phone,
-    details: 'Agent & landlord registration — ' + data.areas, routedTo: AGENT_EMAIL + ' & WhatsApp ' + WHATSAPP_NUMBER, whatsappRouted: true
+    details: 'Agent & landlord registration — ' + data.areas, routedTo: AGENT_EMAIL + ' & WhatsApp ' + WHATSAPP_NUMBER, whatsappRouted: true, payload: data
   });
   if (endpointReady(AGENT_FORM_ENDPOINT)) { submitFormToEmail(AGENT_FORM_ENDPOINT, f).catch(()=>{}); }
   renderDispatchSuccess('agentSuccess', f, whatsappText, AGENT_EMAIL, data.contactName);
@@ -1360,6 +1375,7 @@ function handleContactSubmit(){
     return;
   }
   const text = 'Name: ' + name + '\nEmail: ' + email + '\n\n' + msg;
+  sbSaveRegistration({ type: 'contact', name: name, email: email, details: msg.slice(0, 1800) });
   const mailto = getMailtoLink(TENANT_EMAIL, 'Message from the 00.house contact form', text);
   const btn = document.getElementById('ct-send');
   function fallback(){
@@ -2507,7 +2523,7 @@ function initInAreaMap(){
       if (!isBot && typeof saveEnquiryToLog === 'function') {
         saveEnquiryToLog({
           type: 'agent', name: data.contact + ' (' + data.agency + ')', email: data.email, phone: data.phone,
-          details: 'Early access — launch promotion', routedTo: 'partner@00.house & WhatsApp +44 7956 716677', whatsappRouted: true
+          details: 'Early access — launch promotion', routedTo: 'partner@00.house & WhatsApp +44 7956 716677', whatsappRouted: true, payload: data
         });
       }
 
@@ -2604,4 +2620,4 @@ function initInAreaMap(){
 </script>
 
 </body>
-</html>
+        </html>
