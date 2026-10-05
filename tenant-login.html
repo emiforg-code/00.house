@@ -7,6 +7,7 @@
 <title>Tenant sign in | 00.house</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 :root{
   --black:#0a0a0a; --muted:#6b6b6b; --white:#fff; --line:rgba(0,0,0,0.08);
@@ -20,15 +21,19 @@ a{color:var(--trust-blue-deep)}
 nav{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:rgba(255,255,255,0.9);border-bottom:1px solid var(--line)}
 .logo{display:flex;align-items:center;gap:10px;font-weight:600;text-decoration:none;color:var(--black)}
 main{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px}
-.card{background:#fff;border-radius:14px;padding:36px;max-width:380px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,0.08);border:1px solid var(--line)}
+.card{background:#fff;border-radius:14px;padding:36px;max-width:400px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,0.08);border:1px solid var(--line)}
 .tag{display:inline-block;background:var(--trust-blue-deep);color:#fff;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;margin-bottom:14px}
 label{display:block;font-size:12.5px;font-weight:600;margin:16px 0 6px}
 input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:14px}
 input:focus{outline:2px solid var(--trust-blue-deep)}
 button.primary{width:100%;margin-top:22px;background:var(--trust-blue-deep);color:#fff;border:0;padding:12px;border-radius:8px;font-weight:600;font-size:14px;cursor:pointer}
 button.primary:hover{background:#0b2e45}
+button.primary:disabled{opacity:0.6;cursor:default}
 .foot{margin-top:18px;font-size:13px;text-align:center;color:var(--muted)}
-.demo-note{margin-top:28px;padding:12px 14px;background:var(--trust-blue-tint);border-radius:8px;font-size:12.5px;color:var(--trust-blue-deep)}
+#message{display:none;margin-top:16px;padding:10px 12px;border-radius:8px;font-size:13px}
+#message.error{display:block;background:#fdeceb;color:#a3312a}
+#message.ok{display:block;background:var(--trust-blue-tint);color:var(--trust-blue-deep)}
+#signupFields{display:none}
 </style>
 </head>
 <body>
@@ -43,33 +48,99 @@ button.primary:hover{background:#0b2e45}
 <main>
   <div class="card">
     <span class="tag">Tenant panel</span>
-    <h1>Sign in</h1>
-    <p>See your saved favourite homes and your contact details.</p>
+    <h1 id="formTitle">Sign in</h1>
+    <p id="formSub">See your saved favourite homes and your contact details.</p>
 
-    <form id="loginForm">
+    <div id="message"></div>
+
+    <form id="authForm">
       <label for="email">Email</label>
       <input id="email" type="email" required placeholder="you@example.com" />
       <label for="password">Password</label>
-      <input id="password" type="password" required placeholder="••••••••" />
-      <button class="primary" type="submit">Sign in</button>
+      <input id="password" type="password" required minlength="6" placeholder="********" />
+
+      <div id="signupFields">
+        <label for="name">Your name</label>
+        <input id="name" type="text" placeholder="Oliver Davies" />
+        <label for="phone">Phone</label>
+        <input id="phone" type="tel" placeholder="07700 900123" />
+      </div>
+
+      <button class="primary" type="submit" id="submitBtn">Sign in</button>
     </form>
 
-    <p class="foot">New here? <a href="index.html?open=tenant-form">Register as a tenant</a></p>
-
-    <div class="demo-note">
-      <strong>Demo mode:</strong> sign-in isn't wired to a real account system yet.
-      <a href="tenant-dashboard.html">Open the demo dashboard &rarr;</a>
-    </div>
+    <p class="foot"><a href="#" id="toggleLink">New here? Create an account</a></p>
   </div>
 </main>
 
 <script>
-  // TODO (build step 4): replace this with a real Supabase call, e.g.
-  //   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-  //   if (!error) window.location.href = 'tenant-dashboard.html';
-  document.getElementById('loginForm').addEventListener('submit', function (e) {
+  const SUPABASE_URL = 'https://eyyaemqygddtxbbmbqhl.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_A_aCzMwxAPY_UX7M5cOTRg_oZGKAUVG';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  let mode = 'signin';
+  const toggleLink = document.getElementById('toggleLink');
+  const signupFields = document.getElementById('signupFields');
+  const formTitle = document.getElementById('formTitle');
+  const formSub = document.getElementById('formSub');
+  const submitBtn = document.getElementById('submitBtn');
+  const messageEl = document.getElementById('message');
+
+  toggleLink.addEventListener('click', function (e) {
     e.preventDefault();
-    window.location.href = 'tenant-dashboard.html';
+    mode = mode === 'signin' ? 'signup' : 'signin';
+    const isSignup = mode === 'signup';
+    signupFields.style.display = isSignup ? 'block' : 'none';
+    formTitle.textContent = isSignup ? 'Create your account' : 'Sign in';
+    formSub.textContent = isSignup
+      ? 'Save your contact details so agents can confirm viewings.'
+      : 'See your saved favourite homes and your contact details.';
+    submitBtn.textContent = isSignup ? 'Create account' : 'Sign in';
+    toggleLink.textContent = isSignup ? 'Already have an account? Sign in' : 'New here? Create an account';
+    showMessage('');
+  });
+
+  function showMessage(text, isError) {
+    if (!text) { messageEl.style.display = 'none'; return; }
+    messageEl.textContent = text;
+    messageEl.className = isError ? 'error' : 'ok';
+  }
+
+  document.getElementById('authForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    showMessage('');
+
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    try {
+      if (mode === 'signin') {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) { showMessage(error.message, true); return; }
+        window.location.href = 'tenant-dashboard.html';
+      } else {
+        const name = document.getElementById('name').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+
+        const { data, error } = await supabase.auth.signUp({ email, password });
+        if (error) { showMessage(error.message, true); return; }
+
+        if (data.session) {
+          const { error: profileError } = await supabase.from('tenants').insert({
+            id: data.user.id, name, email, phone
+          });
+          if (profileError) { showMessage(profileError.message, true); return; }
+          window.location.href = 'tenant-dashboard.html';
+        } else {
+          showMessage('Account created. Check your email to confirm it, then come back and sign in.');
+        }
+      }
+    } catch (err) {
+      showMessage('Something went wrong: ' + err.message, true);
+    } finally {
+      submitBtn.disabled = false;
+    }
   });
 </script>
 </body>
