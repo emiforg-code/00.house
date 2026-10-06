@@ -11,6 +11,11 @@
   e.g. admin.00.house) behind Cloudflare Access so only your own email
   can ever load it. The sign-in check below is a second layer, not a
   replacement for that.
+
+  This page now displays IP addresses for agents and tenants, which is
+  personal data under UK GDPR — keep this page locked down accordingly,
+  and make sure your privacy policy mentions it (yours already does, in
+  the "technical data such as device and approximate location" line).
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -18,21 +23,47 @@
 <style>
 :root{ --black:#0a0a0a; --muted:#6b6b6b; --white:#fff; --line:rgba(0,0,0,0.08); --brass:#b98a3f; --cream:#f6f2ea; }
 *{box-sizing:border-box}
-body{font-family:'Inter',system-ui,sans-serif;margin:0;background:#faf9f6;color:var(--black)}
+body{font-family:'Inter',system-ui,sans-serif;margin:0;background:#ffffff;color:var(--black)}
 h1{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;margin:0}
 p{color:var(--muted);line-height:1.5;margin:4px 0 0}
-nav{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:var(--black);color:#fff}
-.logo{font-weight:600;color:#fff}
-.nav-right a{color:#fff;font-size:13px;text-decoration:none;margin-left:18px;opacity:0.9;cursor:pointer}
-main{max-width:1100px;margin:0 auto;padding:36px 20px 80px}
-.loading-note{background:var(--cream);border:1px solid var(--line);color:#6b5a3a;padding:10px 14px;border-radius:8px;font-size:12.5px;margin:18px 0 28px}
-.tabs{display:flex;gap:8px;border-bottom:1px solid var(--line);margin-bottom:22px}
-.tab-btn{background:none;border:0;padding:10px 4px;font-family:inherit;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-right:18px}
+nav{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:14px 20px;background:var(--black);color:#fff}
+.logo{font-weight:600;color:#fff;font-size:15px}
+.nav-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.nav-right a,.nav-right span{color:#fff;font-size:12.5px;text-decoration:none;margin-left:14px;opacity:0.9;cursor:pointer}
+main{max-width:1100px;margin:0 auto;padding:24px 16px 70px}
+.loading-note{background:#f5f5f7;border:1px solid var(--line);color:#444;padding:10px 14px;border-radius:8px;font-size:12.5px;margin:18px 0 24px}
+
+/* ---- Affordability distribution chart ---- */
+.dist-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin-bottom:26px}
+.dist-card h2{font-size:15px;margin-bottom:14px;font-family:'Inter',sans-serif;font-weight:600}
+.dist-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:12.5px}
+.dist-row:last-child{margin-bottom:0}
+.dist-label{flex:0 0 90px;color:#333;font-weight:600}
+.dist-track{flex:1;height:10px;background:#f0f0f0;border-radius:999px;overflow:hidden}
+.dist-fill{height:100%;border-radius:999px;transition:width .4s ease}
+.dist-fill.low{background:#d9453d}
+.dist-fill.medium{background:#e0a62e}
+.dist-fill.high{background:#4caf6b}
+.dist-val{flex:0 0 28px;text-align:right;font-weight:600;color:#333}
+
+/* ---- Stat cards ---- */
+.stats-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:26px}
+.stat-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 12px;text-align:center}
+.stat-card .num{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;font-size:26px;color:var(--black);line-height:1}
+.stat-card .lbl{font-size:10.5px;letter-spacing:0.04em;text-transform:uppercase;color:var(--muted);margin-top:5px;line-height:1.3}
+@media (max-width:900px){ .stats-grid{grid-template-columns:repeat(3,1fr)} }
+@media (max-width:480px){ .stats-grid{grid-template-columns:repeat(2,1fr)} .stat-card .num{font-size:22px} }
+
+.tabs{display:flex;gap:8px;border-bottom:1px solid var(--line);margin-bottom:20px;overflow-x:auto}
+.tab-btn{background:none;border:0;padding:10px 4px;font-family:inherit;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-right:18px;white-space:nowrap}
 .tab-btn.active{color:var(--black);border-bottom-color:var(--brass)}
+
 table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
 th{text-align:left;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);padding:12px 16px;background:#fafafa;border-bottom:1px solid var(--line)}
 td{padding:13px 16px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:top}
 tr:last-child td{border-bottom:0}
+.ip-mono{font-family:'SF Mono',Consolas,monospace;font-size:12.5px;color:#333}
+.ip-loc{font-size:11.5px;color:var(--muted);margin-top:2px}
 .addr-list{display:flex;flex-direction:column;gap:6px}
 .addr-pill{font-size:12px;background:#f2f2f2;border-radius:6px;padding:4px 8px;display:inline-block}
 a.site-link{color:#0F3D5C}
@@ -44,6 +75,21 @@ a.site-link{color:#0F3D5C}
 #tenants-panel, #agents-panel{display:none}
 #agents-panel.active, #tenants-panel.active{display:block}
 .empty-card{background:#fff;border:1px dashed var(--line);border-radius:10px;padding:28px;text-align:center;color:var(--muted);font-size:13.5px}
+
+/* ---- Responsive tables: become stacked cards below 700px ---- */
+@media (max-width:700px){
+  table,thead,tbody,th,td,tr{display:block}
+  thead{display:none}
+  table{border:0;background:none}
+  tr{margin-bottom:12px;border:1px solid var(--line);border-radius:10px;background:#fff;overflow:hidden}
+  td{border:0;border-bottom:1px solid #f2f2f2;position:relative;padding:10px 14px 10px 44%}
+  td:last-child{border-bottom:0}
+  td::before{
+    content:attr(data-label);
+    position:absolute;left:14px;top:10px;width:38%;
+    font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--muted);
+  }
+}
 </style>
 </head>
 <body>
@@ -57,11 +103,18 @@ a.site-link{color:#0F3D5C}
 
 <main>
   <h1>Admin panel</h1>
-  <p>Agents, tenants, and the viewings and affordability data behind each enquiry.</p>
+  <p>Agents, tenants, IP addresses, and the viewings and affordability data behind each enquiry.</p>
 
   <div class="loading-note" id="loadingNote">Checking your access…</div>
 
   <div id="panels" style="display:none">
+    <div class="stats-grid" id="statsGrid"></div>
+
+    <div class="dist-card" id="distCard" style="display:none">
+      <h2>Affordability distribution across all requested viewings</h2>
+      <div id="distBody"></div>
+    </div>
+
     <div class="tabs">
       <button class="tab-btn active" id="btn-agents" onclick="showTab('agents')">Agents</button>
       <button class="tab-btn" id="btn-tenants" onclick="showTab('tenants')">Tenants</button>
@@ -69,14 +122,14 @@ a.site-link{color:#0F3D5C}
 
     <div id="agents-panel" class="active">
       <table>
-        <thead><tr><th>Name</th><th>Contact</th><th>Website</th></tr></thead>
+        <thead><tr><th>Name</th><th>Contact</th><th>Website</th><th>IP address</th></tr></thead>
         <tbody id="agentsBody"></tbody>
       </table>
     </div>
 
     <div id="tenants-panel">
       <table>
-        <thead><tr><th>Name</th><th>Email / phone</th><th>IP location</th><th>Requested viewings</th><th>Affordability</th></tr></thead>
+        <thead><tr><th>Name</th><th>Email / phone</th><th>IP address</th><th>Requested viewings</th><th>Affordability</th></tr></thead>
         <tbody id="tenantsBody"></tbody>
       </table>
     </div>
@@ -108,6 +161,16 @@ a.site-link{color:#0F3D5C}
       '<span class="rainbow-addr">' + score + '%</span></div>';
   }
 
+  function ipCell(ipAddress, ipLocation) {
+    if (!ipAddress) return '<span style="color:#9a9a9a">—</span>';
+    return '<span class="ip-mono">' + ipAddress + '</span>' +
+      (ipLocation ? '<div class="ip-loc">' + ipLocation + '</div>' : '');
+  }
+
+  function statCard(num, label) {
+    return '<div class="stat-card"><div class="num">' + num + '</div><div class="lbl">' + label + '</div></div>';
+  }
+
   async function init() {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) { window.location.href = 'admin-login.html'; return; }
@@ -121,33 +184,75 @@ a.site-link{color:#0F3D5C}
 
     document.getElementById('adminLabel').textContent = adminRow.email;
 
-    const [{ data: agents, error: agentsError }, { data: tenants, error: tenantsError }] = await Promise.all([
-      supabase.from('agents').select('name, email, phone, agency_name, website_url'),
-      supabase.from('tenants').select('name, email, phone, ip_location, viewings(affordability_score, properties(address))')
+    const [agentsRes, tenantsRes, propertiesCountRes, viewingsCountRes, favouritesCountRes] = await Promise.all([
+      supabase.from('agents').select('name, email, phone, agency_name, website_url, ip_address, ip_location, created_at'),
+      supabase.from('tenants').select('name, email, phone, ip_address, ip_location, created_at, viewings(affordability_score, properties(address))'),
+      supabase.from('properties').select('*', { count: 'exact', head: true }),
+      supabase.from('viewings').select('*', { count: 'exact', head: true }),
+      supabase.from('favourites').select('*', { count: 'exact', head: true })
     ]);
+
+    const agents = agentsRes.data || [];
+    const tenants = tenantsRes.data || [];
 
     document.getElementById('loadingNote').remove();
     document.getElementById('panels').style.display = 'block';
 
+    // ---- Stats ----
+    const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    const newThisWeek = [...agents, ...tenants].filter(p => p.created_at && new Date(p.created_at).getTime() >= weekAgo).length;
+
+    document.getElementById('statsGrid').innerHTML =
+      statCard(agents.length, 'Agents') +
+      statCard(tenants.length, 'Tenants') +
+      statCard(propertiesCountRes.count ?? '—', 'Properties') +
+      statCard(viewingsCountRes.count ?? '—', 'Viewings requested') +
+      statCard(favouritesCountRes.count ?? '—', 'Favourites saved') +
+      statCard(newThisWeek, 'New this week');
+
+    // ---- Affordability distribution (from every tenant's viewing scores) ----
+    const allScores = tenants.flatMap(t => (t.viewings || []).map(v => v.affordability_score)).filter(s => s !== null && s !== undefined);
+    if (allScores.length > 0) {
+      const low = allScores.filter(s => s < 40).length;
+      const medium = allScores.filter(s => s >= 40 && s < 70).length;
+      const high = allScores.filter(s => s >= 70).length;
+      const max = Math.max(low, medium, high, 1);
+      document.getElementById('distCard').style.display = 'block';
+      document.getElementById('distBody').innerHTML = [
+        ['Low (<40%)', low, 'low'],
+        ['Medium (40–69%)', medium, 'medium'],
+        ['High (70%+)', high, 'high']
+      ].map(([label, count, cls]) =>
+        '<div class="dist-row"><span class="dist-label">' + label + '</span>' +
+        '<div class="dist-track"><div class="dist-fill ' + cls + '" style="width:' + Math.max(4, Math.round((count / max) * 100)) + '%"></div></div>' +
+        '<span class="dist-val">' + count + '</span></div>'
+      ).join('');
+    }
+
+    // ---- Agents table ----
     const agentsBody = document.getElementById('agentsBody');
-    if (agentsError) {
-      agentsBody.innerHTML = '<tr><td colspan="3">Could not load agents: ' + agentsError.message + '</td></tr>';
-    } else if (!agents || agents.length === 0) {
-      agentsBody.innerHTML = '<tr><td colspan="3">No agents registered yet.</td></tr>';
+    if (agentsRes.error) {
+      agentsBody.innerHTML = '<tr><td colspan="4">Could not load agents: ' + agentsRes.error.message + '</td></tr>';
+    } else if (agents.length === 0) {
+      agentsBody.innerHTML = '<tr><td colspan="4">No agents registered yet.</td></tr>';
     } else {
       agentsBody.innerHTML = agents.map(a => {
         const site = a.website_url || '';
         const siteCell = site ? '<a class="site-link" href="' + site + '" target="_blank" rel="noopener">' + site.replace(/^https?:\/\//, '') + '</a>' : '—';
-        return '<tr><td>' + a.name + (a.agency_name ? ' · ' + a.agency_name : '') + '</td>' +
-          '<td>' + a.email + '<br><span style="color:#6b6b6b">' + (a.phone || '—') + '</span></td>' +
-          '<td>' + siteCell + '</td></tr>';
+        return '<tr>' +
+          '<td data-label="Name">' + a.name + (a.agency_name ? ' · ' + a.agency_name : '') + '</td>' +
+          '<td data-label="Contact">' + a.email + '<br><span style="color:#6b6b6b">' + (a.phone || '—') + '</span></td>' +
+          '<td data-label="Website">' + siteCell + '</td>' +
+          '<td data-label="IP address">' + ipCell(a.ip_address, a.ip_location) + '</td>' +
+          '</tr>';
       }).join('');
     }
 
+    // ---- Tenants table ----
     const tenantsBody = document.getElementById('tenantsBody');
-    if (tenantsError) {
-      tenantsBody.innerHTML = '<tr><td colspan="5">Could not load tenants: ' + tenantsError.message + '</td></tr>';
-    } else if (!tenants || tenants.length === 0) {
+    if (tenantsRes.error) {
+      tenantsBody.innerHTML = '<tr><td colspan="5">Could not load tenants: ' + tenantsRes.error.message + '</td></tr>';
+    } else if (tenants.length === 0) {
       tenantsBody.innerHTML = '<tr><td colspan="5">No tenants registered yet.</td></tr>';
     } else {
       tenantsBody.innerHTML = tenants.map(t => {
@@ -156,11 +261,13 @@ a.site-link{color:#0F3D5C}
           ? '<span style="color:#9a9a9a">No viewings requested</span>'
           : '<div class="addr-list">' + viewings.map(v => '<span class="addr-pill">' + (v.properties ? v.properties.address : 'Unknown address') + '</span>').join('') + '</div>';
         const rainbowCell = viewings.length === 0 ? '—' : viewings.map(v => renderRainbow(v.affordability_score)).join('');
-        return '<tr><td>' + t.name + '</td>' +
-          '<td>' + t.email + '<br><span style="color:#6b6b6b">' + (t.phone || '—') + '</span></td>' +
-          '<td>' + (t.ip_location || '—') + '</td>' +
-          '<td>' + addrCell + '</td>' +
-          '<td>' + rainbowCell + '</td></tr>';
+        return '<tr>' +
+          '<td data-label="Name">' + t.name + '</td>' +
+          '<td data-label="Email / phone">' + t.email + '<br><span style="color:#6b6b6b">' + (t.phone || '—') + '</span></td>' +
+          '<td data-label="IP address">' + ipCell(t.ip_address, t.ip_location) + '</td>' +
+          '<td data-label="Requested viewings">' + addrCell + '</td>' +
+          '<td data-label="Affordability">' + rainbowCell + '</td>' +
+          '</tr>';
       }).join('');
     }
   }
