@@ -14,14 +14,29 @@
   --trust-blue-deep:#0F3D5C; --trust-blue-tint:#DCEBF3; --brass:#b98a3f;
 }
 *{box-sizing:border-box}
-body{font-family:'Inter',system-ui,sans-serif;margin:0;background:#faf9f6;color:var(--black)}
+body{font-family:'Inter',system-ui,sans-serif;margin:0;background:#ffffff;color:var(--black)}
 h1,h2{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;margin:0}
 p{color:var(--muted);line-height:1.5;margin:4px 0 0}
-nav{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:var(--trust-blue-deep);color:#fff}
-.logo{display:flex;align-items:center;gap:10px;font-weight:600;color:#fff;text-decoration:none}
-.nav-right a{color:#fff;font-size:13px;text-decoration:none;margin-left:18px;opacity:0.9;cursor:pointer}
-main{max-width:920px;margin:0 auto;padding:36px 20px 80px}
-.loading-note{background:var(--trust-blue-tint);border:1px solid #c4dced;color:var(--trust-blue-deep);padding:10px 14px;border-radius:8px;font-size:12.5px;margin-bottom:28px}
+nav{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:14px 20px;background:var(--trust-blue-deep);color:#fff}
+.logo{display:flex;align-items:center;gap:10px;font-weight:600;color:#fff;text-decoration:none;font-size:15px}
+.nav-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.nav-right a,.nav-right span{color:#fff;font-size:12.5px;text-decoration:none;margin-left:14px;opacity:0.9;cursor:pointer}
+main{max-width:960px;margin:0 auto;padding:24px 16px 70px}
+@media (max-width:480px){
+  nav{padding:12px 14px}
+  .logo{font-size:14px}
+  main{padding:18px 14px 60px}
+  .fav-card{flex-direction:column;align-items:flex-start;gap:10px}
+  .fav-card button{align-self:flex-end}
+}
+.loading-note{background:#f5f5f7;border:1px solid var(--line);color:#444;padding:10px 14px;border-radius:8px;font-size:12.5px;margin-bottom:24px}
+
+/* ---- Stat cards ---- */
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px 0 26px}
+.stat-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 14px;text-align:center}
+.stat-card .num{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;font-size:26px;color:var(--trust-blue-deep);line-height:1}
+.stat-card .lbl{font-size:10.5px;letter-spacing:0.04em;text-transform:uppercase;color:var(--muted);margin-top:5px}
+
 .grid{display:grid;grid-template-columns:280px 1fr;gap:24px;align-items:start}
 @media (max-width:760px){ .grid{grid-template-columns:1fr} }
 .card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px}
@@ -29,13 +44,29 @@ main{max-width:920px;margin:0 auto;padding:36px 20px 80px}
 .contact-row:last-child{border-bottom:0}
 .contact-row .k{color:var(--muted)}
 .contact-row .v{font-weight:600;text-align:right}
-.fav-list{display:flex;flex-direction:column;gap:12px}
-.fav-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:14px}
+
+section.block{margin-bottom:30px}
+section.block h2{font-size:17px;margin-bottom:12px}
+
+.fav-list,.viewings-list{display:flex;flex-direction:column;gap:12px}
+.fav-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:14px}
+.fav-icon{flex:0 0 40px;width:40px;height:40px;border-radius:8px;background:var(--trust-blue-tint);display:flex;align-items:center;justify-content:center;color:var(--trust-blue-deep)}
+.fav-main{flex:1;min-width:0}
 .fav-card .addr{font-weight:600;font-size:14px}
 .fav-card .rent{font-size:12.5px;color:var(--muted);margin-top:2px}
-.fav-card button{background:none;border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:12px;color:var(--muted);cursor:pointer}
+.fav-card button{background:none;border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:12px;color:var(--muted);cursor:pointer;flex:0 0 auto}
 .fav-card button:hover{border-color:#c0392b;color:#c0392b}
-.empty-card{background:#fff;border:1px dashed var(--line);border-radius:10px;padding:28px;text-align:center;color:var(--muted);font-size:13.5px}
+
+.viewing-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.viewing-card .addr{font-weight:600;font-size:14px}
+.viewing-card .when{font-size:12.5px;color:var(--brass);margin-top:3px}
+.rainbow-row{display:flex;align-items:center;gap:8px;margin-top:8px}
+.rainbow-bar{position:relative;flex:1;height:8px;border-radius:999px;background:linear-gradient(90deg,#d9453d 0%,#e0a62e 35%,#4caf6b 65%,#2f6b4f 100%);max-width:220px}
+.rainbow-bar.unknown{background:#e2e2e2}
+.rainbow-marker{position:absolute;top:-3px;width:3px;height:14px;background:#111;border-radius:2px;transform:translateX(-50%)}
+.rainbow-lbl{font-size:11px;color:var(--muted)}
+
+.empty-card{background:#fff;border:1px dashed var(--line);border-radius:10px;padding:24px;text-align:center;color:var(--muted);font-size:13.5px}
 </style>
 </head>
 <body>
@@ -49,11 +80,13 @@ main{max-width:920px;margin:0 auto;padding:36px 20px 80px}
 
 <main>
   <h1>Your account</h1>
-  <p>Your contact details and the homes you've saved.</p>
+  <p>Your contact details, saved homes, and the viewings you've requested.</p>
 
   <div class="loading-note" id="loadingNote">Loading your account…</div>
 
-  <div class="grid" id="contentGrid" style="display:none">
+  <div id="statsGrid" class="stats-grid" style="display:none"></div>
+
+  <div id="contentGrid" class="grid" style="display:none">
     <div class="card">
       <h2 style="font-size:17px;margin-bottom:12px">Contact details</h2>
       <div class="contact-row"><span class="k">Name</span><span class="v" id="profName"></span></div>
@@ -62,8 +95,15 @@ main{max-width:920px;margin:0 auto;padding:36px 20px 80px}
     </div>
 
     <div>
-      <h2 style="font-size:17px;margin-bottom:12px">Favourite homes</h2>
-      <div class="fav-list" id="favList"></div>
+      <section class="block">
+        <h2>Favourite homes</h2>
+        <div class="fav-list" id="favList"></div>
+      </section>
+
+      <section class="block">
+        <h2>Your requested viewings</h2>
+        <div class="viewings-list" id="viewingsList"></div>
+      </section>
     </div>
   </div>
 </main>
@@ -76,11 +116,29 @@ main{max-width:920px;margin:0 auto;padding:36px 20px 80px}
   const loadingNote = document.getElementById('loadingNote');
   const contentGrid = document.getElementById('contentGrid');
   const favList = document.getElementById('favList');
+  const viewingsList = document.getElementById('viewingsList');
 
   document.getElementById('signOutLink').addEventListener('click', async function () {
     await supabase.auth.signOut();
     window.location.href = 'tenant-login.html';
   });
+
+  function statCard(num, label) {
+    return '<div class="stat-card"><div class="num">' + num + '</div><div class="lbl">' + label + '</div></div>';
+  }
+
+  function houseIconSvg() {
+    return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+      '<path d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z" stroke="currentColor" stroke-width="1.5"/></svg>';
+  }
+
+  function renderRainbow(score) {
+    if (score === null || score === undefined) {
+      return '<div class="rainbow-row"><div class="rainbow-bar unknown"></div><span class="rainbow-lbl">not available</span></div>';
+    }
+    return '<div class="rainbow-row"><div class="rainbow-bar"><div class="rainbow-marker" style="left:' + score + '%"></div></div>' +
+      '<span class="rainbow-lbl">' + score + '% affordability match</span></div>';
+  }
 
   async function removeFavourite(tenantId, propertyId, cardEl) {
     await supabase.from('favourites').delete().eq('tenant_id', tenantId).eq('property_id', propertyId);
@@ -105,38 +163,60 @@ main{max-width:920px;margin:0 auto;padding:36px 20px 80px}
     document.getElementById('profEmail').textContent = profile ? profile.email : session.user.email;
     document.getElementById('profPhone').textContent = profile ? profile.phone : '—';
 
-    const { data: favourites, error } = await supabase
-      .from('favourites')
-      .select('property_id, properties(address, rent_pcm)')
-      .eq('tenant_id', session.user.id);
+    const [favouritesRes, viewingsRes] = await Promise.all([
+      supabase.from('favourites').select('property_id, properties(address, rent_pcm)').eq('tenant_id', session.user.id),
+      supabase.from('viewings').select('requested_at, affordability_score, properties(address)').eq('tenant_id', session.user.id).order('requested_at', { ascending: false })
+    ]);
 
     loadingNote.remove();
     contentGrid.style.display = 'grid';
+    document.getElementById('statsGrid').style.display = 'grid';
 
-    if (error) {
-      favList.innerHTML = '<div class="empty-card">Could not load favourites: ' + error.message + '</div>';
-      return;
-    }
+    const favourites = favouritesRes.data || [];
+    const viewings = viewingsRes.data || [];
 
-    if (!favourites || favourites.length === 0) {
+    document.getElementById('statsGrid').innerHTML =
+      statCard(favourites.length, 'Favourites saved') +
+      statCard(viewings.length, 'Viewings requested');
+
+    // ---- Favourites ----
+    if (favouritesRes.error) {
+      favList.innerHTML = '<div class="empty-card">Could not load favourites: ' + favouritesRes.error.message + '</div>';
+    } else if (favourites.length === 0) {
       favList.innerHTML = '<div class="empty-card">No favourite homes saved yet. ' +
         'Once the main site\'s "save to favourites" button is wired up, they\'ll appear here automatically.</div>';
-      return;
+    } else {
+      favourites.forEach(f => {
+        const row = document.createElement('div');
+        row.className = 'fav-card';
+        const rent = f.properties && f.properties.rent_pcm ? '£' + f.properties.rent_pcm + ' pcm' : '';
+        row.innerHTML =
+          '<div class="fav-icon">' + houseIconSvg() + '</div>' +
+          '<div class="fav-main"><div class="addr">' + (f.properties ? f.properties.address : 'Unknown address') + '</div>' +
+          '<div class="rent">' + rent + '</div></div>' +
+          '<button type="button">Remove</button>';
+        row.querySelector('button').addEventListener('click', function () {
+          removeFavourite(session.user.id, f.property_id, row);
+        });
+        favList.appendChild(row);
+      });
     }
 
-    favourites.forEach(f => {
-      const row = document.createElement('div');
-      row.className = 'fav-card';
-      const rent = f.properties && f.properties.rent_pcm ? '£' + f.properties.rent_pcm + ' pcm' : '';
-      row.innerHTML =
-        '<div><div class="addr">' + (f.properties ? f.properties.address : 'Unknown address') + '</div>' +
-        '<div class="rent">' + rent + '</div></div>' +
-        '<button type="button">Remove</button>';
-      row.querySelector('button').addEventListener('click', function () {
-        removeFavourite(session.user.id, f.property_id, row);
-      });
-      favList.appendChild(row);
-    });
+    // ---- Your requested viewings ----
+    if (viewingsRes.error) {
+      viewingsList.innerHTML = '<div class="empty-card">Could not load viewings: ' + viewingsRes.error.message + '</div>';
+    } else if (viewings.length === 0) {
+      viewingsList.innerHTML = '<div class="empty-card">No viewings requested yet.</div>';
+    } else {
+      viewingsList.innerHTML = viewings.map(v => {
+        const when = new Date(v.requested_at).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' });
+        return '<div class="viewing-card">' +
+          '<div class="addr">' + (v.properties ? v.properties.address : 'Unknown address') + '</div>' +
+          '<div class="when">' + when + '</div>' +
+          renderRainbow(v.affordability_score) +
+          '</div>';
+      }).join('');
+    }
   }
 
   init();
