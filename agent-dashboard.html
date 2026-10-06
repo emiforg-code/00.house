@@ -14,16 +14,41 @@
   --racing:#1f4632; --racing-green-tint:#E1EFE6; --brass:#b98a3f;
 }
 *{box-sizing:border-box}
-body{font-family:'Inter',system-ui,sans-serif;margin:0;background:#faf9f6;color:var(--black)}
+body{font-family:'Inter',system-ui,sans-serif;margin:0;background:#ffffff;color:var(--black)}
 h1,h2{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;margin:0}
 p{color:var(--muted);line-height:1.5;margin:4px 0 0}
-nav{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:var(--racing);color:#fff}
-.logo{display:flex;align-items:center;gap:10px;font-weight:600;color:#fff;text-decoration:none}
-.nav-right a{color:#fff;font-size:13px;text-decoration:none;margin-left:18px;opacity:0.9;cursor:pointer}
-main{max-width:920px;margin:0 auto;padding:36px 20px 80px}
-.loading-note{background:var(--racing-green-tint);border:1px solid #cfe3d6;color:#1f4632;padding:10px 14px;border-radius:8px;font-size:12.5px;margin-bottom:24px}
+nav{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:14px 20px;background:var(--racing);color:#fff}
+.logo{display:flex;align-items:center;gap:10px;font-weight:600;color:#fff;text-decoration:none;font-size:15px}
+.nav-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.nav-right a,.nav-right span{color:#fff;font-size:12.5px;text-decoration:none;margin-left:14px;opacity:0.9;cursor:pointer}
+main{max-width:920px;margin:0 auto;padding:24px 16px 70px}
+@media (max-width:480px){
+  nav{padding:12px 14px}
+  .logo{font-size:14px}
+  main{padding:18px 14px 60px}
+  summary{padding:14px 12px}
+}
+.loading-note{background:#f5f5f7;border:1px solid var(--line);color:#444;padding:10px 14px;border-radius:8px;font-size:12.5px;margin-bottom:24px}
 .empty-card{background:#fff;border:1px dashed var(--line);border-radius:10px;padding:28px;text-align:center;color:var(--muted);font-size:13.5px}
-.list{display:flex;flex-direction:column;gap:12px;margin-top:24px}
+
+/* ---- Stat cards ---- */
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0 6px}
+.stat-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 14px;text-align:center}
+.stat-card .num{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;font-size:26px;color:var(--racing);line-height:1}
+.stat-card .lbl{font-size:10.5px;letter-spacing:0.04em;text-transform:uppercase;color:var(--muted);margin-top:5px}
+@media (max-width:480px){ .stat-card .num{font-size:22px} }
+
+/* ---- Mini bar chart: viewings per property ---- */
+.chart-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:18px 0 28px}
+.chart-card h2{font-size:15px;margin-bottom:14px}
+.chart-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:12.5px}
+.chart-row:last-child{margin-bottom:0}
+.chart-label{flex:0 0 46%;max-width:46%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#333}
+.chart-track{flex:1;height:10px;background:var(--racing-green-tint);border-radius:999px;overflow:hidden}
+.chart-fill{height:100%;background:var(--racing);border-radius:999px;transition:width .4s ease}
+.chart-val{flex:0 0 22px;text-align:right;font-weight:600;color:var(--racing)}
+
+.list{display:flex;flex-direction:column;gap:12px;margin-top:8px}
 details{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
 summary{list-style:none;cursor:pointer;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;font-weight:600}
 summary::-webkit-details-marker{display:none}
@@ -56,6 +81,14 @@ details[open] summary .chev{transform:rotate(90deg)}
 
   <div class="loading-note" id="loadingNote">Loading your account…</div>
 
+  <div id="statsSection" style="display:none">
+    <div class="stats-grid" id="statsGrid"></div>
+    <div class="chart-card" id="chartCard" style="display:none">
+      <h2>Viewings by property</h2>
+      <div id="chartBody"></div>
+    </div>
+  </div>
+
   <div class="list" id="listingsList"></div>
 </main>
 
@@ -71,6 +104,10 @@ details[open] summary .chev{transform:rotate(90deg)}
     await supabase.auth.signOut();
     window.location.href = 'agent-login.html';
   });
+
+  function statCard(num, label) {
+    return '<div class="stat-card"><div class="num">' + num + '</div><div class="lbl">' + label + '</div></div>';
+  }
 
   async function init() {
     const { data: { session } } = await supabase.auth.getSession();
@@ -90,7 +127,7 @@ details[open] summary .chev{transform:rotate(90deg)}
 
     const { data: properties, error } = await supabase
       .from('properties')
-      .select('id, address, viewings(tenant_name, tenant_phone, requested_at)')
+      .select('id, address, created_at, viewings(tenant_name, tenant_phone, requested_at)')
       .eq('agent_id', session.user.id)
       .order('created_at', { ascending: false });
 
@@ -109,6 +146,36 @@ details[open] summary .chev{transform:rotate(90deg)}
       return;
     }
 
+    // ---- Stats + mini chart ----
+    const totalViewings = properties.reduce((sum, p) => sum + (p.viewings || []).length, 0);
+    const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    const viewingsThisWeek = properties.reduce((sum, p) =>
+      sum + (p.viewings || []).filter(v => new Date(v.requested_at).getTime() >= weekAgo).length, 0);
+
+    document.getElementById('statsSection').style.display = 'block';
+    document.getElementById('statsGrid').innerHTML =
+      statCard(properties.length, 'Listings') +
+      statCard(totalViewings, 'Viewings requested') +
+      statCard(viewingsThisWeek, 'Requested this week');
+
+    const withViewings = properties.filter(p => (p.viewings || []).length > 0);
+    if (withViewings.length > 0) {
+      const maxCount = Math.max(...withViewings.map(p => p.viewings.length));
+      document.getElementById('chartCard').style.display = 'block';
+      document.getElementById('chartBody').innerHTML = withViewings
+        .slice().sort((a, b) => b.viewings.length - a.viewings.length)
+        .map(p => {
+          const n = p.viewings.length;
+          const pct = Math.max(8, Math.round((n / maxCount) * 100));
+          return '<div class="chart-row">' +
+            '<span class="chart-label" title="' + p.address + '">' + p.address + '</span>' +
+            '<div class="chart-track"><div class="chart-fill" style="width:' + pct + '%"></div></div>' +
+            '<span class="chart-val">' + n + '</span>' +
+            '</div>';
+        }).join('');
+    }
+
+    // ---- Expandable listing cards ----
     properties.forEach(p => {
       const count = (p.viewings || []).length;
       const details = document.createElement('details');
