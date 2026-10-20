@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Admin sign in | 00.house</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --bg: #f5f2ee;
+      --panel: #ffffff;
+      --panel-alt: #f9f6f2;
+      --line: #e8e0d8;
+      --ink: #1d262c;
+      --muted: #5d6974;
+      --navy: #0f3d5c;
+      --navy-soft: #e6f0f7;
+      --rose: #c57b83;
+      --rose-soft: #f9eef0;
+      --green: #2f6b57;
+      --green-soft: #ebf7f0;
+      --danger: #b63b41;
+      --danger-soft: #fdecef;
+      --shadow: 0 20px 44px rgba(24, 30, 35, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f7f2ee, #eef4f7);
+      font-family: 'Inter', system-ui, sans-serif;
+      color: var(--ink);
+    }
+
+    .card {
+      width: min(440px, calc(100vw - 24px));
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 28px 24px 22px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--navy-soft);
+      color: var(--navy);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: clamp(32px, 4vw, 40px);
+      line-height: 1.1;
+    }
+
+    p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--ink);
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px 13px;
+      font: inherit;
+      background: #fff;
+      color: var(--ink);
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--navy);
+      box-shadow: 0 0 0 3px rgba(15, 61, 92, 0.08);
+    }
+
+    .primary {
+      margin-top: 8px;
+      width: 100%;
+      border: 0;
+      cursor: pointer;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font: 600 14px 'Inter', sans-serif;
+      background: linear-gradient(135deg, var(--navy), #1d5379);
+      color: #fff;
+      box-shadow: 0 12px 22px rgba(15, 61, 92, 0.18);
+    }
+
+    .primary:disabled {
+      opacity: 0.7;
+      cursor: default;
+    }
+
+    .help {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    .help a {
+      color: var(--navy);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .message {
+      display: none;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 12.5px;
+      margin-top: 8px;
+    }
+
+    .message.error {
+      display: block;
+      background: var(--danger-soft);
+      color: var(--danger);
+      border: 1px solid #f2c7cd;
+    }
+
+    .message.ok {
+      display: block;
+      background: var(--green-soft);
+      color: var(--green);
+      border: 1px solid #cfe7dc;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="badge">Internal access</div>
+    <h1>Admin sign in</h1>
+    <p>Use your Supabase-authenticated admin account. Only users in the <strong>admins</strong> table can access this dashboard.</p>
+
+    <div id="message" class="message"></div>
+
+    <form id="authForm">
+      <div>
+        <label for="email">Email</label>
+        <input id="email" type="email" required autocomplete="email" placeholder="admin@00.house" />
+      </div>
+
+      <div>
+        <label for="password">Password</label>
+        <input id="password" type="password" required autocomplete="current-password" placeholder="••••••••" />
+      </div>
+
+      <button class="primary" type="submit" id="submitBtn">Sign in to admin panel</button>
+    </form>
+
+    <div class="help">
+      Need an admin user? Create a Supabase Auth user, then insert that user into the <strong>admins</strong> table with the same UUID and email.
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://eyyaemqygddtxbbmbqhl.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_A_aCzMwxAPY_UX7M5cOTRg_oZGKAUVG';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const form = document.getElementById('authForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const messageEl = document.getElementById('message');
+
+    function showMessage(text, kind) {
+      messageEl.textContent = text;
+      messageEl.className = 'message ' + kind;
+    }
+
+    if (new URLSearchParams(window.location.search).get('denied')) {
+      showMessage('That account is not authorised as an admin.', 'error');
+    }
+
+    form.addEventListener('submit', async function (event) {
+      event.preventDefault();
+      submitBtn.disabled = true;
+      showMessage('', '');
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) {
+          showMessage(error.message, 'error');
+          return;
+        }
+
+        const { data: adminRow, error: adminError } = await supabase
+          .from('admins')
+          .select('id, email')
+          .eq('id', data.user.id)
+          .maybeSingle();
+
+        if (adminError) {
+          await supabase.auth.signOut();
+          showMessage('Could not verify admin access: ' + adminError.message, 'error');
+          return;
+        }
+
+        if (!adminRow) {
+          await supabase.auth.signOut();
+          showMessage('That account does not exist in the admins table.', 'error');
+          return;
+        }
+
+        window.location.href = 'admin.html';
+      } catch (err) {
+        showMessage(err.message || 'Something went wrong.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
