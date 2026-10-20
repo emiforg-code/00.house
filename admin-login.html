@@ -184,8 +184,14 @@
     </form>
 
     <div class="help">
+   </form>
+
+    <div class="help">
+      <button type="button" id="forgotPassword">Forgot password?</button>
+      <br><br>
       Need an admin user? Create a Supabase Auth user, then insert that user into the <strong>admins</strong> table with the same UUID and email.
-    </div>
+
+    </div>   </div>
   </div>
 
   <script>
@@ -201,7 +207,24 @@
       messageEl.textContent = text;
       messageEl.className = 'message ' + kind;
     }
+document.getElementById('forgotPassword').addEventListener('click', async () => {
+  const email = document.getElementById('email').value.trim();
 
+  if (!email) {
+    showMessage('Enter your email address first.', 'error');
+    return;
+  }
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://00.house/update-password.html'
+  });
+
+  if (error) {
+    showMessage(error.message, 'error');
+  } else {
+    showMessage('Check your email for a password reset link.', 'ok');
+  }
+});
     if (new URLSearchParams(window.location.search).get('denied')) {
       showMessage('That account is not authorised as an admin.', 'error');
     }
@@ -247,5 +270,9 @@
       }
     });
   </script>
+</form>
+
+
+
 </body>
 </html>
