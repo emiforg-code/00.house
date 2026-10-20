@@ -5,21 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex, nofollow" />
   <title>Admin sign in | 00.house</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     :root {
       --bg: #f5f2ee;
       --panel: #ffffff;
-      --panel-alt: #f9f6f2;
       --line: #e8e0d8;
       --ink: #1d262c;
       --muted: #5d6974;
       --navy: #0f3d5c;
       --navy-soft: #e6f0f7;
-      --rose: #c57b83;
-      --rose-soft: #f9eef0;
       --green: #2f6b57;
       --green-soft: #ebf7f0;
       --danger: #b63b41;
@@ -197,7 +196,12 @@
   <script>
     const SUPABASE_URL = 'https://eyyaemqygddtxbbmbqhl.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_A_aCzMwxAPY_UX7M5cOTRg_oZGKAUVG';
-    const REDIRECT_URL = 'https://00.house/update-password.html';
+
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const REDIRECT_URL = isLocal
+      ? `${window.location.origin}/update-password.html`
+      : 'https://00.house/update-password.html';
+
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const form = document.getElementById('authForm');
@@ -228,7 +232,6 @@
 
       forgotPasswordBtn.disabled = true;
       forgotPasswordBtn.textContent = 'Sending...';
-      showMessage('', '');
 
       try {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -240,9 +243,12 @@
           return;
         }
 
-        showMessage('Password reset email sent. Please check your inbox and follow the link to choose a new password.', 'ok');
-      } catch (error) {
-        showMessage(error.message || 'Unable to send password reset email.', 'error');
+        showMessage(
+          'Password reset email sent. Please check your inbox and follow the link to choose a new password.',
+          'ok'
+        );
+      } catch (err) {
+        showMessage(err.message || 'Unable to send password reset email.', 'error');
       } finally {
         forgotPasswordBtn.disabled = false;
         forgotPasswordBtn.textContent = 'Forgot password?';
@@ -251,6 +257,7 @@
 
     form.addEventListener('submit', async function (event) {
       event.preventDefault();
+
       submitBtn.disabled = true;
       showMessage('', '');
 
