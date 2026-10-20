@@ -1,73 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="robots" content="noindex" />
-<title>Tenant dashboard | 00.house</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-:root{
-  --black:#0a0a0a; --muted:#6b6b6b; --white:#fff; --line:rgba(0,0,0,0.08);
-  --trust-blue-deep:#0F3D5C; --trust-blue-tint:#DCEBF3; --brass:#b98a3f;
-}
-*{box-sizing:border-box}
-body{font-family:'Inter',system-ui,sans-serif;margin:0;background:#ffffff;color:var(--black)}
-h1,h2{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;margin:0}
-p{color:var(--muted);line-height:1.5;margin:4px 0 0}
-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:14px 20px;background:var(--trust-blue-deep);color:#fff}
-.logo{display:flex;align-items:center;gap:10px;font-weight:600;color:#fff;text-decoration:none;font-size:15px}
-.nav-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.nav-right a,.nav-right span{color:#fff;font-size:12.5px;text-decoration:none;margin-left:14px;opacity:0.9;cursor:pointer}
-main{max-width:960px;margin:0 auto;padding:24px 16px 70px}
-@media (max-width:480px){
-  nav{padding:12px 14px}
-  .logo{font-size:14px}
-  main{padding:18px 14px 60px}
-  .fav-card{flex-direction:column;align-items:flex-start;gap:10px}
-  .fav-card button{align-self:flex-end}
-}
-.loading-note{background:#f5f5f7;border:1px solid var(--line);color:#444;padding:10px 14px;border-radius:8px;font-size:12.5px;margin-bottom:24px}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Tenant dashboard | 00.house</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root{
+      --bg:#f5f2ee;
+      --panel:#ffffff;
+      --panel-alt:#f8f5f1;
+      --line:#e6dfd7;
+      --ink:#1d262c;
+      --muted:#596970;
+      --navy:#0f3d5c;
+      --navy-soft:#e7f0f6;
+      --sage:#396d62;
+      --sage-soft:#ebf6f1;
+      --rose:#c57b83;
+      --rose-soft:#f9eef0;
+      --gold:#d6873b;
+      --gold-soft:#fff3df;
+      --danger:#b63b41;
+      --danger-soft:#fdecee;
+      --shadow:0 16px 36px rgba(24, 30, 35, 0.08);
+    }
+    *{box-sizing:border-box}
+    body{font-family:'Inter',system-ui,sans-serif;margin:0;background:var(--bg);color:var(--ink)}
+    h1,h2,h3{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;margin:0}
+    p{color:var(--muted);line-height:1.5;margin:4px 0 0}
+    a{color:inherit}
+    nav{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:14px 20px;background:linear-gradient(135deg, var(--navy), #1a4d68);color:#fff;box-shadow:0 8px 18px rgba(15,61,92,0.12)}
+    .logo{display:flex;align-items:center;gap:10px;font-weight:600;color:#fff;text-decoration:none;font-size:15px}
+    .nav-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+    .nav-right a,.nav-right span{color:#fff;font-size:12.5px;text-decoration:none;margin-left:14px;opacity:0.9;cursor:pointer}
+    main{max-width:1100px;margin:0 auto;padding:24px 16px 70px}
+    @media (max-width:480px){
+      nav{padding:12px 14px}
+      .logo{font-size:14px}
+      main{padding:18px 14px 60px}
+      .fav-card{flex-direction:column;align-items:flex-start;gap:10px}
+      .fav-card button{align-self:flex-end}
+    }
 
-/* ---- Stat cards ---- */
-.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px 0 26px}
-.stat-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 14px;text-align:center}
-.stat-card .num{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;font-size:26px;color:var(--trust-blue-deep);line-height:1}
-.stat-card .lbl{font-size:10.5px;letter-spacing:0.04em;text-transform:uppercase;color:var(--muted);margin-top:5px}
+    .loading-note{background:#fff;border:1px solid var(--line);color:#444;padding:10px 14px;border-radius:10px;font-size:12.5px;margin-bottom:24px;box-shadow:var(--shadow)}
 
-.grid{display:grid;grid-template-columns:280px 1fr;gap:24px;align-items:start}
-@media (max-width:760px){ .grid{grid-template-columns:1fr} }
-.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px}
-.contact-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
-.contact-row:last-child{border-bottom:0}
-.contact-row .k{color:var(--muted)}
-.contact-row .v{font-weight:600;text-align:right}
+    .stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:20px 0 26px}
+    .stat-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 14px;text-align:center;box-shadow:var(--shadow)}
+    .stat-card .num{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;font-size:26px;color:var(--navy);line-height:1}
+    .stat-card .lbl{font-size:10.5px;letter-spacing:0.04em;text-transform:uppercase;color:var(--muted);margin-top:6px}
 
-section.block{margin-bottom:30px}
-section.block h2{font-size:17px;margin-bottom:12px}
+    .grid{display:grid;grid-template-columns:360px 1fr;gap:24px;align-items:start}
+    @media (max-width:760px){ .grid{grid-template-columns:1fr} }
 
-.fav-list,.viewings-list{display:flex;flex-direction:column;gap:12px}
-.fav-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:14px}
-.fav-icon{flex:0 0 40px;width:40px;height:40px;border-radius:8px;background:var(--trust-blue-tint);display:flex;align-items:center;justify-content:center;color:var(--trust-blue-deep)}
-.fav-main{flex:1;min-width:0}
-.fav-card .addr{font-weight:600;font-size:14px}
-.fav-card .rent{font-size:12.5px;color:var(--muted);margin-top:2px}
-.fav-card button{background:none;border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:12px;color:var(--muted);cursor:pointer;flex:0 0 auto}
-.fav-card button:hover{border-color:#c0392b;color:#c0392b}
+    .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px;box-shadow:var(--shadow)}
+    .profile-head{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+    .profile-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg, var(--navy-soft), var(--rose-soft));display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid var(--line)}
+    .profile-avatar img{width:100%;height:100%;object-fit:cover}
+    .profile-avatar .initials{font-size:22px;font-weight:700;color:var(--navy)}
+    .profile-meta strong{display:block;font-size:16px}
+    .profile-meta span{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em}
 
-.viewing-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px}
-.viewing-card .addr{font-weight:600;font-size:14px}
-.viewing-card .when{font-size:12.5px;color:var(--brass);margin-top:3px}
-.rainbow-row{display:flex;align-items:center;gap:8px;margin-top:8px}
-.rainbow-bar{position:relative;flex:1;height:8px;border-radius:999px;background:linear-gradient(90deg,#d9453d 0%,#e0a62e 35%,#4caf6b 65%,#2f6b4f 100%);max-width:220px}
-.rainbow-bar.unknown{background:#e2e2e2}
-.rainbow-marker{position:absolute;top:-3px;width:3px;height:14px;background:#111;border-radius:2px;transform:translateX(-50%)}
-.rainbow-lbl{font-size:11px;color:var(--muted)}
+    .contact-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
+    .contact-row:last-child{border-bottom:0}
+    .contact-row .k{color:var(--muted)}
+    .contact-row .v{font-weight:600;text-align:right;max-width:60%}
 
-.empty-card{background:#fff;border:1px dashed var(--line);border-radius:10px;padding:24px;text-align:center;color:var(--muted);font-size:13.5px}
-</style>
+    .section-card{margin-bottom:26px}
+    .section-card h2{font-size:17px;margin-bottom:12px}
+
+    .small-note{font-size:12px;color:var(--muted);margin-top:8px}
+    .editor-wrap{display:flex;flex-direction:column;gap:14px}
+    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:560px){ .field-row{grid-template-columns:1fr} }
+    label{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:6px}
+    input,textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:9px;font:inherit;background:#fff;color:var(--ink)}
+    input:focus,textarea:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(15,61,92,0.08)}
+    textarea{resize:vertical;min-height:90px}
+    input[readonly]{background:#f7f7f6;color:var(--muted)}
+    .file-box{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+    .file-box input[type="file"]{padding:8px;border-style:dashed;background:#faf8f6}
+    .save-btn{display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg, var(--navy), #1d5578);color:#fff;border:0;padding:12px 16px;border-radius:10px;font-weight:600;font-size:13.5px;cursor:pointer;box-shadow:0 12px 22px rgba(15,61,92,0.18)}
+    .save-btn:hover{filter:brightness(1.03)}
+    .save-btn:disabled{opacity:0.7;cursor:default}
+
+    .form-success,.form-error{display:none;padding:10px 12px;border-radius:9px;font-size:12.5px;margin-top:8px}
+    .form-success.show{display:block;background:var(--sage-soft);color:var(--sage);border:1px solid #cfe7dc}
+    .form-error.show{display:block;background:var(--danger-soft);color:var(--danger);border:1px solid #f4c9cc}
+
+    .fav-list,.viewings-list{display:flex;flex-direction:column;gap:12px}
+    .fav-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:14px;box-shadow:var(--shadow)}
+    .fav-icon{flex:0 0 40px;width:40px;height:40px;border-radius:10px;background:var(--navy-soft);display:flex;align-items:center;justify-content:center;color:var(--navy)}
+    .fav-main{flex:1;min-width:0}
+    .fav-card .addr{font-weight:600;font-size:14px}
+    .fav-card .rent{font-size:12.5px;color:var(--muted);margin-top:2px}
+    .fav-card button{background:none;border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:12px;color:var(--muted);cursor:pointer;flex:0 0 auto}
+    .fav-card button:hover{border-color:#c0392b;color:#c0392b}
+
+    .viewing-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;box-shadow:var(--shadow)}
+    .viewing-card .addr{font-weight:600;font-size:14px}
+    .viewing-card .when{font-size:12.5px;color:var(--gold);margin-top:3px}
+    .rainbow-row{display:flex;align-items:center;gap:8px;margin-top:8px}
+    .rainbow-bar{position:relative;flex:1;height:8px;border-radius:999px;background:linear-gradient(90deg,#d9453d 0%,#e0a62e 35%,#4caf6b 65%,#2f6b4f 100%);max-width:220px}
+    .rainbow-bar.unknown{background:#e2e2e2}
+    .rainbow-marker{position:absolute;top:-3px;width:3px;height:14px;background:#111;border-radius:2px;transform:translateX(-50%)}
+    .rainbow-lbl{font-size:11px;color:var(--muted)}
+
+    .empty-card{background:#fff;border:1px dashed var(--line);border-radius:10px;padding:24px;text-align:center;color:var(--muted);font-size:13.5px}
+  </style>
 </head>
 <body>
 <nav>
@@ -88,19 +131,89 @@ section.block h2{font-size:17px;margin-bottom:12px}
 
   <div id="contentGrid" class="grid" style="display:none">
     <div class="card">
-      <h2 style="font-size:17px;margin-bottom:12px">Contact details</h2>
-      <div class="contact-row"><span class="k">Name</span><span class="v" id="profName"></span></div>
-      <div class="contact-row"><span class="k">Email</span><span class="v" id="profEmail"></span></div>
-      <div class="contact-row"><span class="k">Phone</span><span class="v" id="profPhone"></span></div>
+      <div class="profile-head">
+        <div class="profile-avatar" id="avatarWrap">
+          <img id="profileAvatar" alt="Profile photo" style="display:none" />
+          <div class="initials" id="avatarInitials">T</div>
+        </div>
+        <div class="profile-meta">
+          <strong id="profName">—</strong>
+          <span>Tenant profile</span>
+        </div>
+      </div>
+
+      <div class="contact-row"><span class="k">Name</span><span class="v" id="profNameInline">—</span></div>
+      <div class="contact-row"><span class="k">Email</span><span class="v" id="profEmail">—</span></div>
+      <div class="contact-row"><span class="k">Phone</span><span class="v" id="profPhone">—</span></div>
+      <div class="contact-row"><span class="k">Area</span><span class="v" id="profAreas">—</span></div>
     </div>
 
     <div>
-      <section class="block">
+      <section class="section-card">
+        <h2>Update your details</h2>
+        <div class="card editor-wrap">
+          <form id="profileForm">
+            <div class="field-row">
+              <div>
+                <label for="fullName">Full name</label>
+                <input id="fullName" name="fullName" type="text" />
+              </div>
+              <div>
+                <label for="emailField">Email</label>
+                <input id="emailField" name="emailField" type="email" readonly />
+              </div>
+            </div>
+
+            <div class="field-row" style="margin-top:14px;">
+              <div>
+                <label for="phoneField">Telephone number</label>
+                <input id="phoneField" name="phoneField" type="tel" placeholder="+44 20 7946 0958" />
+              </div>
+              <div>
+                <label for="companyNameField">Company / agency</label>
+                <input id="companyNameField" name="companyNameField" type="text" placeholder="e.g. Greenfield Living" />
+              </div>
+            </div>
+
+            <div style="margin-top:14px;">
+              <label for="areasField">Preferred areas / postcodes</label>
+              <input id="areasField" name="areasField" type="text" placeholder="e.g. London SW1, Greenwich, NW3" />
+            </div>
+
+            <div style="margin-top:14px;">
+              <label for="websiteField">Website / portfolio</label>
+              <input id="websiteField" name="websiteField" type="url" placeholder="https://yourportfolio.example" />
+            </div>
+
+            <div style="margin-top:14px;">
+              <label for="bioField">Bio</label>
+              <textarea id="bioField" name="bioField" placeholder="Tell agents or landlords a bit about you and what you are looking for."></textarea>
+            </div>
+
+            <div style="margin-top:14px;">
+              <label>Profile photo</label>
+              <div class="file-box">
+                <input id="photoInput" type="file" accept="image/*" />
+                <span class="small-note">PNG / JPG / WEBP up to 5MB</span>
+              </div>
+            </div>
+
+            <div style="margin-top:16px;">
+              <button class="save-btn" id="saveProfileBtn" type="submit">Save profile changes</button>
+            </div>
+
+            <div id="formSuccess" class="form-success">Profile updated successfully.</div>
+            <div id="formError" class="form-error">Unable to update your profile.</div>
+          </form>
+        </div>
+      </section>
+
+      <section class="section-card">
         <h2>Favourite homes</h2>
         <div class="fav-list" id="favList"></div>
       </section>
 
-      <section class="block">
+      <section class="section-card">
         <h2>Your requested viewings</h2>
         <div class="viewings-list" id="viewingsList"></div>
       </section>
@@ -117,11 +230,12 @@ section.block h2{font-size:17px;margin-bottom:12px}
   const contentGrid = document.getElementById('contentGrid');
   const favList = document.getElementById('favList');
   const viewingsList = document.getElementById('viewingsList');
+  const formSuccess = document.getElementById('formSuccess');
+  const formError = document.getElementById('formError');
 
-  document.getElementById('signOutLink').addEventListener('click', async function () {
-    await supabase.auth.signOut();
-    window.location.href = 'tenant-login.html';
-  });
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
 
   function statCard(num, label) {
     return '<div class="stat-card"><div class="num">' + num + '</div><div class="lbl">' + label + '</div></div>';
@@ -145,6 +259,26 @@ section.block h2{font-size:17px;margin-bottom:12px}
     cardEl.remove();
   }
 
+  async function uploadProfilePhoto(file) {
+    const session = (await supabase.auth.getSession()).data.session;
+    if (!session) throw new Error('No active session');
+
+    const safeName = (file.name || 'photo').replace(/[^a-zA-Z0-9._-]/g, '_');
+    const path = `tenant-uploads/${session.user.id}/${Date.now()}-${safeName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('tenant-uploads')
+      .upload(path, file, { upsert: true, contentType: file.type || 'image/jpeg' });
+
+    if (uploadError) throw uploadError;
+
+    const { data: publicUrlData } = supabase.storage
+      .from('tenant-uploads')
+      .getPublicUrl(path);
+
+    return publicUrlData?.publicUrl;
+  }
+
   async function init() {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
@@ -152,16 +286,58 @@ section.block h2{font-size:17px;margin-bottom:12px}
       return;
     }
 
-    const { data: profile } = await supabase
+    let { data: profile } = await supabase
       .from('tenants')
-      .select('name, email, phone')
+      .select('id, name, email, phone, photo_url, company_name, preferred_areas, website_url, bio, is_active, status')
       .eq('id', session.user.id)
       .maybeSingle();
 
-    document.getElementById('tenantNameLabel').textContent = profile ? profile.name : session.user.email;
+    if (!profile) {
+      const createPayload = {
+        id: session.user.id,
+        name: session.user.user_metadata?.full_name || session.user.email || 'Tenant',
+        email: session.user.email,
+        phone: '',
+        company_name: '',
+        preferred_areas: '',
+        website_url: '',
+        bio: '',
+        status: 'pending',
+        is_active: false,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+
+      const { data: created } = await supabase.from('tenants').insert(createPayload).select().single();
+      profile = created;
+    }
+
+    document.getElementById('tenantNameLabel').textContent = profile?.name || session.user.email;
     document.getElementById('profName').textContent = profile ? profile.name : '—';
+    document.getElementById('profNameInline').textContent = profile ? profile.name : '—';
     document.getElementById('profEmail').textContent = profile ? profile.email : session.user.email;
-    document.getElementById('profPhone').textContent = profile ? profile.phone : '—';
+    document.getElementById('profPhone').textContent = profile ? (profile.phone || '—') : '—';
+    document.getElementById('profAreas').textContent = profile && profile.preferred_areas ? profile.preferred_areas : '—';
+
+    document.getElementById('fullName').value = profile?.name || '';
+    document.getElementById('emailField').value = profile?.email || session.user.email;
+    document.getElementById('phoneField').value = profile?.phone || '';
+    document.getElementById('companyNameField').value = profile?.company_name || '';
+    document.getElementById('areasField').value = profile?.preferred_areas || '';
+    document.getElementById('websiteField').value = profile?.website_url || '';
+    document.getElementById('bioField').value = profile?.bio || '';
+
+    const avatarImage = document.getElementById('profileAvatar');
+    const initials = document.getElementById('avatarInitials');
+    if (profile?.photo_url) {
+      avatarImage.src = profile.photo_url;
+      avatarImage.style.display = 'block';
+      initials.style.display = 'none';
+    } else {
+      avatarImage.style.display = 'none';
+      initials.style.display = 'flex';
+      initials.textContent = (profile?.name || session.user.email || 'T').charAt(0).toUpperCase();
+    }
 
     const [favouritesRes, viewingsRes] = await Promise.all([
       supabase.from('favourites').select('property_id, properties(address, rent_pcm)').eq('tenant_id', session.user.id),
@@ -179,12 +355,10 @@ section.block h2{font-size:17px;margin-bottom:12px}
       statCard(favourites.length, 'Favourites saved') +
       statCard(viewings.length, 'Viewings requested');
 
-    // ---- Favourites ----
     if (favouritesRes.error) {
       favList.innerHTML = '<div class="empty-card">Could not load favourites: ' + favouritesRes.error.message + '</div>';
     } else if (favourites.length === 0) {
-      favList.innerHTML = '<div class="empty-card">No favourite homes saved yet. ' +
-        'Once the main site\'s "save to favourites" button is wired up, they\'ll appear here automatically.</div>';
+      favList.innerHTML = '<div class="empty-card">No favourite homes saved yet.</div>';
     } else {
       favourites.forEach(f => {
         const row = document.createElement('div');
@@ -192,8 +366,8 @@ section.block h2{font-size:17px;margin-bottom:12px}
         const rent = f.properties && f.properties.rent_pcm ? '£' + f.properties.rent_pcm + ' pcm' : '';
         row.innerHTML =
           '<div class="fav-icon">' + houseIconSvg() + '</div>' +
-          '<div class="fav-main"><div class="addr">' + (f.properties ? f.properties.address : 'Unknown address') + '</div>' +
-          '<div class="rent">' + rent + '</div></div>' +
+          '<div class="fav-main"><div class="addr">' + escapeHtml(f.properties ? f.properties.address : 'Unknown address') + '</div>' +
+          '<div class="rent">' + escapeHtml(rent) + '</div></div>' +
           '<button type="button">Remove</button>';
         row.querySelector('button').addEventListener('click', function () {
           removeFavourite(session.user.id, f.property_id, row);
@@ -202,7 +376,6 @@ section.block h2{font-size:17px;margin-bottom:12px}
       });
     }
 
-    // ---- Your requested viewings ----
     if (viewingsRes.error) {
       viewingsList.innerHTML = '<div class="empty-card">Could not load viewings: ' + viewingsRes.error.message + '</div>';
     } else if (viewings.length === 0) {
@@ -211,13 +384,87 @@ section.block h2{font-size:17px;margin-bottom:12px}
       viewingsList.innerHTML = viewings.map(v => {
         const when = new Date(v.requested_at).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' });
         return '<div class="viewing-card">' +
-          '<div class="addr">' + (v.properties ? v.properties.address : 'Unknown address') + '</div>' +
-          '<div class="when">' + when + '</div>' +
+          '<div class="addr">' + escapeHtml(v.properties ? v.properties.address : 'Unknown address') + '</div>' +
+          '<div class="when">' + escapeHtml(when) + '</div>' +
           renderRainbow(v.affordability_score) +
           '</div>';
       }).join('');
     }
+
+    document.getElementById('profileForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const saveBtn = document.getElementById('saveProfileBtn');
+      saveBtn.disabled = true;
+      formSuccess.classList.remove('show');
+      formError.classList.remove('show');
+
+      try {
+        const fileInput = document.getElementById('photoInput');
+        let photoUrl = profile?.photo_url || null;
+
+        if (fileInput.files && fileInput.files[0]) {
+          const file = fileInput.files[0];
+          if (file.size > 5 * 1024 * 1024) {
+            throw new Error('Image must be smaller than 5MB.');
+          }
+          photoUrl = await uploadProfilePhoto(file);
+        }
+
+        const { error } = await supabase
+          .from('tenants')
+          .update({
+            name: document.getElementById('fullName').value.trim(),
+            phone: document.getElementById('phoneField').value.trim(),
+            company_name: document.getElementById('companyNameField').value.trim(),
+            preferred_areas: document.getElementById('areasField').value.trim(),
+            website_url: document.getElementById('websiteField').value.trim(),
+            bio: document.getElementById('bioField').value.trim(),
+            photo_url: photoUrl,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', session.user.id);
+
+        if (error) throw error;
+
+        profile = {
+          ...profile,
+          name: document.getElementById('fullName').value.trim(),
+          phone: document.getElementById('phoneField').value.trim(),
+          company_name: document.getElementById('companyNameField').value.trim(),
+          preferred_areas: document.getElementById('areasField').value.trim(),
+          website_url: document.getElementById('websiteField').value.trim(),
+          bio: document.getElementById('bioField').value.trim(),
+          photo_url: photoUrl
+        };
+
+        document.getElementById('profName').textContent = profile.name;
+        document.getElementById('profNameInline').textContent = profile.name;
+        document.getElementById('profPhone').textContent = profile.phone || '—';
+        document.getElementById('profAreas').textContent = profile.preferred_areas || '—';
+
+        if (photoUrl) {
+          const avatarImage = document.getElementById('profileAvatar');
+          const initials = document.getElementById('avatarInitials');
+          avatarImage.src = photoUrl;
+          avatarImage.style.display = 'block';
+          initials.style.display = 'none';
+        }
+
+        formSuccess.classList.add('show');
+        formSuccess.textContent = 'Profile updated successfully.';
+      } catch (err) {
+        formError.textContent = err.message || 'Unable to update your profile.';
+        formError.classList.add('show');
+      } finally {
+        saveBtn.disabled = false;
+      }
+    });
   }
+
+  document.getElementById('signOutLink').addEventListener('click', async function () {
+    await supabase.auth.signOut();
+    window.location.href = 'tenant-login.html';
+  });
 
   init();
 </script>
