@@ -1,96 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="robots" content="noindex, nofollow" />
-<title>Admin | 00.house</title>
-<!--
-  DO NOT link this page from your public navigation.
-  Before go-live, put this page's URL (ideally on its own subdomain,
-  e.g. admin.00.house) behind Cloudflare Access so only your own email
-  can ever load it. The sign-in check below is a second layer, not a
-  replacement for that.
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Admin | 00.house</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root{
+      --bg:#f5f2ee;
+      --panel:#ffffff;
+      --panel-alt:#f8f5f1;
+      --line:#e7e0d8;
+      --ink:#1d262c;
+      --muted:#58666e;
+      --accent:#c57b83;
+      --accent-deep:#a75d65;
+      --green:#3e7d69;
+      --green-soft:#e7f3ee;
+      --amber:#d6873b;
+      --warning:#fff3d9;
+      --danger:#b33838;
+      --danger-soft:#fdecec;
+      --navy:#0f3d5c;
+      --navy-soft:#dfeaf3;
+      --shadow:0 20px 45px rgba(24, 30, 35, 0.08);
+    }
+    *{box-sizing:border-box}
+    body{font-family:'Inter',system-ui,sans-serif;margin:0;background:var(--bg);color:var(--ink)}
+    h1{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;margin:0}
+    p{color:var(--muted);line-height:1.5;margin:4px 0 0}
+    nav{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:14px 20px;background:linear-gradient(135deg, var(--navy), #1a4d68);color:#fff;box-shadow:0 8px 18px rgba(15,61,92,0.12)}
+    .logo{font-weight:600;color:#fff;font-size:15px;letter-spacing:0.02em}
+    .nav-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+    .nav-right a,.nav-right span{color:#fff;font-size:12.5px;text-decoration:none;margin-left:14px;opacity:0.9;cursor:pointer}
+    main{max-width:1180px;margin:0 auto;padding:28px 16px 70px}
+    .loading-note{background:#fff;border:1px solid var(--line);color:#444;padding:10px 14px;border-radius:10px;font-size:12.5px;margin:18px 0 24px;box-shadow:var(--shadow)}
 
-  This page now displays IP addresses for agents and tenants, which is
-  personal data under UK GDPR — keep this page locked down accordingly,
-  and make sure your privacy policy mentions it (yours already does, in
-  the "technical data such as device and approximate location" line).
--->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-:root{ --black:#0a0a0a; --muted:#6b6b6b; --white:#fff; --line:rgba(0,0,0,0.08); --brass:#b98a3f; --cream:#f6f2ea; }
-*{box-sizing:border-box}
-body{font-family:'Inter',system-ui,sans-serif;margin:0;background:#ffffff;color:var(--black)}
-h1{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;margin:0}
-p{color:var(--muted);line-height:1.5;margin:4px 0 0}
-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:14px 20px;background:var(--black);color:#fff}
-.logo{font-weight:600;color:#fff;font-size:15px}
-.nav-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.nav-right a,.nav-right span{color:#fff;font-size:12.5px;text-decoration:none;margin-left:14px;opacity:0.9;cursor:pointer}
-main{max-width:1100px;margin:0 auto;padding:24px 16px 70px}
-.loading-note{background:#f5f5f7;border:1px solid var(--line);color:#444;padding:10px 14px;border-radius:8px;font-size:12.5px;margin:18px 0 24px}
+    .dist-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:26px;box-shadow:var(--shadow)}
+    .dist-card h2{font-size:15px;margin-bottom:14px;font-family:'Inter',sans-serif;font-weight:600}
+    .dist-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:12.5px}
+    .dist-row:last-child{margin-bottom:0}
+    .dist-label{flex:0 0 90px;color:#333;font-weight:600}
+    .dist-track{flex:1;height:10px;background:#f0f0f0;border-radius:999px;overflow:hidden}
+    .dist-fill{height:100%;border-radius:999px;transition:width .4s ease}
+    .dist-fill.low{background:#d9453d}
+    .dist-fill.medium{background:#e0a62e}
+    .dist-fill.high{background:#4caf6b}
+    .dist-val{flex:0 0 28px;text-align:right;font-weight:600;color:#333}
 
-/* ---- Affordability distribution chart ---- */
-.dist-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin-bottom:26px}
-.dist-card h2{font-size:15px;margin-bottom:14px;font-family:'Inter',sans-serif;font-weight:600}
-.dist-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:12.5px}
-.dist-row:last-child{margin-bottom:0}
-.dist-label{flex:0 0 90px;color:#333;font-weight:600}
-.dist-track{flex:1;height:10px;background:#f0f0f0;border-radius:999px;overflow:hidden}
-.dist-fill{height:100%;border-radius:999px;transition:width .4s ease}
-.dist-fill.low{background:#d9453d}
-.dist-fill.medium{background:#e0a62e}
-.dist-fill.high{background:#4caf6b}
-.dist-val{flex:0 0 28px;text-align:right;font-weight:600;color:#333}
+    .stats-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:26px}
+    .stat-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center;box-shadow:var(--shadow)}
+    .stat-card .num{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;font-size:26px;color:var(--navy);line-height:1}
+    .stat-card .lbl{font-size:10.5px;letter-spacing:0.04em;text-transform:uppercase;color:var(--muted);margin-top:6px;line-height:1.3}
+    @media (max-width:900px){ .stats-grid{grid-template-columns:repeat(3,1fr)} }
+    @media (max-width:480px){ .stats-grid{grid-template-columns:repeat(2,1fr)} .stat-card .num{font-size:22px} }
 
-/* ---- Stat cards ---- */
-.stats-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:26px}
-.stat-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 12px;text-align:center}
-.stat-card .num{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;font-size:26px;color:var(--black);line-height:1}
-.stat-card .lbl{font-size:10.5px;letter-spacing:0.04em;text-transform:uppercase;color:var(--muted);margin-top:5px;line-height:1.3}
-@media (max-width:900px){ .stats-grid{grid-template-columns:repeat(3,1fr)} }
-@media (max-width:480px){ .stats-grid{grid-template-columns:repeat(2,1fr)} .stat-card .num{font-size:22px} }
+    .tabs{display:flex;gap:8px;border-bottom:1px solid var(--line);margin-bottom:20px;overflow-x:auto}
+    .tab-btn{background:none;border:0;padding:10px 4px;font-family:inherit;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-right:18px;white-space:nowrap}
+    .tab-btn.active{color:var(--navy);border-bottom-color:var(--accent)}
 
-.tabs{display:flex;gap:8px;border-bottom:1px solid var(--line);margin-bottom:20px;overflow-x:auto}
-.tab-btn{background:none;border:0;padding:10px 4px;font-family:inherit;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-right:18px;white-space:nowrap}
-.tab-btn.active{color:var(--black);border-bottom-color:var(--brass)}
+    table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+    th{text-align:left;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);padding:12px 16px;background:var(--panel-alt);border-bottom:1px solid var(--line)}
+    td{padding:13px 16px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:top}
+    tr:last-child td{border-bottom:0}
+    .ip-mono{font-family:'SF Mono',Consolas,monospace;font-size:12.5px;color:#333}
+    .ip-loc{font-size:11.5px;color:var(--muted);margin-top:2px}
+    .addr-list{display:flex;flex-direction:column;gap:6px}
+    .addr-pill{font-size:12px;background:#f4f4f4;border-radius:6px;padding:4px 8px;display:inline-block}
+    a.site-link{color:var(--navy)}
+    .rainbow-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+    .rainbow-bar{position:relative;flex:1;height:8px;border-radius:999px;background:linear-gradient(90deg,#d9453d 0%,#e0a62e 35%,#4caf6b 65%,#2f6b4f 100%);min-width:90px}
+    .rainbow-bar.unknown{background:#e2e2e2}
+    .rainbow-marker{position:absolute;top:-3px;width:3px;height:14px;background:#111;border-radius:2px;transform:translateX(-50%)}
+    .rainbow-addr{font-size:11.5px;color:var(--muted);white-space:nowrap}
+    #tenants-panel, #agents-panel{display:none}
+    #agents-panel.active, #tenants-panel.active{display:block}
+    .empty-card{background:#fff;border:1px dashed var(--line);border-radius:10px;padding:28px;text-align:center;color:var(--muted);font-size:13.5px;box-shadow:var(--shadow)}
 
-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
-th{text-align:left;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);padding:12px 16px;background:#fafafa;border-bottom:1px solid var(--line)}
-td{padding:13px 16px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:top}
-tr:last-child td{border-bottom:0}
-.ip-mono{font-family:'SF Mono',Consolas,monospace;font-size:12.5px;color:#333}
-.ip-loc{font-size:11.5px;color:var(--muted);margin-top:2px}
-.addr-list{display:flex;flex-direction:column;gap:6px}
-.addr-pill{font-size:12px;background:#f2f2f2;border-radius:6px;padding:4px 8px;display:inline-block}
-a.site-link{color:#0F3D5C}
-.rainbow-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.rainbow-bar{position:relative;flex:1;height:8px;border-radius:999px;background:linear-gradient(90deg,#d9453d 0%,#e0a62e 35%,#4caf6b 65%,#2f6b4f 100%);min-width:90px}
-.rainbow-bar.unknown{background:#e2e2e2}
-.rainbow-marker{position:absolute;top:-3px;width:3px;height:14px;background:#111;border-radius:2px;transform:translateX(-50%)}
-.rainbow-addr{font-size:11.5px;color:var(--muted);white-space:nowrap}
-#tenants-panel, #agents-panel{display:none}
-#agents-panel.active, #tenants-panel.active{display:block}
-.empty-card{background:#fff;border:1px dashed var(--line);border-radius:10px;padding:28px;text-align:center;color:var(--muted);font-size:13.5px}
+    .status-badge{display:inline-flex;align-items:center;justify-content:center;padding:4px 9px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:0.02em}
+    .status-pending{background:#fff3d9;color:#9a6705}
+    .status-approved{background:#e8f7ee;color:#246f4f}
+    .status-rejected{background:#fdecec;color:#a83a3a}
+    .status-deleted{background:#f2f2f2;color:#5a5a5a}
 
-/* ---- Responsive tables: become stacked cards below 700px ---- */
-@media (max-width:700px){
-  table,thead,tbody,th,td,tr{display:block}
-  thead{display:none}
-  table{border:0;background:none}
-  tr{margin-bottom:12px;border:1px solid var(--line);border-radius:10px;background:#fff;overflow:hidden}
-  td{border:0;border-bottom:1px solid #f2f2f2;position:relative;padding:10px 14px 10px 44%}
-  td:last-child{border-bottom:0}
-  td::before{
-    content:attr(data-label);
-    position:absolute;left:14px;top:10px;width:38%;
-    font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--muted);
-  }
-}
-</style>
+    .table-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .table-btn{border-radius:8px;border:1px solid var(--line);background:#fff;padding:6px 10px;font-size:11.5px;font-weight:600;cursor:pointer;color:var(--ink);transition:all .15s ease}
+    .table-btn:hover{transform:translateY(-1px)}
+    .table-btn.approve{color:var(--green);border-color:#bfe2d3;background:#f1faf5}
+    .table-btn.reject{color:var(--danger);border-color:#f2c8c8;background:#fff7f7}
+    .table-btn.delete{color:var(--ink);border-color:var(--line);background:#fff}
+
+    @media (max-width:700px){
+      table,thead,tbody,th,td,tr{display:block}
+      thead{display:none}
+      table{border:0;background:none;box-shadow:none}
+      tr{margin-bottom:12px;border:1px solid var(--line);border-radius:10px;background:#fff;overflow:hidden;box-shadow:var(--shadow)}
+      td{border:0;border-bottom:1px solid #f2f2f2;position:relative;padding:10px 14px 10px 44%}
+      td:last-child{border-bottom:0}
+      td::before{
+        content:attr(data-label);
+        position:absolute;left:14px;top:10px;width:38%;
+        font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--muted);
+      }
+    }
+  </style>
 </head>
 <body>
 <nav>
@@ -122,14 +138,14 @@ a.site-link{color:#0F3D5C}
 
     <div id="agents-panel" class="active">
       <table>
-        <thead><tr><th>Name</th><th>Contact</th><th>Website</th><th>IP address</th></tr></thead>
+        <thead><tr><th>Name</th><th>Contact</th><th>Status</th><th>IP address</th><th>Actions</th></tr></thead>
         <tbody id="agentsBody"></tbody>
       </table>
     </div>
 
     <div id="tenants-panel">
       <table>
-        <thead><tr><th>Name</th><th>Email / phone</th><th>IP address</th><th>Requested viewings</th><th>Affordability</th></tr></thead>
+        <thead><tr><th>Name</th><th>Email / phone</th><th>Status</th><th>IP address</th><th>Requested viewings</th><th>Affordability</th><th>Actions</th></tr></thead>
         <tbody id="tenantsBody"></tbody>
       </table>
     </div>
@@ -167,6 +183,51 @@ a.site-link{color:#0F3D5C}
       (ipLocation ? '<div class="ip-loc">' + ipLocation + '</div>' : '');
   }
 
+  function statusBadge(status) {
+    const s = (status || 'pending').toLowerCase();
+    const label = s === 'approved' ? 'Approved' : s === 'rejected' ? 'Rejected' : s === 'deleted' ? 'Deleted' : 'Pending';
+    const className = s === 'approved' ? 'status-approved' : s === 'rejected' ? 'status-rejected' : s === 'deleted' ? 'status-deleted' : 'status-pending';
+    return '<span class="status-badge ' + className + '">' + label + '</span>';
+  }
+
+  function tableActions(tableName, id, currentStatus) {
+    const nextApproved = currentStatus === 'approved' ? 'approved' : 'approved';
+    const rejectAllowed = currentStatus !== 'rejected' && currentStatus !== 'deleted';
+    const deleteAllowed = currentStatus !== 'deleted';
+    return '<div class="table-actions">' +
+      '<button class="table-btn approve" data-table="' + tableName + '" data-id="' + id + '" data-status="approved">Approve</button>' +
+      (rejectAllowed ? '<button class="table-btn reject" data-table="' + tableName + '" data-id="' + id + '" data-status="rejected">Reject</button>' : '') +
+      (deleteAllowed ? '<button class="table-btn delete" data-table="' + tableName + '" data-id="' + id + '" data-status="deleted">Delete</button>' : '') +
+      '</div>';
+  }
+
+  async function setRecordStatus(tableName, id, nextStatus) {
+    const payload = {
+      status: nextStatus,
+      is_active: nextStatus === 'approved',
+      updated_at: new Date().toISOString()
+    };
+
+    if (nextStatus === 'deleted') {
+      payload.deleted_at = new Date().toISOString();
+      payload.is_active = false;
+    } else {
+      payload.deleted_at = null;
+    }
+
+    const { error } = await supabase
+      .from(tableName)
+      .update(payload)
+      .eq('id', id);
+
+    if (error) {
+      alert('Could not update status: ' + error.message);
+      return;
+    }
+
+    window.location.reload();
+  }
+
   function statCard(num, label) {
     return '<div class="stat-card"><div class="num">' + num + '</div><div class="lbl">' + label + '</div></div>';
   }
@@ -185,8 +246,8 @@ a.site-link{color:#0F3D5C}
     document.getElementById('adminLabel').textContent = adminRow.email;
 
     const [agentsRes, tenantsRes, propertiesCountRes, viewingsCountRes, favouritesCountRes] = await Promise.all([
-      supabase.from('agents').select('name, email, phone, agency_name, website_url, ip_address, ip_location, created_at'),
-      supabase.from('tenants').select('name, email, phone, ip_address, ip_location, created_at, viewings(affordability_score, properties(address))'),
+      supabase.from('agents').select('id, name, email, phone, agency_name, website_url, ip_address, ip_location, status, is_active, deleted_at, created_at'),
+      supabase.from('tenants').select('id, name, email, phone, ip_address, ip_location, status, is_active, deleted_at, created_at, viewings(affordability_score, properties(address))'),
       supabase.from('properties').select('*', { count: 'exact', head: true }),
       supabase.from('viewings').select('*', { count: 'exact', head: true }),
       supabase.from('favourites').select('*', { count: 'exact', head: true })
@@ -198,7 +259,6 @@ a.site-link{color:#0F3D5C}
     document.getElementById('loadingNote').remove();
     document.getElementById('panels').style.display = 'block';
 
-    // ---- Stats ----
     const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
     const newThisWeek = [...agents, ...tenants].filter(p => p.created_at && new Date(p.created_at).getTime() >= weekAgo).length;
 
@@ -210,7 +270,6 @@ a.site-link{color:#0F3D5C}
       statCard(favouritesCountRes.count ?? '—', 'Favourites saved') +
       statCard(newThisWeek, 'New this week');
 
-    // ---- Affordability distribution (from every tenant's viewing scores) ----
     const allScores = tenants.flatMap(t => (t.viewings || []).map(v => v.affordability_score)).filter(s => s !== null && s !== undefined);
     if (allScores.length > 0) {
       const low = allScores.filter(s => s < 40).length;
@@ -229,33 +288,34 @@ a.site-link{color:#0F3D5C}
       ).join('');
     }
 
-    // ---- Agents table ----
     const agentsBody = document.getElementById('agentsBody');
     if (agentsRes.error) {
-      agentsBody.innerHTML = '<tr><td colspan="4">Could not load agents: ' + agentsRes.error.message + '</td></tr>';
+      agentsBody.innerHTML = '<tr><td colspan="5">Could not load agents: ' + agentsRes.error.message + '</td></tr>';
     } else if (agents.length === 0) {
-      agentsBody.innerHTML = '<tr><td colspan="4">No agents registered yet.</td></tr>';
+      agentsBody.innerHTML = '<tr><td colspan="5">No agents registered yet.</td></tr>';
     } else {
       agentsBody.innerHTML = agents.map(a => {
         const site = a.website_url || '';
         const siteCell = site ? '<a class="site-link" href="' + site + '" target="_blank" rel="noopener">' + site.replace(/^https?:\/\//, '') + '</a>' : '—';
+        const currentStatus = a.deleted_at ? 'deleted' : (a.status || 'pending');
         return '<tr>' +
           '<td data-label="Name">' + a.name + (a.agency_name ? ' · ' + a.agency_name : '') + '</td>' +
           '<td data-label="Contact">' + a.email + '<br><span style="color:#6b6b6b">' + (a.phone || '—') + '</span></td>' +
-          '<td data-label="Website">' + siteCell + '</td>' +
+          '<td data-label="Status">' + statusBadge(currentStatus) + '</td>' +
           '<td data-label="IP address">' + ipCell(a.ip_address, a.ip_location) + '</td>' +
+          '<td data-label="Actions">' + tableActions('agents', a.id, currentStatus) + '</td>' +
           '</tr>';
       }).join('');
     }
 
-    // ---- Tenants table ----
     const tenantsBody = document.getElementById('tenantsBody');
     if (tenantsRes.error) {
-      tenantsBody.innerHTML = '<tr><td colspan="5">Could not load tenants: ' + tenantsRes.error.message + '</td></tr>';
+      tenantsBody.innerHTML = '<tr><td colspan="7">Could not load tenants: ' + tenantsRes.error.message + '</td></tr>';
     } else if (tenants.length === 0) {
-      tenantsBody.innerHTML = '<tr><td colspan="5">No tenants registered yet.</td></tr>';
+      tenantsBody.innerHTML = '<tr><td colspan="7">No tenants registered yet.</td></tr>';
     } else {
       tenantsBody.innerHTML = tenants.map(t => {
+        const currentStatus = t.deleted_at ? 'deleted' : (t.status || 'pending');
         const viewings = t.viewings || [];
         const addrCell = viewings.length === 0
           ? '<span style="color:#9a9a9a">No viewings requested</span>'
@@ -264,12 +324,23 @@ a.site-link{color:#0F3D5C}
         return '<tr>' +
           '<td data-label="Name">' + t.name + '</td>' +
           '<td data-label="Email / phone">' + t.email + '<br><span style="color:#6b6b6b">' + (t.phone || '—') + '</span></td>' +
+          '<td data-label="Status">' + statusBadge(currentStatus) + '</td>' +
           '<td data-label="IP address">' + ipCell(t.ip_address, t.ip_location) + '</td>' +
           '<td data-label="Requested viewings">' + addrCell + '</td>' +
           '<td data-label="Affordability">' + rainbowCell + '</td>' +
+          '<td data-label="Actions">' + tableActions('tenants', t.id, currentStatus) + '</td>' +
           '</tr>';
       }).join('');
     }
+
+    document.querySelectorAll('[data-status]').forEach(button => {
+      button.addEventListener('click', async function () {
+        const tableName = this.dataset.table;
+        const id = this.dataset.id;
+        const status = this.dataset.status;
+        await setRecordStatus(tableName, id, status);
+      });
+    });
   }
 
   init();
