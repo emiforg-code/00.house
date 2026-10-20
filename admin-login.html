@@ -197,6 +197,7 @@
   <script>
     const SUPABASE_URL = 'https://eyyaemqygddtxbbmbqhl.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_A_aCzMwxAPY_UX7M5cOTRg_oZGKAUVG';
+    const REDIRECT_URL = 'https://00.house/update-password.html';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const form = document.getElementById('authForm');
@@ -206,10 +207,11 @@
 
     function showMessage(text, kind) {
       messageEl.textContent = text;
-      messageEl.className = 'message ' + kind;
       if (!text) {
         messageEl.className = 'message';
+        return;
       }
+      messageEl.className = 'message ' + kind;
     }
 
     if (new URLSearchParams(window.location.search).get('denied')) {
@@ -220,18 +222,30 @@
       const email = document.getElementById('email').value.trim();
 
       if (!email) {
-        showMessage('Enter your email address first.', 'error');
+        showMessage('Please enter your email address first.', 'error');
         return;
       }
 
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: 'https://00.house/update-password.html'
-      });
+      forgotPasswordBtn.disabled = true;
+      forgotPasswordBtn.textContent = 'Sending...';
+      showMessage('', '');
 
-      if (error) {
-        showMessage(error.message, 'error');
-      } else {
-        showMessage('Check your email for a password reset link.', 'ok');
+      try {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: REDIRECT_URL
+        });
+
+        if (error) {
+          showMessage(error.message, 'error');
+          return;
+        }
+
+        showMessage('Password reset email sent. Please check your inbox and follow the link to choose a new password.', 'ok');
+      } catch (error) {
+        showMessage(error.message || 'Unable to send password reset email.', 'error');
+      } finally {
+        forgotPasswordBtn.disabled = false;
+        forgotPasswordBtn.textContent = 'Forgot password?';
       }
     });
 
